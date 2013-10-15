@@ -34,6 +34,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
     }
 
+    public List<Playlist> currentAllPlaylists { get; set; }
     public List<Track> currentTrackList { get; set; }
 
     public IEnumerable<XElement> getAllPlaylists()
@@ -66,7 +67,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
       List<Playlist> playlists = new List<Playlist>();
       foreach (XElement element in elements)
       {
-        playlists.Add(new Playlist() { Key = attributeValue(element, KEY), Title = attributeValue(element, TITLE), Description = attributeValue(element, SUMMARY) });
+        playlists.Add(new Playlist() { Key = attributeValue(element, KEY), Title = attributeValue(element, TITLE), 
+          Description = attributeValue(element, SUMMARY), Duration =  attributeValueAsInt(element, DURATION)});
       }
       return playlists;
     }
@@ -75,9 +77,21 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       var elements = getSinglePlaylist(_key);
       List<Track> playlist = new List<Track>();
+      int totalDuration = 0;
       foreach (XElement element in elements)
       {
-        playlist.Add(new Track(playlist) { Key = attributeValue(element, KEY), Title = attributeValue(element, TITLE) });
+        Track track = new Track(playlist) { Key = attributeValue(element, KEY), Title = attributeValue(element, TITLE), 
+          Duration = attributeValueAsInt(element, DURATION) / 1000 };
+        playlist.Add(track);
+        totalDuration += track.Duration;
+      }
+      if (currentAllPlaylists != null)
+      {
+        Playlist pl = currentAllPlaylists.Find(p => p.Key.Equals(_key));
+        if (pl != null)
+        {
+          pl.Duration = totalDuration;
+        }
       }
       return playlist;
     }

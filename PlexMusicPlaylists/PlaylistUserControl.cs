@@ -255,7 +255,8 @@ namespace PlexMusicPlaylists
 
     private void loadPlaylists()
     {
-      gvPlaylists.DataSource = playlistManager.allPlaylists();
+      playlistManager.currentAllPlaylists = playlistManager.allPlaylists();
+      gvPlaylists.DataSource = playlistManager.currentAllPlaylists;
     }
 
     private void logMessage(string _message)
@@ -415,6 +416,7 @@ namespace PlexMusicPlaylists
         {
           // Reload the playlist
           loadSinglePlaylist(playlist.Key, firstKey, true);
+          gvPlaylists.Refresh();
         }
       }
     }
@@ -473,6 +475,7 @@ namespace PlexMusicPlaylists
             }
           }
           loadSinglePlaylist(playlist.Key, "", true);
+          gvPlaylists.Refresh();
         }
       }
     }

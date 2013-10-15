@@ -16,6 +16,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     protected const string KEY = "key";
     protected const string TITLE = "title";
     protected const string FRIENDLYNAME = "friendlyName";
+    protected const string DURATION = "duration";
 
     public String IP { get; set; }
 
@@ -68,6 +69,16 @@ namespace PlexMusicPlaylists.PlexMediaServer
     public static string attributeValue(XElement _element, string _attrName)
     {
       return attributeValue(_element, _attrName, "");
+    }
+
+    public static int attributeValueAsInt(XElement _element, string _attrName)
+    {
+      try
+      {
+        return Convert.ToInt32(attributeValue(_element, _attrName, "0"));
+      }
+      catch { }
+      return 0;
     }
   }
 }

@@ -12,5 +12,29 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public string Title { get; set; }
 
+    public int Duration { get; set; }
+
+    protected int Hours
+    {
+      get
+      {
+        return Duration / 3600;
+      }
+    }
+    protected int Minutes
+    {
+      get
+      {
+        return (Duration % 3600) / 60;
+      }
+    }
+    protected int Seconds
+    {
+      get
+      {
+        return Duration % 60;
+      }
+    }
+
   }
 }

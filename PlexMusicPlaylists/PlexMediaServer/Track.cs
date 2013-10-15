@@ -21,6 +21,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
+    public string DurationStr
+    {
+      get
+      {
+        return String.Format("{0}:{1}", Minutes.ToString("00"), Seconds.ToString("00"));
+      }
+    }
+
     public Track() : base()
     {
     }

@@ -9,6 +9,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
   {
     public string Description { get; set; }
 
+    public string DurationStr
+    {
+      get
+      {
+        return String.Format("{0}:{1}:{2}", Hours.ToString("00"), Minutes.ToString("00"), Seconds.ToString("00"));
+      }
+    }
+
     public bool canRenameTo(string _newTitle)
     {
       _newTitle = (_newTitle ?? "").Trim();
