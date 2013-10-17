@@ -66,6 +66,7 @@
     <Compile Include="PlexMediaServer\PMSBase.cs" />
     <Compile Include="PlexMediaServer\PMSServer.cs" />
     <Compile Include="PlexMediaServer\Track.cs" />
+    <Compile Include="PlexMediaServer\PLUser.cs" />
     <Compile Include="PlexMediaServer\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,6 +140,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Delete user.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

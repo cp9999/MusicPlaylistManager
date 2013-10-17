@@ -22,6 +22,8 @@ namespace PlexMusicPlaylists
     protected string caption = "Playlist configurator";
     string loadedListKey = "";
     bool editAddMode = false;
+    bool editIsUser = false;
+    bool plexConnected = false;
     #endregion
 
     #region public properties
@@ -46,6 +48,7 @@ namespace PlexMusicPlaylists
 
     public bool setPlexMediaServerIP(string _ip, int _port)
     {
+      plexConnected = false;
       playlistManager.IP = _ip;
       playlistManager.Port = _port;
       server.IP = _ip;
@@ -53,9 +56,13 @@ namespace PlexMusicPlaylists
       try
       {
         updateCaption();
+        plexConnected = true;
         loadedListKey = "";
+        fillUserList();
         loadPlaylists();
         loadMusicSections();
+        enableEditCommands();
+        enableTrackCommands();
         return true;
       }
       catch (Exception ex)
@@ -68,121 +75,6 @@ namespace PlexMusicPlaylists
 
     #endregion
 
-    #region control event handlers
-
-    private void gvPlaylists_SelectionChanged(object sender, EventArgs e)
-    {
-      Playlist playlist = selectedPlaylist;
-      if (playlist != null)
-      {
-        tbPlaylistEditKey.Text = playlist.Key;
-        tbPlaylistEditRenameTitle.Text = playlist.Title;
-        tbPlaylistEditRenameDescription.Text = playlist.Description;
-        loadSinglePlaylist(playlist.Key);
-      } 
-      enableEditCommands();
-    }
-
-    private void btnPlaylistAdd_Click(object sender, EventArgs e)
-    {
-      showPlaylistEditPanel(true);
-    }
-
-    private void btnPlaylistRename_Click(object sender, EventArgs e)
-    {
-      showPlaylistEditPanel(false);
-    }
-
-    private void btnPlaylistEditHide_Click(object sender, EventArgs e)
-    {
-      hidePlaylistEditPanel();
-    }
-
-    private void btnPlaylistEditCreate_Click(object sender, EventArgs e)
-    {
-      string newkey = playlistManager.createNewPlaylist(tbPlaylistEditAddTitle.Text.Trim(), tbPlaylistEditAddDescription.Text.Trim(), PlaylistManager.PLTypes.Simple);
-      if (!String.IsNullOrEmpty(newkey))
-      {
-        tbPlaylistEditAddTitle.Text = "";
-        tbPlaylistEditAddDescription.Text = "";
-        // Reload the playlists and select the new one!
-        loadPlaylists();
-        if (gvPlaylists.Rows.Count > 0)
-        {
-          DataGridViewRow newRow = gvPlaylists.Rows.OfType<DataGridViewRow>().FirstOrDefault(row => ((Playlist)row.DataBoundItem).Key == newkey);
-          if (newRow != null)
-          {
-            newRow.Selected = true;
-          }
-        }
-      }
-    }
-
-    private void btnPlaylistEditRename_Click(object sender, EventArgs e)
-    {
-      Playlist playlist = selectedPlaylist;
-      if (playlist != null)
-      {
-        playlistManager.renamePlaylist(playlist.Key, tbPlaylistEditRenameTitle.Text.Trim());
-      }
-    }
-
-    private void tbPlaylistEditAddTitle_TextChanged(object sender, EventArgs e)
-    {
-      enableEditCommands();
-    }
-
-    private void tbPlaylistEditRenameTitle_TextChanged(object sender, EventArgs e)
-    {
-      enableEditCommands();
-    }
-
-    private void btnPlaylistDelete_Click(object sender, EventArgs e)
-    {
-      Playlist playlist = selectedPlaylist;
-      if (playlist != null)
-      {
-        if (MessageBox.Show("Delete the selected playlist", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
-        {
-          playlistManager.deletePlaylist(playlist.Key);
-          // Reload the playlists
-          loadPlaylists();
-        }
-      }
-    }
-
-    private void btnPlaylistEditRename_Click_1(object sender, EventArgs e)
-    {
-      Playlist playlist = selectedPlaylist;
-      if (playlist != null)
-      {
-        playlistManager.renamePlaylist(playlist.Key, tbPlaylistEditRenameTitle.Text.Trim());
-        playlist.Title = tbPlaylistEditRenameTitle.Text.Trim();
-      }
-    }
-
-    private void gvSinglePlayList_SelectionChanged(object sender, EventArgs e)
-    {
-      enableTrackCommands();
-    }
-
-    private void btnTrackUp_Click(object sender, EventArgs e)
-    {
-      moveTrack(-1);
-    }
-
-    private void btnTrackDown_Click(object sender, EventArgs e)
-    {
-      moveTrack(1);
-    }
-
-    private void btTrackBrowseMusice_Click(object sender, EventArgs e)
-    {
-      splitContainerGlobal.Panel2Collapsed = !splitContainerGlobal.Panel2Collapsed;
-    }
-
-    #endregion
-
 
     #region Playlist Helper methods
 
@@ -190,7 +82,6 @@ namespace PlexMusicPlaylists
     {
       lblCaption.Text = String.Format("{0}: {1} [{2}]", caption, playlistManager.Name, playlistManager.baseUrl);
     }
-
 
     private Playlist selectedPlaylist
     {
@@ -204,14 +95,16 @@ namespace PlexMusicPlaylists
       }
     }
 
-    private void showPlaylistEditPanel(bool _addnew)
+    private void showPlaylistEditPanel(bool _addnew, bool _isUser)
     {
       panelPlaylistEdit.Visible = true;
       editAddMode = _addnew;
+      editIsUser = _isUser;
 
       tbPlaylistEditAddTitle.Visible = _addnew;
-      tbPlaylistEditAddDescription.Visible = _addnew;
+      tbPlaylistEditAddDescription.Visible = _addnew && !_isUser;
       btnPlaylistEditCreate.Visible = _addnew;
+      lblPlaylistEditDescription.Visible = !_isUser;
 
       tbPlaylistEditKey.Visible = !_addnew;
       tbPlaylistEditRenameTitle.Visible = !_addnew;
@@ -219,8 +112,8 @@ namespace PlexMusicPlaylists
       btnPlaylistEditRename.Visible = !_addnew;
       if (_addnew)
       {
-        gbPlaylistEdit.Text = "Add new playlist";
-        lblPlaylistEditTitle.Text = "Title";
+        gbPlaylistEdit.Text = _isUser ? "Add new user" : "Add new playlist";
+        lblPlaylistEditTitle.Text = _isUser ? "User name" : "Title";
       }
       else
       {
@@ -257,6 +150,10 @@ namespace PlexMusicPlaylists
     {
       playlistManager.currentAllPlaylists = playlistManager.allPlaylists();
       gvPlaylists.DataSource = playlistManager.currentAllPlaylists;
+      if (playlistManager.currentAllPlaylists.Count() == 0)
+      {
+        gvSinglePlayList.DataSource = null;
+      }
     }
 
     private void logMessage(string _message)
@@ -295,10 +192,22 @@ namespace PlexMusicPlaylists
 
     private void enableEditCommands()
     {
-      btnPlaylistEditCreate.Enabled = !String.IsNullOrEmpty(tbPlaylistEditAddTitle.Text) && tbPlaylistEditAddTitle.Text.Trim() != String.Empty;
+      toolStripPlaylists.Enabled = plexConnected;
+      toolStripSinglePlaylist.Enabled = plexConnected;
+      toolStripServerSections.Enabled = plexConnected;
+      toolStripServerTracks.Enabled = plexConnected;
+      if (editIsUser)
+      {
+        btnPlaylistEditCreate.Enabled = !String.IsNullOrEmpty(tbPlaylistEditAddTitle.Text) && !playlistManager.userExist(tbPlaylistEditAddTitle.Text);
+      }
+      else
+      {
+        btnPlaylistEditCreate.Enabled = !String.IsNullOrEmpty(tbPlaylistEditAddTitle.Text) && tbPlaylistEditAddTitle.Text.Trim() != String.Empty;
+      }
       Playlist playlist = selectedPlaylist;
       btnPlaylistEditRename.Enabled = playlist != null && playlist.canRenameTo(tbPlaylistEditRenameTitle.Text);
       btnPlaylistDelete.Enabled = playlistBindingSource != null;
+      btnUserDelete.Enabled = playlistManager.isNormalUser(playlistManager.currentUser.Name);
     }
 
     private void enableTrackCommands()
@@ -421,7 +330,154 @@ namespace PlexMusicPlaylists
       }
     }
 
+    private void changeUser(string _newName)
+    {
+      if (playlistManager.setCurrentUser(_newName))
+      {
+        loadedListKey = "";
+        loadPlaylists();
+      }
+    }
+
+    private void fillUserList()
+    {
+      comboUsers.Items.Clear();
+      playlistManager.currentUserlist = playlistManager.userList();
+      foreach (PLUser user in playlistManager.currentUserlist)
+      {
+        comboUsers.Items.Add(user.Name);
+      }
+      comboUsers.SelectedIndex = comboUsers.Items.IndexOf(playlistManager.currentUser.Name);
+    }
+
     #endregion
+
+
+    #region control event handlers
+
+    private void gvPlaylists_SelectionChanged(object sender, EventArgs e)
+    {
+      Playlist playlist = selectedPlaylist;
+      if (playlist != null)
+      {
+        tbPlaylistEditKey.Text = playlist.Key;
+        tbPlaylistEditRenameTitle.Text = playlist.Title;
+        tbPlaylistEditRenameDescription.Text = playlist.Description;
+        loadSinglePlaylist(playlist.Key);
+      } 
+      enableEditCommands();
+    }
+
+    private void btnPlaylistAdd_Click(object sender, EventArgs e)
+    {
+      showPlaylistEditPanel(true, false);
+    }
+
+    private void btnPlaylistRename_Click(object sender, EventArgs e)
+    {
+      showPlaylistEditPanel(false, false);
+    }
+
+    private void btnPlaylistEditHide_Click(object sender, EventArgs e)
+    {
+      hidePlaylistEditPanel();
+    }
+
+    private void btnPlaylistEditCreate_Click(object sender, EventArgs e)
+    {
+      if (editIsUser)
+      {
+        if (playlistManager.setCurrentUser(tbPlaylistEditAddTitle.Text.Trim()))
+        {
+          gvPlaylists.DataSource = null;
+          gvSinglePlayList.DataSource = null;
+          loadedListKey = "";
+          fillUserList();
+        }
+      }
+      else
+      {
+        string newkey = playlistManager.createNewPlaylist(tbPlaylistEditAddTitle.Text.Trim(), tbPlaylistEditAddDescription.Text.Trim(), PlaylistManager.PLTypes.Simple);
+        if (!String.IsNullOrEmpty(newkey))
+        {
+          tbPlaylistEditAddTitle.Text = "";
+          tbPlaylistEditAddDescription.Text = "";
+          // Reload the playlists and select the new one!
+          loadPlaylists();
+          if (gvPlaylists.Rows.Count > 0)
+          {
+            DataGridViewRow newRow = gvPlaylists.Rows.OfType<DataGridViewRow>().FirstOrDefault(row => ((Playlist)row.DataBoundItem).Key == newkey);
+            if (newRow != null)
+            {
+              newRow.Selected = true;
+            }
+          }
+        }
+      }
+    }
+
+    private void btnPlaylistEditRename_Click(object sender, EventArgs e)
+    {
+      Playlist playlist = selectedPlaylist;
+      if (playlist != null)
+      {
+        playlistManager.renamePlaylist(playlist.Key, tbPlaylistEditRenameTitle.Text.Trim());
+      }
+    }
+
+    private void tbPlaylistEditAddTitle_TextChanged(object sender, EventArgs e)
+    {
+      enableEditCommands();
+    }
+
+    private void tbPlaylistEditRenameTitle_TextChanged(object sender, EventArgs e)
+    {
+      enableEditCommands();
+    }
+
+    private void btnPlaylistDelete_Click(object sender, EventArgs e)
+    {
+      Playlist playlist = selectedPlaylist;
+      if (playlist != null)
+      {
+        if (MessageBox.Show("Delete the selected playlist", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        {
+          playlistManager.deletePlaylist(playlist.Key);
+          // Reload the playlists
+          loadPlaylists();
+        }
+      }
+    }
+
+    private void btnPlaylistEditRename_Click_1(object sender, EventArgs e)
+    {
+      Playlist playlist = selectedPlaylist;
+      if (playlist != null)
+      {
+        playlistManager.renamePlaylist(playlist.Key, tbPlaylistEditRenameTitle.Text.Trim());
+        playlist.Title = tbPlaylistEditRenameTitle.Text.Trim();
+      }
+    }
+
+    private void gvSinglePlayList_SelectionChanged(object sender, EventArgs e)
+    {
+      enableTrackCommands();
+    }
+
+    private void btnTrackUp_Click(object sender, EventArgs e)
+    {
+      moveTrack(-1);
+    }
+
+    private void btnTrackDown_Click(object sender, EventArgs e)
+    {
+      moveTrack(1);
+    }
+
+    private void btTrackBrowseMusice_Click(object sender, EventArgs e)
+    {
+      splitContainerGlobal.Panel2Collapsed = !splitContainerGlobal.Panel2Collapsed;
+    }
 
     private void tvServerSection_AfterSelect(object sender, TreeViewEventArgs e)
     {
@@ -476,6 +532,41 @@ namespace PlexMusicPlaylists
           }
           loadSinglePlaylist(playlist.Key, "", true);
           gvPlaylists.Refresh();
+        }
+      }
+    }
+
+    private void comboUsers_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      string newName = comboUsers.SelectedItem.ToString();
+
+      changeUser(newName);
+    }
+
+    private void btnUserAdd_Click(object sender, EventArgs e)
+    {
+      showPlaylistEditPanel(true, true);
+    }
+
+    #endregion
+
+    private void btnUserDelete_Click(object sender, EventArgs e)
+    {
+      string userName = comboUsers.SelectedItem.ToString();
+
+      if (playlistManager.isNormalUser(userName))
+      {
+        if (MessageBox.Show(String.Format("Remove user {0} and all associated playlists?", userName),
+          "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        {
+          if (playlistManager.deleteCurrentUser(userName))
+          {
+            gvPlaylists.DataSource = null;
+            gvSinglePlayList.DataSource = null;
+            loadedListKey = "";
+            fillUserList();
+            loadPlaylists();
+          }
         }
       }
     }

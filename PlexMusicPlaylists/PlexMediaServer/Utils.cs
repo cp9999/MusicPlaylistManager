@@ -10,6 +10,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
 {
   public class Utils
   {
+    private const string HEADER_ENTRY_PLEX_CLIENT = "X-Plex-Client-Identifier";
+    private const string PLEX_CLIENT_IDENTIFIER = "MusicPlaylist-Configurator";
     public const string DUMMY = "dummy";
 
     public static string textFromURL(string _url)
@@ -17,6 +19,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       var client = new WebClient();
       try
       {
+        client.Headers.Add(HEADER_ENTRY_PLEX_CLIENT, PLEX_CLIENT_IDENTIFIER);
         return client.DownloadString(_url);
       }
       catch 

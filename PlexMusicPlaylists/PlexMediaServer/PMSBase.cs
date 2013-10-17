@@ -41,7 +41,12 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     private string getName()
     {
-      if (!String.IsNullOrEmpty(IP) && (String.IsNullOrEmpty(serverName) || !serverUrl.Equals(baseUrl)))
+      if (String.IsNullOrEmpty(IP) || Port <= 0)
+      {
+        if (!String.IsNullOrEmpty(serverName))
+          throw new Exception("ERROR: No IP or no Port set");
+      }
+      else if (String.IsNullOrEmpty(serverName) || !serverUrl.Equals(baseUrl))
       {
         XElement element = Utils.elementFromURL(baseUrl);
         if (element.Name.LocalName.Equals(Utils.DUMMY))

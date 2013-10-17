@@ -81,9 +81,23 @@ namespace PlexMusicPlaylists.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Add_user {
+            get {
+                object obj = ResourceManager.GetObject("Add_user", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap delete {
             get {
                 object obj = ResourceManager.GetObject("delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Delete_user {
+            get {
+                object obj = ResourceManager.GetObject("Delete_user", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

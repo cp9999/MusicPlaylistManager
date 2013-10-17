@@ -17,36 +17,62 @@ namespace PlexMusicPlaylists.PlexMediaServer
     protected const string TITLE1 = "title1";
     protected const string TITLE2 = "title2";
     protected const string SUMMARY = "summary";
+    protected const string USER_UNKNOWN = "Unknown";
+    protected const string USER = "user";
 
     private const string PLAYLIST_BASE_URL = "/music/playlists";
+    private const string PLAYLIST_USERS_URL = PLAYLIST_BASE_URL + "/users";
     private const string PLAYLIST_PLAYLISTS_URL = PLAYLIST_BASE_URL + "/playlists";
     private const string PLAYLIST_TRACKS_URL = PLAYLIST_BASE_URL + "/tracks";
-    protected enum PLCommands { PLAll, PLSingle, PLCreate, PLDelete, PLRename, TRAdd, TRRemove, TRMove };
+    protected enum PLCommands { PLAll, PLSingle, PLCreate, PLDelete, PLRename, TRAdd, TRRemove, TRMove, USERList, USERGetCurrent, USERSetCurrent, USERDelete };
     public enum PLTypes { Simple, Smart};
     private SortedDictionary<PLCommands, string> PLCommandBaseUrl = new SortedDictionary<PLCommands,string>
       {{PLCommands.PLAll , PLAYLIST_PLAYLISTS_URL}, {PLCommands.PLSingle, PLAYLIST_PLAYLISTS_URL + "/list"}, 
         {PLCommands.PLCreate, PLAYLIST_PLAYLISTS_URL+"/create"}, {PLCommands.PLDelete, PLAYLIST_PLAYLISTS_URL +"/delete"}, {PLCommands.PLRename, PLAYLIST_PLAYLISTS_URL+"/rename"}, 
         {PLCommands.TRAdd, PLAYLIST_TRACKS_URL + "/add"}, {PLCommands.TRRemove, PLAYLIST_TRACKS_URL + "/remove"}, {PLCommands.TRMove, PLAYLIST_TRACKS_URL + "/move"}, 
+        {PLCommands.USERList, PLAYLIST_USERS_URL}, {PLCommands.USERGetCurrent, PLAYLIST_USERS_URL + "/current"}, 
+        {PLCommands.USERSetCurrent, PLAYLIST_USERS_URL + "/set"}, {PLCommands.USERDelete, PLAYLIST_USERS_URL + "/delete"}
       };
     private SortedDictionary<PLTypes, string> PLTypeNames = new SortedDictionary<PLTypes, string> { { PLTypes.Simple, "SIMPLE" }, { PLTypes.Smart, "SMART" } };
+    private PLUser m_currentUser = null;
 
     public PlaylistManager(string _ip, int _port) : base(_ip, _port)
     {
     }
 
+    public List<PLUser> currentUserlist { get; set; }
     public List<Playlist> currentAllPlaylists { get; set; }
     public List<Track> currentTrackList { get; set; }
-
-    public IEnumerable<XElement> getAllPlaylists()
+    public PLUser currentUser
     {
-      string commandUrl = this.makeUrl(PLCommands.PLAll);
+      get { return this.getCurrentUser(); }
+    }
+
+    public bool isNormalUser(string _userName)
+    {
+      return !String.IsNullOrEmpty(_userName) && !_userName.Equals(USER_UNKNOWN);
+    }
+
+    protected IEnumerable<XElement> getElementList(PLCommands _command, string _elementsKey)
+    {
+      string commandUrl = this.makeUrl(_command);
       XElement elementRoot = Utils.elementFromURL(commandUrl);
 
       var elements =
-        from el in elementRoot.Elements(DIRECTORY)
+        from el in elementRoot.Elements(_elementsKey)
         select el;
 
       return elements;
+    }
+
+    public IEnumerable<XElement> getUserList()
+    {
+      return getElementList(PLCommands.USERList, DIRECTORY);
+    }
+
+    public IEnumerable<XElement> getAllPlaylists()
+    {
+      return getElementList(PLCommands.PLAll, DIRECTORY);
     }
 
     public IEnumerable<XElement> getSinglePlaylist(string _key)
@@ -59,6 +85,69 @@ namespace PlexMusicPlaylists.PlexMediaServer
         select el;
 
       return elements;
+    }
+
+    public PLUser getCurrentUser()
+    {
+      if (m_currentUser == null || m_currentUser.Name.Equals(USER_UNKNOWN))
+      {
+        var elements = getElementList(PLCommands.USERGetCurrent, DIRECTORY);
+        if (elements.Count() > 0)
+        {
+          m_currentUser = new PLUser() { Name = attributeValue(elements.First(), KEY) };
+        }
+        else
+        {
+          m_currentUser = new PLUser() { Name = USER_UNKNOWN };
+        }
+      }
+      return m_currentUser;
+    }
+
+    public List<PLUser> userList()
+    {
+      var elements = getUserList();
+      List<PLUser> userlist = new List<PLUser>();
+      foreach (XElement element in elements)
+      {
+        userlist.Add(new PLUser()
+        {
+          Name = attributeValue(element, KEY),
+          Title = attributeValue(element, TITLE),
+        });
+      }
+      return userlist;
+    }
+    
+    public bool setCurrentUser(string _newUser)
+    {
+      if (!String.IsNullOrEmpty(_newUser) && !_newUser.Equals(USER_UNKNOWN) && !_newUser.Equals(currentUser.Name))
+      {
+        String commandUrl = this.makeUrl(PLCommands.USERSetCurrent, new Dictionary<string, string> { { USER, _newUser } });
+        XElement elementRoot = Utils.elementFromURL(commandUrl);
+        m_currentUser = null;
+        this.getCurrentUser();
+        return true;
+      }
+      return false;
+    }
+
+    public bool deleteCurrentUser(string _user)
+    {
+      if (!String.IsNullOrEmpty(_user) && !_user.Equals(USER_UNKNOWN))
+      {
+        String commandUrl = this.makeUrl(PLCommands.USERDelete, new Dictionary<string, string> { { USER, _user } });
+        XElement elementRoot = Utils.elementFromURL(commandUrl);
+        m_currentUser = null;
+        this.getCurrentUser();
+        return true;
+      }
+      return false;
+    }
+
+    public bool userExist(string _user)
+    {
+      return currentUserlist != null && currentUserlist.Find(user => user.Name.Equals(_user.Trim())) != null;
     }
 
     public List<Playlist> allPlaylists()
@@ -98,6 +187,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public string createNewPlaylist(string _title, string _description, PLTypes _pltype)
     {
+      _description = String.IsNullOrEmpty(_description) ? "-" : _description;
       string commandUrl = this.makeUrl(PLCommands.PLCreate, new Dictionary<string, string> { { TITLE, _title }, { PLTYPE, PLTypeNames[_pltype] }, { DESCRIPTION, _description } });
       XElement elementRoot = Utils.elementFromURL(commandUrl);
 
