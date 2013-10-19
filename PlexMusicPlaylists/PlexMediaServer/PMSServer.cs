@@ -29,13 +29,20 @@ namespace PlexMusicPlaylists.PlexMediaServer
       return musicsections;
     }
 
-    private List<LibrarySection> listFromElements(IEnumerable<XElement> _elements, string _parentUrl, bool _hasTracks)
+    private List<LibrarySection> listFromElements(IEnumerable<XElement> _elements, string _parentUrl, bool _hasTracks, bool _isMusicSection)
     {
       List<LibrarySection> sections = new List<LibrarySection>();
       foreach (XElement element in _elements)
       {
         string key = attributeValue(element, KEY);
-        sections.Add(new LibrarySection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl), HasTracks = _hasTracks });
+        LibrarySection section = _isMusicSection
+          ? new MusicSection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl) }
+          : new LibrarySection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl), HasTracks = _hasTracks };
+        sections.Add(section);
+        if (_isMusicSection)
+        {
+          ((MusicSection)section).addSearchSections();
+        }
       }
       return sections;
     }
@@ -79,13 +86,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public List<LibrarySection> musicSections()
     {
-      return listFromElements(getMusicSections(), "", false);
+      return listFromElements(getMusicSections(), "", false, true);
     }
 
     public List<LibrarySection> librarySections(LibrarySection _section)
     {
-      return listFromElements(getSectionElements(_section), _section.SectionUrl, _section.HasTracks);
+      return listFromElements(getSectionElements(_section), _section.SectionUrl, _section.HasTracks, false);
     }
+
 
 
   }

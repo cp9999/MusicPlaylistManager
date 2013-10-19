@@ -16,13 +16,27 @@ namespace PlexMusicPlaylists
   public partial class MainForm : Form
   {
     PlexMediaServer.PlaylistSettings playlistSettings = PlexMediaServer.PlaylistSettings.theSettings();
+    SearchForm searchForm = new SearchForm();
 
     public MainForm()
     {
       InitializeComponent();
       playlistUC.OnLogMessage += new PlaylistUserControl.LogMessageEventHandler(addToLog);
+      playlistUC.OnSearchInput += new PlaylistUserControl.SearchInputHandler(playlistUC_OnSearchInput);
       splitBottom.Panel2Collapsed = true;
       loadConfiguration();
+    }
+
+    bool playlistUC_OnSearchInput(PlexMediaServer.SearchSection _searchSection, out string _query)
+    {
+      _query = "";
+      searchForm.SetSearchSection(_searchSection);
+      if (searchForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        _query = searchForm.SearchQuery;
+        return true;
+      }
+      return false;
     }
 
     private void loadConfiguration()

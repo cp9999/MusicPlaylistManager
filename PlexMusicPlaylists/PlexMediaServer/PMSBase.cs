@@ -10,11 +10,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
   {
     private string serverUrl = "";
     private string serverName = "";
-    protected const string DIRECTORY = "Directory";
+    public const string DIRECTORY = "Directory";
     protected const string TRACK = "Track";
     protected const string MESSAGE = "message";
-    protected const string KEY = "key";
-    protected const string TITLE = "title";
+    public const string KEY = "key";
+    public const string TITLE = "title";
     protected const string FRIENDLYNAME = "friendlyName";
     protected const string DURATION = "duration";
 

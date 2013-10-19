@@ -13,6 +13,8 @@ namespace PlexMusicPlaylists
 {
   public partial class PlaylistUserControl : UserControl
   {
+    public delegate bool SearchInputHandler(SearchSection _searchSection, out string _query);
+    public event SearchInputHandler OnSearchInput;
     public delegate void LogMessageEventHandler(string _message);
     public event LogMessageEventHandler OnLogMessage;
 
@@ -63,6 +65,7 @@ namespace PlexMusicPlaylists
         loadMusicSections();
         enableEditCommands();
         enableTrackCommands();
+        enableServerSectionCommands();
         return true;
       }
       catch (Exception ex)
@@ -217,6 +220,54 @@ namespace PlexMusicPlaylists
       btnTrackDown.Enabled = tracksSelected == 1 && gvSinglePlayList.Rows.IndexOf(gvSinglePlayList.SelectedRows[0]) < gvSinglePlayList.Rows.Count - 1;
       btnTrackRemove.Enabled = tracksSelected > 0;
       enableServerTrackCommands();
+    }
+
+    private void enableServerSectionCommands()
+    {
+      MusicSection section = selectedServerSection as MusicSection;
+      btnServerSectionSearch.Enabled = OnSearchInput != null && section != null && section.canBeSearched;
+      if (btnServerSectionSearch.Enabled && btnServerSectionSearch.Tag != section)
+      {
+        btnServerSectionSearch.DropDownItems.Clear();
+        foreach (SearchSection search in section.searchSections)
+        {
+          ToolStripMenuItem tsi = (ToolStripMenuItem)btnServerSectionSearch.DropDownItems.Add(search.Title);
+          tsi.Tag = search;      
+          tsi.Click += new EventHandler(serverSearch_Click);
+        }
+      }
+    }
+
+    void serverSearch_Click(object sender, EventArgs e)
+    {
+      MusicSection section = selectedServerSection as MusicSection;
+      ToolStripMenuItem tsi = sender as ToolStripMenuItem;
+      SearchSection searchSection = tsi != null ? tsi.Tag as SearchSection : null;
+      if (OnSearchInput != null && section != null && searchSection != null)
+      {
+        // Show search dialog
+        string query = "";
+        if (OnSearchInput(searchSection, out query))
+        {
+          LibrarySection librarySection = searchSection.createFromSearch(query);
+          if (librarySection != null)
+          {
+            // Add a new child node to the musicsection node
+            TreeNode tn = tvServerSection.SelectedNode.Nodes.Add(librarySection.Key, librarySection.Title);
+            tn.Tag = librarySection;
+            // Select the newly added node in the tree
+            tvServerSection.SelectedNode = tn;
+          }
+        }
+      }
+    }
+
+    private LibrarySection selectedServerSection
+    {
+      get
+      {
+        return tvServerSection.SelectedNode != null ? (LibrarySection)tvServerSection.SelectedNode.Tag : null;
+      }
     }
 
     private void moveTrack(int _offset)
@@ -498,6 +549,7 @@ namespace PlexMusicPlaylists
           }
         }
       }
+      enableServerSectionCommands();
     }
 
     private void gvServerTrack_SelectionChanged(object sender, EventArgs e)
@@ -570,5 +622,6 @@ namespace PlexMusicPlaylists
         }
       }
     }
+
   }
 }
