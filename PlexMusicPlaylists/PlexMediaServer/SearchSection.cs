@@ -8,9 +8,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
 {
   public class SearchSection : PlaylistBase
   {
-    protected MusicSection m_owner = null;
+    protected MainSection m_owner = null;
 
-    public SearchSection(MusicSection _owner)
+    public SearchSection(MainSection _owner)
       : base()
     {
       m_owner = _owner;

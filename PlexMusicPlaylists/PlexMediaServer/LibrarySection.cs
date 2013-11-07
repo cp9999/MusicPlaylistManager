@@ -12,5 +12,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public bool HasTracks { get; set; }
 
+    public bool IsMusic { get; set; }
+
+    public string TrackType
+    {
+      get { return IsMusic ? "track" : "movie"; }
+    }
   }
 }

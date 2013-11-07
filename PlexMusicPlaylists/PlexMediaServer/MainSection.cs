@@ -6,13 +6,14 @@ using System.Xml.Linq;
 
 namespace PlexMusicPlaylists.PlexMediaServer
 {
-  public class MusicSection : LibrarySection
+  public class MainSection : LibrarySection
   {
     protected const string SEARCH = "search";
     protected const string PROMPT = "prompt";
     private List<SearchSection> m_searchSections = new List<SearchSection>();
 
     public List<SearchSection> searchSections { get { return m_searchSections; } }
+
     public bool canBeSearched
     {
       get { return m_searchSections != null ? m_searchSections.Count() > 0 : false; }

@@ -23,7 +23,7 @@ namespace PlexMusicPlaylists
       InitializeComponent();
       playlistUC.OnLogMessage += new PlaylistUserControl.LogMessageEventHandler(addToLog);
       playlistUC.OnSearchInput += new PlaylistUserControl.SearchInputHandler(playlistUC_OnSearchInput);
-      splitBottom.Panel2Collapsed = true;
+      splitBottom.Panel2Collapsed = false;
       loadConfiguration();
     }
 

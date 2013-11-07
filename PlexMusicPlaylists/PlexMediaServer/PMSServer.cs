@@ -29,19 +29,32 @@ namespace PlexMusicPlaylists.PlexMediaServer
       return musicsections;
     }
 
-    private List<LibrarySection> listFromElements(IEnumerable<XElement> _elements, string _parentUrl, bool _hasTracks, bool _isMusicSection)
+    public IEnumerable<XElement> getMovieSections()
+    {
+      string sectionUrl = String.Format("{0}{1}", this.baseUrl, LIBRARY_SECTIONS);
+      XElement sections = Utils.elementFromURL(sectionUrl);
+
+      var moviesections =
+        from section in sections.Elements("Directory")
+        where ((string)section.Attribute("type")).Equals("movie")
+        select section;
+
+      return moviesections;
+    }
+
+    private List<LibrarySection> listFromElements(IEnumerable<XElement> _elements, string _parentUrl, bool _hasTracks, bool _isMainSection, bool _isMusicSection)
     {
       List<LibrarySection> sections = new List<LibrarySection>();
       foreach (XElement element in _elements)
       {
         string key = attributeValue(element, KEY);
-        LibrarySection section = _isMusicSection
-          ? new MusicSection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl) }
-          : new LibrarySection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl), HasTracks = _hasTracks };
+        LibrarySection section = _isMainSection
+          ? new MainSection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl), IsMusic = _isMusicSection }
+          : new LibrarySection() { Key = key, Title = attributeValue(element, TITLE), SectionUrl = getSectionUrl(key, _parentUrl), HasTracks = _hasTracks, IsMusic = _isMusicSection };
         sections.Add(section);
-        if (_isMusicSection)
+        if (_isMainSection)
         {
-          ((MusicSection)section).addSearchSections();
+          ((MainSection)section).addSearchSections();
         }
       }
       return sections;
@@ -68,8 +81,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       XElement sectionElements = Utils.elementFromURL(_section.SectionUrl);
 
+      string xpath = _section.IsMusic ? TRACK : VIDEO;
       var elements =
-        from element in sectionElements.Elements(TRACK)
+        from element in sectionElements.Elements(xpath)
         select element;
 
       _section.HasTracks = elements.Count() > 0;
@@ -86,12 +100,17 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public List<LibrarySection> musicSections()
     {
-      return listFromElements(getMusicSections(), "", false, true);
+      return listFromElements(getMusicSections(), "", false, true, true);
+    }
+
+    public List<LibrarySection> movieSections()
+    {
+      return listFromElements(getMovieSections(), "", false, true, false);
     }
 
     public List<LibrarySection> librarySections(LibrarySection _section)
     {
-      return listFromElements(getSectionElements(_section), _section.SectionUrl, _section.HasTracks, false);
+      return listFromElements(getSectionElements(_section), _section.SectionUrl, _section.HasTracks, false, _section.IsMusic);
     }
 
 

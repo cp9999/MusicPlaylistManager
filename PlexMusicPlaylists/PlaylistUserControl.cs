@@ -60,9 +60,10 @@ namespace PlexMusicPlaylists
         updateCaption();
         plexConnected = true;
         loadedListKey = "";
+        playlistManager.loadPreferences();
         fillUserList();
         loadPlaylists();
-        loadMusicSections();
+        loadMainSections();
         enableEditCommands();
         enableTrackCommands();
         enableServerSectionCommands();
@@ -224,7 +225,7 @@ namespace PlexMusicPlaylists
 
     private void enableServerSectionCommands()
     {
-      MusicSection section = selectedServerSection as MusicSection;
+      MainSection section = selectedServerSection as MainSection;
       btnServerSectionSearch.Enabled = OnSearchInput != null && section != null && section.canBeSearched;
       if (btnServerSectionSearch.Enabled && btnServerSectionSearch.Tag != section)
       {
@@ -240,7 +241,7 @@ namespace PlexMusicPlaylists
 
     void serverSearch_Click(object sender, EventArgs e)
     {
-      MusicSection section = selectedServerSection as MusicSection;
+      MainSection section = selectedServerSection as MainSection;
       ToolStripMenuItem tsi = sender as ToolStripMenuItem;
       SearchSection searchSection = tsi != null ? tsi.Tag as SearchSection : null;
       if (OnSearchInput != null && section != null && searchSection != null)
@@ -294,7 +295,7 @@ namespace PlexMusicPlaylists
 
     #region PMS Server Helper methods
 
-    private void loadMusicSections()
+    private void loadMainSections()
     {
       gvServerTrack.DataSource = null;
       tvServerSection.Nodes.Clear();
@@ -306,6 +307,16 @@ namespace PlexMusicPlaylists
         TreeNode tn = rootNode.Nodes.Add(section.Key, section.Title);
         tn.Tag = section;
         loadSubSection(tn);
+      }
+
+      if (playlistManager.Preferences.AllowVideos)
+      {
+        foreach (LibrarySection section in server.movieSections())
+        {
+          TreeNode tn = rootNode.Nodes.Add(section.Key, section.Title);
+          tn.Tag = section;
+          loadSubSection(tn);
+        }
       }
       rootNode.ExpandAll();
     }
@@ -359,7 +370,7 @@ namespace PlexMusicPlaylists
           LibrarySection section = row.DataBoundItem as LibrarySection;
           if (section != null)
           {
-            logMessage(playlistManager.addTrack(playlist.Key, section.Key, atPosition, out trackAdded));
+            logMessage(playlistManager.addTrack(playlist.Key, section.Key, section.TrackType, atPosition, out trackAdded));
             if (trackAdded)
             {
               firstKey = firstKey ?? section.Key;

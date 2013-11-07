@@ -13,6 +13,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     protected const string DESCRIPTION = "description";
     protected const string NEWNAME = "newname";
     protected const string PLAYLISTKEY = "playlistkey";
+    protected const string TRACK_TYPE = "track_type";
     protected const string TOPOSITION = "to";
     protected const string TITLE1 = "title1";
     protected const string TITLE2 = "title2";
@@ -24,28 +25,37 @@ namespace PlexMusicPlaylists.PlexMediaServer
     private const string PLAYLIST_USERS_URL = PLAYLIST_BASE_URL + "/users";
     private const string PLAYLIST_PLAYLISTS_URL = PLAYLIST_BASE_URL + "/playlists";
     private const string PLAYLIST_TRACKS_URL = PLAYLIST_BASE_URL + "/tracks";
-    protected enum PLCommands { PLAll, PLSingle, PLCreate, PLDelete, PLRename, TRAdd, TRRemove, TRMove, USERList, USERGetCurrent, USERSetCurrent, USERDelete };
+    protected enum PLCommands { PLAll, PLSingle, PLCreate, PLDelete, PLRename, TRAdd, TRRemove, TRMove, USERList, USERGetCurrent, USERSetCurrent, USERDelete, PREFSGet };
     public enum PLTypes { Simple, Smart};
     private SortedDictionary<PLCommands, string> PLCommandBaseUrl = new SortedDictionary<PLCommands,string>
       {{PLCommands.PLAll , PLAYLIST_PLAYLISTS_URL}, {PLCommands.PLSingle, PLAYLIST_PLAYLISTS_URL + "/list"}, 
         {PLCommands.PLCreate, PLAYLIST_PLAYLISTS_URL+"/create"}, {PLCommands.PLDelete, PLAYLIST_PLAYLISTS_URL +"/delete"}, {PLCommands.PLRename, PLAYLIST_PLAYLISTS_URL+"/rename"}, 
         {PLCommands.TRAdd, PLAYLIST_TRACKS_URL + "/add"}, {PLCommands.TRRemove, PLAYLIST_TRACKS_URL + "/remove"}, {PLCommands.TRMove, PLAYLIST_TRACKS_URL + "/move"}, 
         {PLCommands.USERList, PLAYLIST_USERS_URL}, {PLCommands.USERGetCurrent, PLAYLIST_USERS_URL + "/current"}, 
-        {PLCommands.USERSetCurrent, PLAYLIST_USERS_URL + "/set"}, {PLCommands.USERDelete, PLAYLIST_USERS_URL + "/delete"}
+        {PLCommands.USERSetCurrent, PLAYLIST_USERS_URL + "/set"}, {PLCommands.USERDelete, PLAYLIST_USERS_URL + "/delete"},
+        {PLCommands.PREFSGet, PLAYLIST_BASE_URL + "/preferences"}
       };
     private SortedDictionary<PLTypes, string> PLTypeNames = new SortedDictionary<PLTypes, string> { { PLTypes.Simple, "SIMPLE" }, { PLTypes.Smart, "SMART" } };
     private PLUser m_currentUser = null;
+    private Preferences m_Preferences = new Preferences();
 
     public PlaylistManager(string _ip, int _port) : base(_ip, _port)
     {
     }
 
+    public Preferences Preferences { get { return m_Preferences; } }
+    
     public List<PLUser> currentUserlist { get; set; }
     public List<Playlist> currentAllPlaylists { get; set; }
     public List<Track> currentTrackList { get; set; }
     public PLUser currentUser
     {
       get { return this.getCurrentUser(); }
+    }
+
+    public void loadPreferences()
+    {
+      m_Preferences.loadFromList(getElementList(PLCommands.PREFSGet, DIRECTORY));
     }
 
     public bool isNormalUser(string _userName)
@@ -64,6 +74,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
       return elements;
     }
+
 
     public IEnumerable<XElement> getUserList()
     {
@@ -170,7 +181,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       foreach (XElement element in elements)
       {
         Track track = new Track(playlist) { Key = attributeValue(element, KEY), Title = attributeValue(element, TITLE), 
-          Duration = attributeValueAsInt(element, DURATION) / 1000 };
+          Duration = attributeValueAsInt(element, DURATION) / 1000, TrackType = attributeValue(element, ALBUM, "track") };
         playlist.Add(track);
         totalDuration += track.Duration;
       }
@@ -215,9 +226,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
     }
 
 
-    public string addTrack(string _playlistKey, string _key, int _atPosition, out bool _trackAdded)
+    public string addTrack(string _playlistKey, string _key, string _trackType, int _atPosition, out bool _trackAdded)
     {
-      string message = addTrack(_playlistKey, _key);
+      string message = addTrack(_playlistKey, _key, _trackType);
 
       _trackAdded = !String.IsNullOrEmpty(message) && message.StartsWith("/");
       if (_trackAdded && _atPosition > 0)
@@ -227,11 +238,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
       return message;
     }
 
-    public string addTrack(string _playlistKey, string _key)
+    public string addTrack(string _playlistKey, string _key, string _trackType)
     {
       if (!String.IsNullOrEmpty(_playlistKey) && !string.IsNullOrEmpty(_key) && !trackInCurrentTrackList(_key))
       {
-        string commandUrl = this.makeUrl(PLCommands.TRAdd, new Dictionary<string, string> {  { PLAYLISTKEY, _playlistKey } , { KEY, _key }});
+        string commandUrl = this.makeUrl(PLCommands.TRAdd, new Dictionary<string, string> { { PLAYLISTKEY, _playlistKey }, { KEY, _key }, { TRACK_TYPE, _trackType} });
         XElement elementRoot = Utils.elementFromURL(commandUrl);
 
         return attributeValue(elementRoot, MESSAGE);

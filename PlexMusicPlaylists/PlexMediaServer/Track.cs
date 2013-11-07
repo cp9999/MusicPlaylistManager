@@ -29,6 +29,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
+    public string TrackType { get; set; }
+
     public Track() : base()
     {
     }

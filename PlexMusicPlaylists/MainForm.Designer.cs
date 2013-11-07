@@ -37,8 +37,8 @@
       this.label1 = new System.Windows.Forms.Label();
       this.splitBottom = new System.Windows.Forms.SplitContainer();
       this.splitDetail = new System.Windows.Forms.SplitContainer();
-      this.rtbLog = new System.Windows.Forms.RichTextBox();
       this.playlistUC = new PlexMusicPlaylists.PlaylistUserControl();
+      this.rtbLog = new System.Windows.Forms.RichTextBox();
       ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
       this.splitMain.Panel1.SuspendLayout();
       this.splitMain.Panel2.SuspendLayout();
@@ -171,6 +171,15 @@
       this.splitDetail.SplitterDistance = 664;
       this.splitDetail.TabIndex = 1;
       // 
+      // playlistUC
+      // 
+      this.playlistUC.Caption = "Playlist configurator";
+      this.playlistUC.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.playlistUC.Location = new System.Drawing.Point(0, 0);
+      this.playlistUC.Name = "playlistUC";
+      this.playlistUC.Size = new System.Drawing.Size(1255, 610);
+      this.playlistUC.TabIndex = 0;
+      // 
       // rtbLog
       // 
       this.rtbLog.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -180,15 +189,6 @@
       this.rtbLog.Size = new System.Drawing.Size(1255, 109);
       this.rtbLog.TabIndex = 0;
       this.rtbLog.Text = "";
-      // 
-      // playlistUC
-      // 
-      this.playlistUC.Caption = "Playlist configurator";
-      this.playlistUC.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.playlistUC.Location = new System.Drawing.Point(0, 0);
-      this.playlistUC.Name = "playlistUC";
-      this.playlistUC.Size = new System.Drawing.Size(1255, 610);
-      this.playlistUC.TabIndex = 0;
       // 
       // MainForm
       // 

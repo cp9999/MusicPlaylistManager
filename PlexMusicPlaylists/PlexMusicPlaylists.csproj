@@ -59,13 +59,14 @@
       <DependentUpon>PlaylistUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="PlexMediaServer\LibrarySection.cs" />
-    <Compile Include="PlexMediaServer\MusicSection.cs" />
+    <Compile Include="PlexMediaServer\MainSection.cs" />
     <Compile Include="PlexMediaServer\Playlist.cs" />
     <Compile Include="PlexMediaServer\PlaylistBase.cs" />
     <Compile Include="PlexMediaServer\PlaylistManager.cs" />
     <Compile Include="PlexMediaServer\PlaylistSettings.cs" />
     <Compile Include="PlexMediaServer\PMSBase.cs" />
     <Compile Include="PlexMediaServer\PMSServer.cs" />
+    <Compile Include="PlexMediaServer\Preferences.cs" />
     <Compile Include="PlexMediaServer\SearchSection.cs" />
     <Compile Include="PlexMediaServer\Track.cs" />
     <Compile Include="PlexMediaServer\PLUser.cs" />
