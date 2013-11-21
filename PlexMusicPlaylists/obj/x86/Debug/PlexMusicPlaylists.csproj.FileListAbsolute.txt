@@ -19,3 +19,5 @@ F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistMa
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\GenerateResource.read.1.tlog
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\GenerateResource.write.1.tlog
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.SearchForm.resources
+F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.Import.ImportForm.resources
+F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.Import.LocationMappingForm.resources

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace PlexMusicPlaylists.PlexMediaServer
 {
   public class LibrarySection : PlaylistBase
   {
+    private IEnumerable<XElement> m_tracks = null;
 
     public string SectionUrl { get; set; }
 
@@ -17,6 +19,15 @@ namespace PlexMusicPlaylists.PlexMediaServer
     public string TrackType
     {
       get { return IsMusic ? "track" : "movie"; }
+    }
+
+    public IEnumerable<XElement> tracks(PMSServer _pmsServer)
+    {
+      if (m_tracks == null && _pmsServer != null)
+      {
+        m_tracks = _pmsServer.getSectionTracks(this);
+      }
+      return m_tracks;
     }
   }
 }

@@ -14,7 +14,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     private const string PLEX_CLIENT_IDENTIFIER = "MusicPlaylist-Configurator";
     public const string DUMMY = "dummy";
 
-    public static string textFromURL(string _url)
+    public static string textFromURL(string _url, bool _throw)
     {
       var client = new WebClient();
       try
@@ -22,22 +22,50 @@ namespace PlexMusicPlaylists.PlexMediaServer
         client.Headers.Add(HEADER_ENTRY_PLEX_CLIENT, PLEX_CLIENT_IDENTIFIER);
         return client.DownloadString(_url);
       }
-      catch 
-      {        
+      catch (Exception ex)
+      {
+        if (_throw)
+          throw ex;
         return "";
       }
+    }
+    public static string textFromURL(string _url)
+    {
+      return textFromURL(_url, false);
     }
 
     public static XElement elementFromURL(string _url)
     {
       try
       {
-        return XElement.Parse(Utils.textFromURL(_url), LoadOptions.None);
+        return XElement.Parse(Utils.textFromURL(_url, true), LoadOptions.None);
       }
-      catch
+      catch (Exception ex)
       {
-        return new XElement(DUMMY, new XAttribute("url", _url));
+        string innerException = ex.Message;
+        if (!String.IsNullOrEmpty(innerException))
+          innerException = String.Format(" [Exception={0}]", innerException);
+        return new XElement(DUMMY, new XAttribute("url", _url), new XAttribute("exception", innerException));
       }
     }
+
+    public static string getSectionUrl(string _key, string _sectionUrl, string _baseUrl, string _defaultUrl)
+    {
+      if (_key.StartsWith("/"))
+      {
+        _sectionUrl = String.Format("{0}{1}", _baseUrl, _key);
+      }
+      else
+      {
+        if (String.IsNullOrEmpty(_sectionUrl) && ! String.IsNullOrEmpty(_defaultUrl))
+        {
+          _sectionUrl = String.Format("{0}{1}/", _baseUrl, _defaultUrl);
+        }
+        _sectionUrl += _key + "/";
+      }
+      return _sectionUrl;
+    }
+
+
   }
 }

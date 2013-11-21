@@ -8,6 +8,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
 {
   public class PMSBase
   {
+    public const char FORWARD_SLASH = '/';
+    public const char BACKWARD_SLASH = '\\';
     private string serverUrl = "";
     private string serverName = "";
     public const string DIRECTORY = "Directory";
@@ -53,7 +55,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
         XElement element = Utils.elementFromURL(baseUrl);
         if (element.Name.LocalName.Equals(Utils.DUMMY))
         {
-          throw new Exception(String.Format("ERROR: No server found at: {0}", baseUrl));
+          throw new Exception(String.Format("ERROR: No server found at: {0}{1}", baseUrl, attributeValue(element, "exception")));
         }
         serverName = attributeValue(element, FRIENDLYNAME);
       }

@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Import\ImportEntry.cs" />
+    <Compile Include="Import\ImportFile.cs" />
+    <Compile Include="Import\ImportFileM3U.cs" />
+    <Compile Include="Import\ImportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Import\ImportForm.Designer.cs">
+      <DependentUpon>ImportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportManager.cs" />
+    <Compile Include="Import\LocationMappingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Import\LocationMappingForm.Designer.cs">
+      <DependentUpon>LocationMappingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Import\MatchEntry.cs" />
+    <Compile Include="Import\PlexLocationMapping.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +82,7 @@
     <Compile Include="PlexMediaServer\PlaylistBase.cs" />
     <Compile Include="PlexMediaServer\PlaylistManager.cs" />
     <Compile Include="PlexMediaServer\PlaylistSettings.cs" />
+    <Compile Include="PlexMediaServer\SectionLocation.cs" />
     <Compile Include="PlexMediaServer\PMSBase.cs" />
     <Compile Include="PlexMediaServer\PMSServer.cs" />
     <Compile Include="PlexMediaServer\Preferences.cs" />
@@ -79,11 +98,18 @@
     <Compile Include="SearchForm.Designer.cs">
       <DependentUpon>SearchForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Import\ImportForm.resx">
+      <DependentUpon>ImportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Import\LocationMappingForm.resx">
+      <DependentUpon>LocationMappingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlaylistUserControl.resx">
       <DependentUpon>PlaylistUserControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -98,8 +124,12 @@
     <EmbeddedResource Include="SearchForm.resx">
       <DependentUpon>SearchForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\PlexMusicPlaylists.Import.ImportEntry.datasource" />
+    <None Include="Properties\DataSources\PlexMusicPlaylists.Import.ImportFile.datasource" />
+    <None Include="Properties\DataSources\PlexMusicPlaylists.Import.PlexLocationMapping.datasource" />
     <None Include="Properties\DataSources\PlexMusicPlaylists.PlexMediaServer.LibrarySection.datasource" />
     <None Include="Properties\DataSources\PlexMusicPlaylists.PlexMediaServer.Playlist.datasource" />
+    <None Include="Properties\DataSources\PlexMusicPlaylists.PlexMediaServer.SectionLocation.datasource" />
     <None Include="Properties\DataSources\PlexMusicPlaylists.PlexMediaServer.Track.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -158,6 +188,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Delete user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open file 16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Blank16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OKmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Blue Exclamation mark 16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Blue question mark 16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Red cross 16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Red stop 16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Import 16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

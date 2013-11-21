@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using PlexMusicPlaylists.PlexMediaServer;
+using PlexMusicPlaylists.Import;
 
 namespace PlexMusicPlaylists
 {
@@ -20,7 +21,8 @@ namespace PlexMusicPlaylists
 
     #region data members
     PlaylistManager playlistManager = new PlaylistManager("", 32400);
-    PlexMediaServer.PMSServer server = new PlexMediaServer.PMSServer("", 32400);
+    PMSServer server = new PMSServer("", 32400);
+    ImportManager importManager = new ImportManager();
     protected string caption = "Playlist configurator";
     string loadedListKey = "";
     bool editAddMode = false;
@@ -45,6 +47,8 @@ namespace PlexMusicPlaylists
     public PlaylistUserControl()
     {
       InitializeComponent();
+      importManager.PlaylistManager = playlistManager;
+      importManager.PMSServer = server;
       initPlaylistControls();
     }
 
@@ -132,7 +136,7 @@ namespace PlexMusicPlaylists
     }
 
     private void initPlaylistControls()
-    {
+    {      
       //splitContainerGlobal.Panel2Collapsed = true;
       btnPlaylistEditRename.Top = btnPlaylistEditCreate.Top;
       btnPlaylistEditRename.Left = btnPlaylistEditCreate.Left;
@@ -299,11 +303,13 @@ namespace PlexMusicPlaylists
     {
       gvServerTrack.DataSource = null;
       tvServerSection.Nodes.Clear();
+      importManager.reset();
       // Add the root node
       TreeNode rootNode = tvServerSection.Nodes.Add(String.Format("{0} [{1}]", server.Name, server.baseUrl));
 
       foreach (LibrarySection section in server.musicSections())
       {
+        importManager.addMainSection(section as MainSection);
         TreeNode tn = rootNode.Nodes.Add(section.Key, section.Title);
         tn.Tag = section;
         loadSubSection(tn);
@@ -313,6 +319,7 @@ namespace PlexMusicPlaylists
       {
         foreach (LibrarySection section in server.movieSections())
         {
+          importManager.addMainSection(section as MainSection);
           TreeNode tn = rootNode.Nodes.Add(section.Key, section.Title);
           tn.Tag = section;
           loadSubSection(tn);
@@ -629,6 +636,29 @@ namespace PlexMusicPlaylists
             loadedListKey = "";
             fillUserList();
             loadPlaylists();
+          }
+        }
+      }
+    }
+
+    private void btnImport_Click(object sender, EventArgs e)
+    {
+      if (importManager != null)
+      {
+        string newKey = importManager.showImport();
+        if (!String.IsNullOrEmpty(newKey))
+        {
+          tbPlaylistEditAddTitle.Text = "";
+          tbPlaylistEditAddDescription.Text = "";
+          // Reload the playlists and select the new one!
+          loadPlaylists();
+          if (gvPlaylists.Rows.Count > 0)
+          {
+            DataGridViewRow newRow = gvPlaylists.Rows.OfType<DataGridViewRow>().FirstOrDefault(row => ((Playlist)row.DataBoundItem).Key == newKey);
+            if (newRow != null)
+            {
+              newRow.Selected = true;
+            }
           }
         }
       }

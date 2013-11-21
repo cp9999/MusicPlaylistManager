@@ -88,6 +88,27 @@ namespace PlexMusicPlaylists.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Blank16 {
+            get {
+                object obj = ResourceManager.GetObject("Blank16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Blue_Exclamation_mark_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Blue_Exclamation_mark_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Blue_question_mark_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Blue_question_mark_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap delete {
             get {
                 object obj = ResourceManager.GetObject("delete", resourceCulture);
@@ -109,6 +130,13 @@ namespace PlexMusicPlaylists.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Import_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Import_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap left {
             get {
                 object obj = ResourceManager.GetObject("left", resourceCulture);
@@ -119,6 +147,41 @@ namespace PlexMusicPlaylists.Properties {
         internal static System.Drawing.Bitmap ok {
             get {
                 object obj = ResourceManager.GetObject("ok", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap OKmark {
+            get {
+                object obj = ResourceManager.GetObject("OKmark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Open_file {
+            get {
+                object obj = ResourceManager.GetObject("Open_file", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Open_file_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Open_file_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Red_cross_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Red_cross_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Red_stop_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Red_stop_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

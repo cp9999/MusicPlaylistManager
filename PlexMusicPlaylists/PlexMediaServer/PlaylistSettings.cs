@@ -9,6 +9,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
 {
   public class PlaylistSettings
   {
+    protected const string FOLDER = "PlexMusicPlaylists";
     protected const string FILENAME = "PlaylistSettings.xml";
     public string IP { get; set; }
     public int Port { get; set; }
@@ -17,6 +18,26 @@ namespace PlexMusicPlaylists.PlexMediaServer
     static PlaylistSettings()
     {
       xs = new XmlSerializer(typeof(PlaylistSettings));
+      initDataFolder();
+    }
+
+    static void initDataFolder()
+    {
+      try
+      {
+        if (!Directory.Exists(SettingsFolder))
+        {
+          // Create our settings folder
+          DirectoryInfo dir = Directory.CreateDirectory(SettingsFolder);
+          // Copy existing settings from old to new storage location
+          string oldSettingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), FILENAME);
+          if (File.Exists(oldSettingsFileName))
+          {
+            File.Copy(oldSettingsFileName, SettingsFileName);
+          }
+        }
+      }
+      catch { }
     }
 
     protected PlaylistSettings()
@@ -53,6 +74,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       try
       {
+
         using (StreamReader sr = new StreamReader(_fileName))
         {
           return xs.Deserialize(sr) as PlaylistSettings;
@@ -68,7 +90,15 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       get
       {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), FILENAME);
+        return Path.Combine(SettingsFolder, FILENAME);
+      }
+    }
+
+    public static string SettingsFolder
+    {
+      get
+      {
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), FOLDER);
       }
     }
   }

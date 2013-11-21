@@ -12,9 +12,16 @@ namespace PlexMusicPlaylists.PlexMediaServer
   {
     private const string LIBRARY_SECTIONS = "/library/sections";
 
+    static PMSServer()
+    {
+      DirectorySeparator = PMSBase.FORWARD_SLASH;
+    }
+
     public PMSServer(string _ip, int _port) : base(_ip, _port)
     {
     }
+
+    public static char DirectorySeparator { get; set; }
 
     public IEnumerable<XElement> getMusicSections()
     {
@@ -54,6 +61,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
         sections.Add(section);
         if (_isMainSection)
         {
+          ((MainSection)section).addLocations(element);
           ((MainSection)section).addSearchSections();
         }
       }
@@ -62,6 +70,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     private string getSectionUrl(string _key, string _sectionUrl)
     {
+      return Utils.getSectionUrl(_key, _sectionUrl, this.baseUrl, LIBRARY_SECTIONS);
+      /*
       if (_key.StartsWith("/"))
       {
         _sectionUrl = String.Format("{0}{1}", this.baseUrl, _key);
@@ -75,9 +85,10 @@ namespace PlexMusicPlaylists.PlexMediaServer
         _sectionUrl += _key + "/";
       }
       return _sectionUrl;
+      */
     }
 
-    public IEnumerable<XElement> getSectionElements(LibrarySection _section)
+    public IEnumerable<XElement> getSectionElements(LibrarySection _section, bool _allowDirectory)
     {
       XElement sectionElements = Utils.elementFromURL(_section.SectionUrl);
 
@@ -87,7 +98,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
         select element;
 
       _section.HasTracks = elements.Count() > 0;
-      if (!_section.HasTracks)
+      if (!_section.HasTracks && _allowDirectory)
       {
         return 
           from element in sectionElements.Elements(DIRECTORY)
@@ -95,6 +106,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
           select element;
       }
       return elements;
+    }
+
+    public IEnumerable<XElement> getSectionTracks(LibrarySection _section)
+    {
+      return getSectionElements(_section, false);
     }
 
 
@@ -110,10 +126,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public List<LibrarySection> librarySections(LibrarySection _section)
     {
-      return listFromElements(getSectionElements(_section), _section.SectionUrl, _section.HasTracks, false, _section.IsMusic);
+      return listFromElements(getSectionElements(_section, true), _section.SectionUrl, _section.HasTracks, false, _section.IsMusic);
     }
-
-
 
   }
 }
