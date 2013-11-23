@@ -10,8 +10,6 @@ namespace PlexMusicPlaylists.Import
   {
     private string m_Path = null;
     protected List<ImportEntry> m_entries = new List<ImportEntry>();
-    
-    public char DirectorySeparator { get; set; }
 
     public string FileName { get; set; }
 
@@ -52,7 +50,6 @@ namespace PlexMusicPlaylists.Import
 
     public ImportFile()
     {
-      DirectorySeparator = PlexMediaServer.PMSServer.DirectorySeparator;
     }
   }
 }

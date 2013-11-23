@@ -67,8 +67,10 @@ namespace PlexMusicPlaylists.Import
       {
         if (String.IsNullOrEmpty(m_fullFileName) && !String.IsNullOrEmpty(FileName))
         {
-          m_fullFileName = Path.IsPathRooted(FileName) ? Path.GetFullPath(FileName) : Path.Combine(Owner.FullPath, FileName);
-          m_fullFileName = normalizePath(m_fullFileName, Owner.DirectorySeparator, PMSServer.DirectorySeparator);
+          // Note: Path.IsPathRooted(FileName) returns true for all windows-style rooted paths
+          m_fullFileName = Path.IsPathRooted(FileName) || FileName.StartsWith(PMSBase.FORWARD_SLASH.ToString()) ? FileName : Path.Combine(Owner.FullPath, FileName);
+          // Note: Owner.FullPath returns a windows style path
+          m_fullFileName = normalizePath(m_fullFileName, PMSBase.BACKWARD_SLASH, PMSServer.DirectorySeparator);
         }
         return m_fullFileName ?? "";
       }
@@ -87,9 +89,9 @@ namespace PlexMusicPlaylists.Import
       }
     }
 
-    public void setSectionLocation(SectionLocation _sectionLocation, string _baseUrl, ImportManager.ProgressEventHandler _progressMessage)
+    public void setSectionLocation(SectionLocation _sectionLocation, bool _usePlexLocation, string _baseUrl, ImportManager.ProgressEventHandler _progressMessage)
     {
-      string relativePath = RelativePath(_sectionLocation.MappedLocation);
+      string relativePath = RelativePath(_usePlexLocation ? _sectionLocation.PlexLocation : _sectionLocation.MappedLocation);
       MainSection = _sectionLocation.Owner();
       _progressMessage(String.Format("PlexMediaServer: loading folders from section {0}.....", MainSection.Title));
       MainSection.loadFolders(_baseUrl);
@@ -98,7 +100,17 @@ namespace PlexMusicPlaylists.Import
         where folder.Title.Equals(relativePath, StringComparison.OrdinalIgnoreCase)
         select folder;
       FolderSection = folders.FirstOrDefault();
-      m_fullPlexFileName = FullFileName.Replace(_sectionLocation.MappedLocation, _sectionLocation.PlexLocation);
+      char directorySeparatorFrom = PMSServer.DirectorySeparator == PMSBase.BACKWARD_SLASH ? PMSBase.FORWARD_SLASH : PMSBase.BACKWARD_SLASH;
+      
+      m_fullPlexFileName = FullFileName;
+      if (!_usePlexLocation && !String.IsNullOrEmpty(_sectionLocation.MappedLocation))
+      {
+        if (m_fullPlexFileName.StartsWith(_sectionLocation.MappedLocation, StringComparison.OrdinalIgnoreCase))
+        {
+          m_fullPlexFileName = _sectionLocation.PlexLocation + m_fullPlexFileName.Remove(0, _sectionLocation.MappedLocation.Length);
+        }
+        m_fullPlexFileName = normalizePath(m_fullPlexFileName, directorySeparatorFrom, PMSServer.DirectorySeparator);
+      }
     }
 
     private string RelativePath(string _basePath)
@@ -106,14 +118,19 @@ namespace PlexMusicPlaylists.Import
       string relativePath = FullFileName;
       if (!String.IsNullOrEmpty(_basePath))
       {
-        _basePath += PMSServer.DirectorySeparator;
-        if (relativePath.StartsWith(_basePath))
+        char dirSep = _basePath.FirstOrDefault(c => c.Equals(PMSBase.BACKWARD_SLASH) || c.Equals(PMSBase.FORWARD_SLASH));
+        if (dirSep != 0)
+          _basePath += dirSep;
+        if (relativePath.StartsWith(_basePath, StringComparison.OrdinalIgnoreCase))
         {
           relativePath = relativePath.Remove(0, _basePath.Length);
         }
       }
       string fileNameOnly = Path.GetFileName(relativePath);
-      return relativePath.Remove(relativePath.Length - fileNameOnly.Length - 1);
+      char directorySeparatorFrom = PMSServer.DirectorySeparator == PMSBase.BACKWARD_SLASH ? PMSBase.FORWARD_SLASH : PMSBase.BACKWARD_SLASH;
+      return relativePath.Length - fileNameOnly.Length - 1 <= 0 
+        ? String.Empty
+        : normalizePath(relativePath.Remove(relativePath.Length - fileNameOnly.Length - 1), directorySeparatorFrom, PMSServer.DirectorySeparator); 
     }
 
     public void resetMatches(bool _matchOnFolder)

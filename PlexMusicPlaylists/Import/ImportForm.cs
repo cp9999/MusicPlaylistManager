@@ -77,7 +77,6 @@ namespace PlexMusicPlaylists.Import
 
     private void enableCommands()
     {
-      btnOpenFile.Enabled = validDirectorySeparator();
       btnMatchFolder.Enabled = m_importManager != null && m_importManager.ImportFile != null;
       btnMatchTitle.Enabled = m_importManager != null && m_importManager.ImportFile != null;
       btnCreate.Enabled = !String.IsNullOrEmpty(tbPlaylistTitle.Text) && m_importManager != null && m_importManager.ImportFile != null && 
@@ -110,12 +109,7 @@ namespace PlexMusicPlaylists.Import
     private void btnOpenFile_Click(object sender, EventArgs e)
     {
       if (ofdImportFile.ShowDialog() == System.Windows.Forms.DialogResult.OK && m_importManager != null)
-      {
-        if (tbDirectorySeparator.Text.Length == 1)
-        {
-          m_importManager.DirectorySeparator = tbDirectorySeparator.Text[0];
-        }
-         
+      {        
         if (m_importManager.LoadImportFile(ofdImportFile.FileName))
         {
           m_importManager_OnProgress("");
@@ -232,30 +226,6 @@ namespace PlexMusicPlaylists.Import
       }
     }
 
-    private bool validDirectorySeparator()
-    {
-      char sep = String.IsNullOrEmpty(tbDirectorySeparator.Text) ? ' ' : tbDirectorySeparator.Text[0];
-      return sep.Equals(PMSBase.BACKWARD_SLASH) || sep.Equals(PMSBase.FORWARD_SLASH);
-    }
-
-    private void tbDirectorySeparator_Validating(object sender, CancelEventArgs e)
-    {
-      e.Cancel = !validDirectorySeparator();
-      if (e.Cancel)
-      {
-        ep.SetError(tbDirectorySeparator, String.Format("Must either be {0} or {1}", PMSBase.BACKWARD_SLASH, PMSBase.FORWARD_SLASH));
-        enableCommands();
-      }
-      else
-      {
-        ep.SetError(tbDirectorySeparator, String.Empty);
-      }
-    }
-
-    private void tbDirectorySeparator_Validated(object sender, EventArgs e)
-    {
-      enableCommands();
-    }
 
     private void btnSectionLocation_Click(object sender, EventArgs e)
     {

@@ -12,10 +12,9 @@ namespace PlexMusicPlaylists.Import
   {
     public bool ExtendedFormat { get; set; }
 
-    public static ImportFileM3U loadM3UFile(string _fileName, char _directorySeparator)
+    public static ImportFileM3U loadM3UFile(string _fileName)
     {
-      ImportFileM3U importFile = new ImportFileM3U() { FileName = _fileName, DirectorySeparator = _directorySeparator };
-      importFile.DirectorySeparator = PlexMusicPlaylists.PlexMediaServer.PMSBase.BACKWARD_SLASH;
+      ImportFileM3U importFile = new ImportFileM3U() { FileName = _fileName};
       try
       {
         Directory.SetCurrentDirectory(Path.GetDirectoryName(_fileName));

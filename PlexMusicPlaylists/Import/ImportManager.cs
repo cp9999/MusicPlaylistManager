@@ -17,7 +17,6 @@ namespace PlexMusicPlaylists.Import
     public PMSServer PMSServer { get; set; }
     private List<MainSection> m_mainSections = new List<MainSection>();
     private List<SectionLocation> m_sectionLocations = new List<SectionLocation>();
-    public char DirectorySeparator { get; set; }
 
     public List<SectionLocation> SectionLocations { get { return m_sectionLocations; } }
 
@@ -108,17 +107,31 @@ namespace PlexMusicPlaylists.Import
       plexLocationMapping.Save(locationMappingFileName());
     }
 
-    SectionLocation findSectionLocation(ImportEntry _importEntry)
+    SectionLocation findSectionLocation(ImportEntry _importEntry, out bool _usePlexLocation)
     {
+      _usePlexLocation = true;
       if (_importEntry != null)
       {
-        // find locations with corresponding MappedLocation
-        var locations = 
-          from location in m_sectionLocations.OrderByDescending(loc => loc.MappedLocation.Length)
-          where !String.IsNullOrEmpty(location.MappedLocation) && _importEntry.FullFileName.StartsWith(location.MappedLocation, StringComparison.OrdinalIgnoreCase)
+        // 1. find section locations with corresponding PlexLocation
+        var locations =
+          from location in m_sectionLocations.OrderByDescending(loc => loc.PlexLocation.Length)
+          where !String.IsNullOrEmpty(location.PlexLocation) && _importEntry.FullFileName.StartsWith(location.PlexLocation, StringComparison.OrdinalIgnoreCase)
           select location;
+        SectionLocation sectionLocation = locations.FirstOrDefault();
 
-        return locations.FirstOrDefault();
+        if (sectionLocation == null)
+        {
+          _usePlexLocation = false;
+          // 2. find section locations with corresponding MappedLocation
+          locations =
+            from location in m_sectionLocations.OrderByDescending(loc => loc.MappedLocation.Length)
+            where !String.IsNullOrEmpty(location.MappedLocation) && _importEntry.FullFileName.StartsWith(location.MappedLocation, StringComparison.OrdinalIgnoreCase)
+            select location;
+          
+          sectionLocation = locations.FirstOrDefault();
+        }
+
+        return sectionLocation;
       }
       return null;
     }
@@ -214,13 +227,14 @@ namespace PlexMusicPlaylists.Import
       if (File.Exists(_fileName))
       {
         progressMessage("Loading file....");
-        m_importFile = ImportFileM3U.loadM3UFile(_fileName, DirectorySeparator);
+        m_importFile = ImportFileM3U.loadM3UFile(_fileName);
         foreach (ImportEntry entry in m_importFile.Entries)
         {
-          SectionLocation sectionLocation = findSectionLocation(entry);
+          bool usePlexLocation;
+          SectionLocation sectionLocation = findSectionLocation(entry, out usePlexLocation);
           if (sectionLocation != null && sectionLocation.Owner() != null)
           {
-            entry.setSectionLocation(sectionLocation, PMSServer.baseUrl, progressMessage);
+            entry.setSectionLocation(sectionLocation, usePlexLocation, PMSServer.baseUrl, progressMessage);
             if (entry.FolderSection != null)
             {
               Debug.WriteLine(String.Format("==> FOLDER FOUND[{0}]: {1} - {2}", entry.FullFileName, entry.FolderSection.Key, entry.FolderSection.Title));

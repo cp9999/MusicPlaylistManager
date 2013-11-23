@@ -29,8 +29,8 @@
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btnClose = new System.Windows.Forms.Button();
@@ -106,8 +106,8 @@
       // 
       this.gvSectionLocation.AllowUserToAddRows = false;
       this.gvSectionLocation.AllowUserToDeleteRows = false;
-      dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-      this.gvSectionLocation.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+      dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+      this.gvSectionLocation.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
       this.gvSectionLocation.AutoGenerateColumns = false;
       this.gvSectionLocation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       this.gvSectionLocation.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -119,8 +119,8 @@
       this.gvSectionLocation.Location = new System.Drawing.Point(0, 0);
       this.gvSectionLocation.MultiSelect = false;
       this.gvSectionLocation.Name = "gvSectionLocation";
-      dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-      this.gvSectionLocation.RowsDefaultCellStyle = dataGridViewCellStyle4;
+      dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+      this.gvSectionLocation.RowsDefaultCellStyle = dataGridViewCellStyle2;
       this.gvSectionLocation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
       this.gvSectionLocation.Size = new System.Drawing.Size(840, 410);
       this.gvSectionLocation.TabIndex = 0;

@@ -49,9 +49,6 @@
       this.tbPlaylistTitle = new System.Windows.Forms.TextBox();
       this.tbPlaylistDescription = new System.Windows.Forms.TextBox();
       this.gbFileSelect = new System.Windows.Forms.GroupBox();
-      this.label5 = new System.Windows.Forms.Label();
-      this.tbDirectorySeparator = new System.Windows.Forms.TextBox();
-      this.label4 = new System.Windows.Forms.Label();
       this.btnOpenFile = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
       this.tbImportFile = new System.Windows.Forms.TextBox();
@@ -61,14 +58,9 @@
       this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
       this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
       this.MatchedOnTitleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.PMSFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.fullFileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.panelImportToolstrip = new System.Windows.Forms.Panel();
       this.toolStripImport = new System.Windows.Forms.ToolStrip();
       this.toolStripLabel = new System.Windows.Forms.ToolStripLabel();
@@ -87,6 +79,13 @@
       this.ep = new System.Windows.Forms.ErrorProvider(this.components);
       this.panelImportBottom = new System.Windows.Forms.Panel();
       this.btnClose = new System.Windows.Forms.Button();
+      this.panelImportDetailGrid = new System.Windows.Forms.Panel();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.fullFileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.panelTop.SuspendLayout();
       this.panelTopRight.SuspendLayout();
       this.panelProgress.SuspendLayout();
@@ -97,11 +96,13 @@
       this.panelImport.SuspendLayout();
       this.panelImportDetail.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.gvImportList)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).BeginInit();
       this.panelImportToolstrip.SuspendLayout();
       this.toolStripImport.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).BeginInit();
       this.panelImportBottom.SuspendLayout();
+      this.panelImportDetailGrid.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // panelTop
@@ -111,7 +112,7 @@
       this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelTop.Location = new System.Drawing.Point(0, 0);
       this.panelTop.Name = "panelTop";
-      this.panelTop.Size = new System.Drawing.Size(1233, 161);
+      this.panelTop.Size = new System.Drawing.Size(1233, 143);
       this.panelTop.TabIndex = 0;
       // 
       // panelTopRight
@@ -121,7 +122,7 @@
       this.panelTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelTopRight.Location = new System.Drawing.Point(668, 0);
       this.panelTopRight.Name = "panelTopRight";
-      this.panelTopRight.Size = new System.Drawing.Size(565, 161);
+      this.panelTopRight.Size = new System.Drawing.Size(565, 143);
       this.panelTopRight.TabIndex = 5;
       // 
       // panelProgress
@@ -130,7 +131,7 @@
       this.panelProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
       this.panelProgress.Controls.Add(this.labelProgress);
       this.panelProgress.Dock = System.Windows.Forms.DockStyle.Bottom;
-      this.panelProgress.Location = new System.Drawing.Point(0, 111);
+      this.panelProgress.Location = new System.Drawing.Point(0, 93);
       this.panelProgress.Name = "panelProgress";
       this.panelProgress.Size = new System.Drawing.Size(565, 50);
       this.panelProgress.TabIndex = 5;
@@ -200,7 +201,7 @@
       this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Left;
       this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
       this.panelTopLeft.Name = "panelTopLeft";
-      this.panelTopLeft.Size = new System.Drawing.Size(668, 161);
+      this.panelTopLeft.Size = new System.Drawing.Size(668, 143);
       this.panelTopLeft.TabIndex = 4;
       // 
       // gbNewPlaylist
@@ -210,7 +211,7 @@
       this.gbNewPlaylist.Controls.Add(this.tbPlaylistTitle);
       this.gbNewPlaylist.Controls.Add(this.tbPlaylistDescription);
       this.gbNewPlaylist.Dock = System.Windows.Forms.DockStyle.Top;
-      this.gbNewPlaylist.Location = new System.Drawing.Point(0, 77);
+      this.gbNewPlaylist.Location = new System.Drawing.Point(0, 60);
       this.gbNewPlaylist.Name = "gbNewPlaylist";
       this.gbNewPlaylist.Size = new System.Drawing.Size(668, 81);
       this.gbNewPlaylist.TabIndex = 3;
@@ -256,48 +257,16 @@
       // 
       // gbFileSelect
       // 
-      this.gbFileSelect.Controls.Add(this.label5);
-      this.gbFileSelect.Controls.Add(this.tbDirectorySeparator);
-      this.gbFileSelect.Controls.Add(this.label4);
       this.gbFileSelect.Controls.Add(this.btnOpenFile);
       this.gbFileSelect.Controls.Add(this.label1);
       this.gbFileSelect.Controls.Add(this.tbImportFile);
       this.gbFileSelect.Dock = System.Windows.Forms.DockStyle.Top;
       this.gbFileSelect.Location = new System.Drawing.Point(0, 0);
       this.gbFileSelect.Name = "gbFileSelect";
-      this.gbFileSelect.Size = new System.Drawing.Size(668, 77);
+      this.gbFileSelect.Size = new System.Drawing.Size(668, 60);
       this.gbFileSelect.TabIndex = 2;
       this.gbFileSelect.TabStop = false;
       this.gbFileSelect.Text = "Select file";
-      // 
-      // label5
-      // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(172, 53);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(273, 13);
-      this.label5.TabIndex = 5;
-      this.label5.Text = "Character used for separating directories in the import file";
-      // 
-      // tbDirectorySeparator
-      // 
-      this.tbDirectorySeparator.Location = new System.Drawing.Point(118, 53);
-      this.tbDirectorySeparator.MaxLength = 1;
-      this.tbDirectorySeparator.Name = "tbDirectorySeparator";
-      this.tbDirectorySeparator.Size = new System.Drawing.Size(26, 20);
-      this.tbDirectorySeparator.TabIndex = 4;
-      this.tbDirectorySeparator.Text = "\\";
-      this.tbDirectorySeparator.Validating += new System.ComponentModel.CancelEventHandler(this.tbDirectorySeparator_Validating);
-      this.tbDirectorySeparator.Validated += new System.EventHandler(this.tbDirectorySeparator_Validated);
-      // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(15, 53);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(96, 13);
-      this.label4.TabIndex = 3;
-      this.label4.Text = "Directory separator";
       // 
       // btnOpenFile
       // 
@@ -335,18 +304,18 @@
       this.panelImport.Controls.Add(this.panelImportDetail);
       this.panelImport.Controls.Add(this.panelImportToolstrip);
       this.panelImport.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelImport.Location = new System.Drawing.Point(0, 161);
+      this.panelImport.Location = new System.Drawing.Point(0, 143);
       this.panelImport.Name = "panelImport";
-      this.panelImport.Size = new System.Drawing.Size(1233, 670);
+      this.panelImport.Size = new System.Drawing.Size(1233, 688);
       this.panelImport.TabIndex = 1;
       // 
       // panelImportDetail
       // 
-      this.panelImportDetail.Controls.Add(this.gvImportList);
+      this.panelImportDetail.Controls.Add(this.tableLayoutPanel1);
       this.panelImportDetail.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelImportDetail.Location = new System.Drawing.Point(0, 31);
       this.panelImportDetail.Name = "panelImportDetail";
-      this.panelImportDetail.Size = new System.Drawing.Size(1233, 639);
+      this.panelImportDetail.Size = new System.Drawing.Size(1233, 657);
       this.panelImportDetail.TabIndex = 1;
       // 
       // gvImportList
@@ -376,7 +345,7 @@
       dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
       this.gvImportList.RowsDefaultCellStyle = dataGridViewCellStyle3;
       this.gvImportList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvImportList.Size = new System.Drawing.Size(1233, 639);
+      this.gvImportList.Size = new System.Drawing.Size(1227, 601);
       this.gvImportList.TabIndex = 0;
       this.gvImportList.VirtualMode = true;
       this.gvImportList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvImportList_CellMouseClick);
@@ -412,27 +381,6 @@
       this.MatchedOnTitleCount.Name = "MatchedOnTitleCount";
       this.MatchedOnTitleCount.ReadOnly = true;
       // 
-      // artistDataGridViewTextBoxColumn
-      // 
-      this.artistDataGridViewTextBoxColumn.DataPropertyName = "Artist";
-      this.artistDataGridViewTextBoxColumn.HeaderText = "Artist";
-      this.artistDataGridViewTextBoxColumn.Name = "artistDataGridViewTextBoxColumn";
-      // 
-      // titleDataGridViewTextBoxColumn
-      // 
-      this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-      this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-      this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-      this.titleDataGridViewTextBoxColumn.Width = 150;
-      // 
-      // fileNameDataGridViewTextBoxColumn
-      // 
-      this.fileNameDataGridViewTextBoxColumn.DataPropertyName = "FileName";
-      this.fileNameDataGridViewTextBoxColumn.HeaderText = "FileName";
-      this.fileNameDataGridViewTextBoxColumn.Name = "fileNameDataGridViewTextBoxColumn";
-      this.fileNameDataGridViewTextBoxColumn.ReadOnly = true;
-      this.fileNameDataGridViewTextBoxColumn.Width = 150;
-      // 
       // MainSectionName
       // 
       this.MainSectionName.DataPropertyName = "MainSectionName";
@@ -455,18 +403,6 @@
       this.Key.Name = "Key";
       this.Key.ReadOnly = true;
       this.Key.Width = 120;
-      // 
-      // fullFileNameDataGridViewTextBoxColumn
-      // 
-      this.fullFileNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.fullFileNameDataGridViewTextBoxColumn.DataPropertyName = "FullFileName";
-      this.fullFileNameDataGridViewTextBoxColumn.HeaderText = "Full filename";
-      this.fullFileNameDataGridViewTextBoxColumn.Name = "fullFileNameDataGridViewTextBoxColumn";
-      this.fullFileNameDataGridViewTextBoxColumn.ReadOnly = true;
-      // 
-      // importEntryBindingSource
-      // 
-      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
       // 
       // panelImportToolstrip
       // 
@@ -608,29 +544,85 @@
       // panelImportBottom
       // 
       this.panelImportBottom.Controls.Add(this.btnClose);
-      this.panelImportBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-      this.panelImportBottom.Location = new System.Drawing.Point(0, 780);
+      this.panelImportBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panelImportBottom.Location = new System.Drawing.Point(3, 610);
       this.panelImportBottom.Name = "panelImportBottom";
-      this.panelImportBottom.Size = new System.Drawing.Size(1233, 51);
+      this.panelImportBottom.Size = new System.Drawing.Size(1227, 44);
       this.panelImportBottom.TabIndex = 2;
       // 
       // btnClose
       // 
       this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-      this.btnClose.Location = new System.Drawing.Point(1146, 16);
+      this.btnClose.Location = new System.Drawing.Point(1143, 12);
       this.btnClose.Name = "btnClose";
       this.btnClose.Size = new System.Drawing.Size(75, 23);
       this.btnClose.TabIndex = 0;
       this.btnClose.Text = "Close";
       this.btnClose.UseVisualStyleBackColor = true;
       // 
+      // panelImportDetailGrid
+      // 
+      this.panelImportDetailGrid.Controls.Add(this.gvImportList);
+      this.panelImportDetailGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panelImportDetailGrid.Location = new System.Drawing.Point(3, 3);
+      this.panelImportDetailGrid.Name = "panelImportDetailGrid";
+      this.panelImportDetailGrid.Size = new System.Drawing.Size(1227, 601);
+      this.panelImportDetailGrid.TabIndex = 1;
+      // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 1;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.Controls.Add(this.panelImportBottom, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.panelImportDetailGrid, 0, 0);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(1233, 657);
+      this.tableLayoutPanel1.TabIndex = 3;
+      // 
+      // artistDataGridViewTextBoxColumn
+      // 
+      this.artistDataGridViewTextBoxColumn.DataPropertyName = "Artist";
+      this.artistDataGridViewTextBoxColumn.HeaderText = "Artist";
+      this.artistDataGridViewTextBoxColumn.Name = "artistDataGridViewTextBoxColumn";
+      // 
+      // titleDataGridViewTextBoxColumn
+      // 
+      this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+      this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+      this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+      this.titleDataGridViewTextBoxColumn.Width = 150;
+      // 
+      // fileNameDataGridViewTextBoxColumn
+      // 
+      this.fileNameDataGridViewTextBoxColumn.DataPropertyName = "FileName";
+      this.fileNameDataGridViewTextBoxColumn.HeaderText = "FileName";
+      this.fileNameDataGridViewTextBoxColumn.Name = "fileNameDataGridViewTextBoxColumn";
+      this.fileNameDataGridViewTextBoxColumn.ReadOnly = true;
+      this.fileNameDataGridViewTextBoxColumn.Width = 150;
+      // 
+      // fullFileNameDataGridViewTextBoxColumn
+      // 
+      this.fullFileNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      this.fullFileNameDataGridViewTextBoxColumn.DataPropertyName = "FullFileName";
+      this.fullFileNameDataGridViewTextBoxColumn.HeaderText = "Full filename";
+      this.fullFileNameDataGridViewTextBoxColumn.Name = "fullFileNameDataGridViewTextBoxColumn";
+      this.fullFileNameDataGridViewTextBoxColumn.ReadOnly = true;
+      // 
+      // importEntryBindingSource
+      // 
+      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
+      // 
       // ImportForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1233, 831);
-      this.Controls.Add(this.panelImportBottom);
       this.Controls.Add(this.panelImport);
       this.Controls.Add(this.panelTop);
       this.Name = "ImportForm";
@@ -651,13 +643,15 @@
       this.panelImport.ResumeLayout(false);
       this.panelImportDetail.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.gvImportList)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).EndInit();
       this.panelImportToolstrip.ResumeLayout(false);
       this.panelImportToolstrip.PerformLayout();
       this.toolStripImport.ResumeLayout(false);
       this.toolStripImport.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).EndInit();
       this.panelImportBottom.ResumeLayout(false);
+      this.panelImportDetailGrid.ResumeLayout(false);
+      this.tableLayoutPanel1.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -711,12 +705,11 @@
     private System.Windows.Forms.Panel panelTopRight;
     private System.Windows.Forms.Panel panelTopLeft;
     private System.Windows.Forms.GroupBox gbNewPlaylist;
-    private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.TextBox tbDirectorySeparator;
-    private System.Windows.Forms.Label label4;
     private System.Windows.Forms.ErrorProvider ep;
     private System.Windows.Forms.ToolStripButton btnSectionLocation;
     private System.Windows.Forms.Panel panelImportBottom;
     private System.Windows.Forms.Button btnClose;
+    private System.Windows.Forms.Panel panelImportDetailGrid;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
   }
 }

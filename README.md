@@ -24,13 +24,10 @@ Notes:
 	A = Matches the Artist exactly
 	N = Matches the filename (with or without same folder)
 
-3. Option "Match on filename" requires additional setup. All the folders that are assigned to the sections of the Plex Media Server must be mapped to the full path as seen by the client that runs this utility.
-Example:
-	=> Plex Media Server(Ubuntu)
-		- Music section:
-			- Folder: /mnt/music		(Mount point for NFS share for music)
-	=> The same music folder can be accesed on the windows client at: \\NAS\Music
-	This requires the following mapping:
-		Plex Location 	= /mnt/music
-		Mapped location	= \\NAS\Music		(or //NAS/Music, which is also allowed on Windows)
+3. Option "Match on filename" requires additional setup in case:
+	A. your PMS server does NOT use windows style path AND your m3u file contains lines with relative path information
+	   => Mapped Location for each Plex Location must be set to the full path (windows style) as seen by the client that runs this utility.
+	B. your m3u file contains lines with full path information where the path style differs from the path style of your PMS server.
+	   => Mapped Location for each Plex Location must be set to the full path in same path style as used in the m3u-file
+
 			
