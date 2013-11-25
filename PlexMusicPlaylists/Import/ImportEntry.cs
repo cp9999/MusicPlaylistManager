@@ -32,7 +32,7 @@ namespace PlexMusicPlaylists.Import
     {
       get
       {
-        return FolderSection != null ? FolderSection.Title : "";
+        return FolderSection != null ? String.Format("{0} [{1}]", FolderSection.Key, FolderSection.Title) : "n/a";
       }
     }
     public string Key { get; set; }

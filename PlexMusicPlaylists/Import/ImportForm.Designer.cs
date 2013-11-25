@@ -59,12 +59,6 @@
       this.btnClose = new System.Windows.Forms.Button();
       this.panelImportDetailGrid = new System.Windows.Forms.Panel();
       this.gvImportList = new System.Windows.Forms.DataGridView();
-      this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
-      this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-      this.MatchedOnTitleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.PMSFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.panelImportToolstrip = new System.Windows.Forms.Panel();
       this.toolStripImport = new System.Windows.Forms.ToolStrip();
       this.toolStripLabel = new System.Windows.Forms.ToolStripLabel();
@@ -82,11 +76,17 @@
       this.ofdImportFile = new System.Windows.Forms.OpenFileDialog();
       this.ep = new System.Windows.Forms.ErrorProvider(this.components);
       this.labelProgressSub = new System.Windows.Forms.Label();
+      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
+      this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
+      this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+      this.MatchedOnTitleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.fullFileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
+      this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.PMSFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.FullPlexFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.panelTop.SuspendLayout();
       this.panelTopRight.SuspendLayout();
       this.panelProgress.SuspendLayout();
@@ -382,7 +382,7 @@
             this.MainSectionName,
             this.PMSFolder,
             this.Key,
-            this.fullFileNameDataGridViewTextBoxColumn});
+            this.FullPlexFileName});
       this.gvImportList.DataSource = this.importEntryBindingSource;
       this.gvImportList.Dock = System.Windows.Forms.DockStyle.Fill;
       this.gvImportList.Location = new System.Drawing.Point(0, 0);
@@ -397,58 +397,6 @@
       this.gvImportList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvImportList_CellMouseClick);
       this.gvImportList.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gvImportList_CellValueNeeded);
       this.gvImportList.SelectionChanged += new System.EventHandler(this.gvImportList_SelectionChanged);
-      // 
-      // MatchIcon
-      // 
-      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-      dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-      dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-      dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
-      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
-      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-      this.MatchIcon.DefaultCellStyle = dataGridViewCellStyle2;
-      this.MatchIcon.HeaderText = "";
-      this.MatchIcon.Name = "MatchIcon";
-      this.MatchIcon.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-      this.MatchIcon.Width = 32;
-      // 
-      // Matched
-      // 
-      this.Matched.DataPropertyName = "Matched";
-      this.Matched.HeaderText = "Matched";
-      this.Matched.Name = "Matched";
-      this.Matched.ReadOnly = true;
-      this.Matched.Width = 50;
-      // 
-      // MatchedOnTitleCount
-      // 
-      this.MatchedOnTitleCount.DataPropertyName = "MatchedOnTitleCount";
-      this.MatchedOnTitleCount.HeaderText = "Title matches";
-      this.MatchedOnTitleCount.Name = "MatchedOnTitleCount";
-      this.MatchedOnTitleCount.ReadOnly = true;
-      // 
-      // MainSectionName
-      // 
-      this.MainSectionName.DataPropertyName = "MainSectionName";
-      this.MainSectionName.HeaderText = "Main section";
-      this.MainSectionName.Name = "MainSectionName";
-      this.MainSectionName.ReadOnly = true;
-      // 
-      // PMSFolder
-      // 
-      this.PMSFolder.DataPropertyName = "PMSFolder";
-      this.PMSFolder.HeaderText = "Folder (Plex Media Server)";
-      this.PMSFolder.Name = "PMSFolder";
-      this.PMSFolder.ReadOnly = true;
-      this.PMSFolder.Width = 160;
-      // 
-      // Key
-      // 
-      this.Key.DataPropertyName = "Key";
-      this.Key.HeaderText = "Key";
-      this.Key.Name = "Key";
-      this.Key.ReadOnly = true;
-      this.Key.Width = 120;
       // 
       // panelImportToolstrip
       // 
@@ -597,6 +545,39 @@
       this.labelProgressSub.TabIndex = 1;
       this.labelProgressSub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
+      // importEntryBindingSource
+      // 
+      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
+      // 
+      // MatchIcon
+      // 
+      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+      dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+      dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
+      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+      this.MatchIcon.DefaultCellStyle = dataGridViewCellStyle2;
+      this.MatchIcon.HeaderText = "";
+      this.MatchIcon.Name = "MatchIcon";
+      this.MatchIcon.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+      this.MatchIcon.Width = 32;
+      // 
+      // Matched
+      // 
+      this.Matched.DataPropertyName = "Matched";
+      this.Matched.HeaderText = "Matched";
+      this.Matched.Name = "Matched";
+      this.Matched.ReadOnly = true;
+      this.Matched.Width = 50;
+      // 
+      // MatchedOnTitleCount
+      // 
+      this.MatchedOnTitleCount.DataPropertyName = "MatchedOnTitleCount";
+      this.MatchedOnTitleCount.HeaderText = "Title matches";
+      this.MatchedOnTitleCount.Name = "MatchedOnTitleCount";
+      this.MatchedOnTitleCount.ReadOnly = true;
+      // 
       // artistDataGridViewTextBoxColumn
       // 
       this.artistDataGridViewTextBoxColumn.DataPropertyName = "Artist";
@@ -618,17 +599,36 @@
       this.fileNameDataGridViewTextBoxColumn.ReadOnly = true;
       this.fileNameDataGridViewTextBoxColumn.Width = 150;
       // 
-      // fullFileNameDataGridViewTextBoxColumn
+      // MainSectionName
       // 
-      this.fullFileNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.fullFileNameDataGridViewTextBoxColumn.DataPropertyName = "FullFileName";
-      this.fullFileNameDataGridViewTextBoxColumn.HeaderText = "Full filename";
-      this.fullFileNameDataGridViewTextBoxColumn.Name = "fullFileNameDataGridViewTextBoxColumn";
-      this.fullFileNameDataGridViewTextBoxColumn.ReadOnly = true;
+      this.MainSectionName.DataPropertyName = "MainSectionName";
+      this.MainSectionName.HeaderText = "Main section";
+      this.MainSectionName.Name = "MainSectionName";
+      this.MainSectionName.ReadOnly = true;
       // 
-      // importEntryBindingSource
+      // PMSFolder
       // 
-      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
+      this.PMSFolder.DataPropertyName = "PMSFolder";
+      this.PMSFolder.HeaderText = "Folder (Plex Media Server)";
+      this.PMSFolder.Name = "PMSFolder";
+      this.PMSFolder.ReadOnly = true;
+      this.PMSFolder.Width = 240;
+      // 
+      // Key
+      // 
+      this.Key.DataPropertyName = "Key";
+      this.Key.HeaderText = "Key";
+      this.Key.Name = "Key";
+      this.Key.ReadOnly = true;
+      this.Key.Width = 120;
+      // 
+      // FullPlexFileName
+      // 
+      this.FullPlexFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      this.FullPlexFileName.DataPropertyName = "FullPlexFileName";
+      this.FullPlexFileName.HeaderText = "Full filename (Plex)";
+      this.FullPlexFileName.Name = "FullPlexFileName";
+      this.FullPlexFileName.ReadOnly = true;
       // 
       // ImportForm
       // 
@@ -697,16 +697,6 @@
     private System.Windows.Forms.TextBox tbNumberMatched;
     private System.Windows.Forms.Panel panelProgress;
     private System.Windows.Forms.Label labelProgress;
-    private System.Windows.Forms.DataGridViewImageColumn MatchIcon;
-    private System.Windows.Forms.DataGridViewCheckBoxColumn Matched;
-    private System.Windows.Forms.DataGridViewTextBoxColumn MatchedOnTitleCount;
-    private System.Windows.Forms.DataGridViewTextBoxColumn artistDataGridViewTextBoxColumn;
-    private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
-    private System.Windows.Forms.DataGridViewTextBoxColumn fileNameDataGridViewTextBoxColumn;
-    private System.Windows.Forms.DataGridViewTextBoxColumn MainSectionName;
-    private System.Windows.Forms.DataGridViewTextBoxColumn PMSFolder;
-    private System.Windows.Forms.DataGridViewTextBoxColumn Key;
-    private System.Windows.Forms.DataGridViewTextBoxColumn fullFileNameDataGridViewTextBoxColumn;
     private System.Windows.Forms.ToolStripButton btnSelectMatch;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     private System.Windows.Forms.ToolStripLabel toolStripLabel;
@@ -724,5 +714,15 @@
     private System.Windows.Forms.Panel panelImportDetailGrid;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.Label labelProgressSub;
+    private System.Windows.Forms.DataGridViewImageColumn MatchIcon;
+    private System.Windows.Forms.DataGridViewCheckBoxColumn Matched;
+    private System.Windows.Forms.DataGridViewTextBoxColumn MatchedOnTitleCount;
+    private System.Windows.Forms.DataGridViewTextBoxColumn artistDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn fileNameDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn MainSectionName;
+    private System.Windows.Forms.DataGridViewTextBoxColumn PMSFolder;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Key;
+    private System.Windows.Forms.DataGridViewTextBoxColumn FullPlexFileName;
   }
 }
