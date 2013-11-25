@@ -19,8 +19,13 @@ namespace PlexMusicPlaylists.PlexMediaServer
     public const string KEY = "key";
     public const string TITLE = "title";
     public const string ALBUM = "parentTitle";
+    public const string ATTR_TYPE = "type";
     protected const string FRIENDLYNAME = "friendlyName";
     protected const string DURATION = "duration";
+    public const string TYPE_TRACK = "track";
+    public const string TYPE_MOVIE = "movie";
+    public const string TYPE_SHOW = "show";
+    public const string TYPE_EPISODE = "episode";
 
     public String IP { get; set; }
 

@@ -29,7 +29,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       XElement sections = Utils.elementFromURL(sectionUrl);
 
       var musicsections =
-        from section in sections.Elements("Directory")
+        from section in sections.Elements(PMSBase.DIRECTORY)
         where ((string)section.Attribute("scanner")).Equals("Plex Music Scanner")
         select section;
 
@@ -42,8 +42,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
       XElement sections = Utils.elementFromURL(sectionUrl);
 
       var moviesections =
-        from section in sections.Elements("Directory")
-        where ((string)section.Attribute("type")).Equals("movie")
+        from section in sections.Elements(PMSBase.DIRECTORY)
+        where ((string)section.Attribute(PMSBase.ATTR_TYPE)).Equals(PMSBase.TYPE_MOVIE) || ((string)section.Attribute(PMSBase.ATTR_TYPE)).Equals(PMSBase.TYPE_SHOW)
         select section;
 
       return moviesections;
@@ -61,8 +61,17 @@ namespace PlexMusicPlaylists.PlexMediaServer
         sections.Add(section);
         if (_isMainSection)
         {
+          ((MainSection)section).Owner = this;
           ((MainSection)section).addLocations(element);
           ((MainSection)section).addSearchSections();
+          if (!_isMusicSection)
+          {
+            section.IsEpisode = attributeValue(element, PMSBase.ATTR_TYPE).Equals(PMSBase.TYPE_SHOW, StringComparison.OrdinalIgnoreCase);
+          }
+        }
+        else 
+        {
+          section.IsEpisode = attributeValue(element, PMSBase.ATTR_TYPE).Equals(PMSBase.TYPE_EPISODE, StringComparison.OrdinalIgnoreCase);
         }
       }
       return sections;
@@ -71,21 +80,6 @@ namespace PlexMusicPlaylists.PlexMediaServer
     private string getSectionUrl(string _key, string _sectionUrl)
     {
       return Utils.getSectionUrl(_key, _sectionUrl, this.baseUrl, LIBRARY_SECTIONS);
-      /*
-      if (_key.StartsWith("/"))
-      {
-        _sectionUrl = String.Format("{0}{1}", this.baseUrl, _key);
-      }
-      else
-      {
-        if (String.IsNullOrEmpty(_sectionUrl))
-        {
-          _sectionUrl = String.Format("{0}{1}/", this.baseUrl, LIBRARY_SECTIONS);
-        }
-        _sectionUrl += _key + "/";
-      }
-      return _sectionUrl;
-      */
     }
 
     public IEnumerable<XElement> getSectionElements(LibrarySection _section, bool _allowDirectory)

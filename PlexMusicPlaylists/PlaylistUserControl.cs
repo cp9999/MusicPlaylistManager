@@ -372,7 +372,12 @@ namespace PlexMusicPlaylists
         }
         bool trackAdded;
         int added = 0;
-        foreach (DataGridViewRow row in gvServerTrack.SelectedRows)
+        List<DataGridViewRow> selectedRows = new List<DataGridViewRow>();
+        foreach (DataGridViewRow selectedRow in gvServerTrack.SelectedRows)
+        {
+          selectedRows.Add(selectedRow);
+        }
+        foreach (DataGridViewRow row in selectedRows.OrderBy(r => r.Index))
         {
           LibrarySection section = row.DataBoundItem as LibrarySection;
           if (section != null)

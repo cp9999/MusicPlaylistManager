@@ -61,7 +61,7 @@ namespace PlexMusicPlaylists.Import
     }
     public string TrackType
     {
-      get { return m_mainSection == null || m_mainSection.IsMusic ? "track" : "movie"; }
+      get { return m_mainSection != null ? m_mainSection.TrackType : PMSBase.TYPE_TRACK; }
     }
     public string Info
     {

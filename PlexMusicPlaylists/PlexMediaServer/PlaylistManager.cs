@@ -181,7 +181,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       foreach (XElement element in elements)
       {
         Track track = new Track(playlist) { Key = attributeValue(element, KEY), Title = attributeValue(element, TITLE), 
-          Duration = attributeValueAsInt(element, DURATION) / 1000, TrackType = attributeValue(element, ALBUM, "track") };
+          Duration = attributeValueAsInt(element, DURATION) / 1000, TrackType = attributeValue(element, ALBUM, PMSBase.TYPE_TRACK) };
         playlist.Add(track);
         totalDuration += track.Duration;
       }

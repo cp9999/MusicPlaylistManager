@@ -16,9 +16,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public bool IsMusic { get; set; }
 
+    public bool IsEpisode { get; set; }
+
     public string TrackType
     {
-      get { return IsMusic ? "track" : "movie"; }
+      get { return IsMusic ? PMSBase.TYPE_TRACK : IsEpisode ? PMSBase.TYPE_SHOW : PMSBase.TYPE_MOVIE; }
     }
 
     public IEnumerable<XElement> tracks(PMSServer _pmsServer)
