@@ -11,7 +11,7 @@ namespace PlexMusicPlaylists.Import
 {
   public class ImportManager
   {
-    public delegate void ProgressEventHandler(string _message);
+    public delegate void ProgressEventHandler(string _message, bool _mainMessage);
     public event ProgressEventHandler OnProgress;
     public PlaylistManager PlaylistManager { get; set; }
     public PMSServer PMSServer { get; set; }
@@ -35,6 +35,7 @@ namespace PlexMusicPlaylists.Import
     {
       if (_mainSection != null && m_mainSections.FirstOrDefault(mainSection => mainSection.Key.Equals(_mainSection.Key, StringComparison.OrdinalIgnoreCase)) == null)
       {
+        _mainSection.Owner = PMSServer;
         m_mainSections.Add(_mainSection);
 
         foreach (string location in _mainSection.Locations)
@@ -47,11 +48,11 @@ namespace PlexMusicPlaylists.Import
       }
     }
 
-    protected void progressMessage(string _message)
+    protected void progressMessage(string _message, bool _mainMessage)
     {
       if (OnProgress != null)
       {
-        OnProgress(_message);
+        OnProgress(_message, _mainMessage);
       }
     }
 
@@ -155,9 +156,10 @@ namespace PlexMusicPlaylists.Import
         select entry;
 
       string baseMessage = "Find matches based on title.... ";
+      progressMessage(baseMessage, true);
       foreach (ImportEntry entry in entries)
       {
-        progressMessage(baseMessage + entry.Title);
+        progressMessage(entry.Title, false);
         entry.resetMatches(false);
         foreach (MainSection mainSection in m_mainSections)
         {
@@ -181,7 +183,7 @@ namespace PlexMusicPlaylists.Import
         }
         entry.CheckBestMatch();
       }
-      progressMessage("");
+      progressMessage("", true);
       return anyMatched;
     }
 
@@ -195,10 +197,11 @@ namespace PlexMusicPlaylists.Import
         select entry;
 
       string baseMessage = "Find matches based on (relative) folder.... ";
+      progressMessage(baseMessage, true);
       foreach (ImportEntry entry in entries)
       {
         entry.resetMatches(true);
-        progressMessage(baseMessage + entry.Title);
+        progressMessage(entry.Title, false);
         var tracks =
           from track in entry.FolderSection.tracks(PMSServer) 
           where track.Elements().FirstOrDefault(
@@ -218,23 +221,21 @@ namespace PlexMusicPlaylists.Import
           anyMatched = true;
         }
       }
-      progressMessage("");
+      progressMessage("", true);
       return anyMatched;
     }
 
-    public bool LoadImportFile(string _fileName)
+    public void updateSectionLocations()
     {
-      if (File.Exists(_fileName))
+      if (m_importFile != null)
       {
-        progressMessage("Loading file....");
-        m_importFile = ImportFileM3U.loadM3UFile(_fileName);
         foreach (ImportEntry entry in m_importFile.Entries)
         {
           bool usePlexLocation;
           SectionLocation sectionLocation = findSectionLocation(entry, out usePlexLocation);
           if (sectionLocation != null && sectionLocation.Owner() != null)
           {
-            entry.setSectionLocation(sectionLocation, usePlexLocation, PMSServer.baseUrl, progressMessage);
+            entry.setSectionLocation(sectionLocation, usePlexLocation, progressMessage);
             if (entry.FolderSection != null)
             {
               Debug.WriteLine(String.Format("==> FOLDER FOUND[{0}]: {1} - {2}", entry.FullFileName, entry.FolderSection.Key, entry.FolderSection.Title));
@@ -246,20 +247,37 @@ namespace PlexMusicPlaylists.Import
           }
           else
           {
+            entry.FolderSection = null;
             Debug.WriteLine(String.Format("==> Mapped SectionLocation NOT FOUND[{0}]", entry.FullFileName));
           }
         }
-        progressMessage("");
+      }
+      progressMessage("", true);
+    }
+
+    public bool LoadImportFile(string _fileName)
+    {
+      if (File.Exists(_fileName))
+      {
+        progressMessage("Loading file....", true);
+        m_importFile = ImportFileM3U.loadM3UFile(_fileName);
+        updateSectionLocations();
         return true;
       }
       return false;
     }
 
-    public void showLocationMapping()
+    public bool showLocationMapping()
     {
       LocationMappingForm locationMappingForm = new LocationMappingForm();
       locationMappingForm.setImportManager(this);
       locationMappingForm.ShowDialog();
+      if (locationMappingForm.MappingChanged)
+      {
+        this.updateSectionLocations();
+        return true;
+      }
+      return false;
     }
 
     public string showImport()

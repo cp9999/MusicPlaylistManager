@@ -89,12 +89,11 @@ namespace PlexMusicPlaylists.Import
       }
     }
 
-    public void setSectionLocation(SectionLocation _sectionLocation, bool _usePlexLocation, string _baseUrl, ImportManager.ProgressEventHandler _progressMessage)
+    public void setSectionLocation(SectionLocation _sectionLocation, bool _usePlexLocation, ImportManager.ProgressEventHandler _progressMessage)
     {
       string relativePath = RelativePath(_usePlexLocation ? _sectionLocation.PlexLocation : _sectionLocation.MappedLocation);
       MainSection = _sectionLocation.Owner();
-      _progressMessage(String.Format("PlexMediaServer: loading folders from section {0}.....", MainSection.Title));
-      MainSection.loadFolders(_baseUrl);
+      MainSection.loadFromCache(false, _progressMessage);
       var folders =
         from folder in MainSection.folders
         where folder.Title.Equals(relativePath, StringComparison.OrdinalIgnoreCase)

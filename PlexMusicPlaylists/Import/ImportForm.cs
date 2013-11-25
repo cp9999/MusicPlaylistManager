@@ -39,7 +39,7 @@ namespace PlexMusicPlaylists.Import
     public void setImportManager(ImportManager _importManager)
     {
       m_importManager = _importManager;
-      m_importManager_OnProgress("");
+      m_importManager_OnProgress("", false);
       if (m_importManager != null)
       {
         m_importManager.OnProgress += new ImportManager.ProgressEventHandler(m_importManager_OnProgress);
@@ -49,11 +49,20 @@ namespace PlexMusicPlaylists.Import
       enableCommands();
     }
 
-    void m_importManager_OnProgress(string _message)
+    void m_importManager_OnProgress(string _message, bool _mainMessage)
     {
-      labelProgress.Text = _message.Trim();
+      if (_mainMessage)
+      {
+        labelProgress.Text = _message.Trim();
+        labelProgressSub.Text = "";
+      }
+      else
+      {
+        labelProgressSub.Text = _message.Trim();
+      }
       panelProgress.Visible = !String.IsNullOrEmpty(labelProgress.Text);
       labelProgress.Refresh();
+      labelProgressSub.Refresh();
     }
 
     private void ImportForm_Shown(object sender, EventArgs e)
@@ -112,7 +121,7 @@ namespace PlexMusicPlaylists.Import
       {        
         if (m_importManager.LoadImportFile(ofdImportFile.FileName))
         {
-          m_importManager_OnProgress("");
+          m_importManager_OnProgress("", true);
           tbImportFile.Text = ofdImportFile.FileName;
           tbPlaylistTitle.Text = Path.GetFileNameWithoutExtension(ofdImportFile.FileName).Trim();
           gvImportList.DataSource = m_importManager.ImportFile.Entries;
@@ -231,7 +240,12 @@ namespace PlexMusicPlaylists.Import
     {
       if (m_importManager != null && m_importManager.SectionLocations.Count > 0)
       {
-        m_importManager.showLocationMapping();
+        if (m_importManager.showLocationMapping())
+        {
+          gvImportList.Refresh();
+          updateMatchDetails();
+          enableCommands();
+        }
       }
     }
 

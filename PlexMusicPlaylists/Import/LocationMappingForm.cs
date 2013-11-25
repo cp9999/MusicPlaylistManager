@@ -12,6 +12,9 @@ namespace PlexMusicPlaylists.Import
 {
   public partial class LocationMappingForm : Form
   {
+    public bool MappingChanged { get; set; }
+    private string m_startText = "";
+
     public LocationMappingForm()
     {
       InitializeComponent();
@@ -36,6 +39,25 @@ namespace PlexMusicPlaylists.Import
     private void enableCommands()
     {
       btnClose.Enabled = validDirectorySeparator();
+      btnShowFolders.Enabled = getSelectedMainSection() != null;
+    }
+
+    private SectionLocation getSingleSelectedEntry()
+    {
+      if (gvSectionLocation.SelectedRows.Count == 1)
+      {
+        return gvSectionLocation.SelectedRows[0].DataBoundItem as SectionLocation;
+      }
+      return null;
+    }
+    private MainSection getSelectedMainSection()
+    {
+      if (gvSectionLocation.SelectedRows.Count == 1)
+      {
+        SectionLocation sectionLocation = gvSectionLocation.SelectedRows[0].DataBoundItem as SectionLocation;
+        return sectionLocation != null ? sectionLocation.Owner() : null;
+      }
+      return null;
     }
 
     private char directorySeparator()
@@ -67,6 +89,33 @@ namespace PlexMusicPlaylists.Import
     {
       enableCommands();
       PMSServer.DirectorySeparator = directorySeparator();
+    }
+
+    private void btnShowFolders_Click(object sender, EventArgs e)
+    {
+      MainSection mainSection = getSelectedMainSection();
+      if (mainSection != null)
+      {
+        SectionFolderForm folderForm = new SectionFolderForm();
+        folderForm.setMainSection(mainSection);
+        folderForm.ShowDialog();
+      }
+    }
+
+    private void gvSectionLocation_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+    {
+      if (!MappingChanged && gvSectionLocation.CurrentCell != null && gvSectionLocation.CurrentCell.Value != null)
+      {
+        MappingChanged = !m_startText.Equals(gvSectionLocation.CurrentCell.Value.ToString(), StringComparison.OrdinalIgnoreCase);
+      }
+    }
+
+    private void gvSectionLocation_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+    {
+      if (gvSectionLocation.CurrentCell != null && gvSectionLocation.CurrentCell.Value != null)
+      {
+        m_startText = gvSectionLocation.CurrentCell.Value.ToString();
+      }
     }
   }
 }

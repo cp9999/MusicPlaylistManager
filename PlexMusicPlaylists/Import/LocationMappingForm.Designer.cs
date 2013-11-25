@@ -31,29 +31,37 @@
       this.components = new System.ComponentModel.Container();
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationMappingForm));
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btnClose = new System.Windows.Forms.Button();
       this.panel2 = new System.Windows.Forms.Panel();
+      this.panelGrid = new System.Windows.Forms.Panel();
       this.gvSectionLocation = new System.Windows.Forms.DataGridView();
       this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.plexLocationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.mappedLocationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.sectionLocationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+      this.panelToolstrip = new System.Windows.Forms.Panel();
+      this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+      this.btnShowFolders = new System.Windows.Forms.ToolStripButton();
       this.panel3 = new System.Windows.Forms.Panel();
       this.gbPlexMediaServer = new System.Windows.Forms.GroupBox();
       this.label5 = new System.Windows.Forms.Label();
       this.tbDirectorySeparator = new System.Windows.Forms.TextBox();
       this.label4 = new System.Windows.Forms.Label();
       this.ep = new System.Windows.Forms.ErrorProvider(this.components);
+      this.plexLocationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.mappedLocationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.sectionLocationBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.tableLayoutPanel1.SuspendLayout();
       this.panel1.SuspendLayout();
       this.panel2.SuspendLayout();
+      this.panelGrid.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.gvSectionLocation)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.sectionLocationBindingSource)).BeginInit();
+      this.panelToolstrip.SuspendLayout();
+      this.toolStrip1.SuspendLayout();
       this.panel3.SuspendLayout();
       this.gbPlexMediaServer.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.sectionLocationBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // tableLayoutPanel1
@@ -95,12 +103,22 @@
       // 
       // panel2
       // 
-      this.panel2.Controls.Add(this.gvSectionLocation);
+      this.panel2.Controls.Add(this.panelGrid);
+      this.panel2.Controls.Add(this.panelToolstrip);
       this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panel2.Location = new System.Drawing.Point(3, 66);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(840, 410);
       this.panel2.TabIndex = 1;
+      // 
+      // panelGrid
+      // 
+      this.panelGrid.Controls.Add(this.gvSectionLocation);
+      this.panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panelGrid.Location = new System.Drawing.Point(0, 30);
+      this.panelGrid.Name = "panelGrid";
+      this.panelGrid.Size = new System.Drawing.Size(840, 380);
+      this.panelGrid.TabIndex = 2;
       // 
       // gvSectionLocation
       // 
@@ -122,8 +140,10 @@
       dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
       this.gvSectionLocation.RowsDefaultCellStyle = dataGridViewCellStyle2;
       this.gvSectionLocation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvSectionLocation.Size = new System.Drawing.Size(840, 410);
+      this.gvSectionLocation.Size = new System.Drawing.Size(840, 380);
       this.gvSectionLocation.TabIndex = 0;
+      this.gvSectionLocation.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.gvSectionLocation_CellBeginEdit);
+      this.gvSectionLocation.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvSectionLocation_CellEndEdit);
       // 
       // MainSectionName
       // 
@@ -133,24 +153,34 @@
       this.MainSectionName.ReadOnly = true;
       this.MainSectionName.Width = 140;
       // 
-      // plexLocationDataGridViewTextBoxColumn
+      // panelToolstrip
       // 
-      this.plexLocationDataGridViewTextBoxColumn.DataPropertyName = "PlexLocation";
-      this.plexLocationDataGridViewTextBoxColumn.HeaderText = "Plex Location";
-      this.plexLocationDataGridViewTextBoxColumn.Name = "plexLocationDataGridViewTextBoxColumn";
-      this.plexLocationDataGridViewTextBoxColumn.ReadOnly = true;
-      this.plexLocationDataGridViewTextBoxColumn.Width = 300;
+      this.panelToolstrip.Controls.Add(this.toolStrip1);
+      this.panelToolstrip.Dock = System.Windows.Forms.DockStyle.Top;
+      this.panelToolstrip.Location = new System.Drawing.Point(0, 0);
+      this.panelToolstrip.Name = "panelToolstrip";
+      this.panelToolstrip.Size = new System.Drawing.Size(840, 30);
+      this.panelToolstrip.TabIndex = 1;
       // 
-      // mappedLocationDataGridViewTextBoxColumn
+      // toolStrip1
       // 
-      this.mappedLocationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.mappedLocationDataGridViewTextBoxColumn.DataPropertyName = "MappedLocation";
-      this.mappedLocationDataGridViewTextBoxColumn.HeaderText = "Mapped Location";
-      this.mappedLocationDataGridViewTextBoxColumn.Name = "mappedLocationDataGridViewTextBoxColumn";
+      this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnShowFolders});
+      this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+      this.toolStrip1.Name = "toolStrip1";
+      this.toolStrip1.Size = new System.Drawing.Size(840, 25);
+      this.toolStrip1.TabIndex = 0;
+      this.toolStrip1.Text = "toolStrip1";
       // 
-      // sectionLocationBindingSource
+      // btnShowFolders
       // 
-      this.sectionLocationBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.SectionLocation);
+      this.btnShowFolders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.btnShowFolders.Image = ((System.Drawing.Image)(resources.GetObject("btnShowFolders.Image")));
+      this.btnShowFolders.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.btnShowFolders.Name = "btnShowFolders";
+      this.btnShowFolders.Size = new System.Drawing.Size(133, 22);
+      this.btnShowFolders.Text = "Show folders in section";
+      this.btnShowFolders.Click += new System.EventHandler(this.btnShowFolders_Click);
       // 
       // panel3
       // 
@@ -207,6 +237,25 @@
       // 
       this.ep.ContainerControl = this;
       // 
+      // plexLocationDataGridViewTextBoxColumn
+      // 
+      this.plexLocationDataGridViewTextBoxColumn.DataPropertyName = "PlexLocation";
+      this.plexLocationDataGridViewTextBoxColumn.HeaderText = "Plex Location";
+      this.plexLocationDataGridViewTextBoxColumn.Name = "plexLocationDataGridViewTextBoxColumn";
+      this.plexLocationDataGridViewTextBoxColumn.ReadOnly = true;
+      this.plexLocationDataGridViewTextBoxColumn.Width = 300;
+      // 
+      // mappedLocationDataGridViewTextBoxColumn
+      // 
+      this.mappedLocationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      this.mappedLocationDataGridViewTextBoxColumn.DataPropertyName = "MappedLocation";
+      this.mappedLocationDataGridViewTextBoxColumn.HeaderText = "Mapped Location";
+      this.mappedLocationDataGridViewTextBoxColumn.Name = "mappedLocationDataGridViewTextBoxColumn";
+      // 
+      // sectionLocationBindingSource
+      // 
+      this.sectionLocationBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.SectionLocation);
+      // 
       // LocationMappingForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -222,12 +271,17 @@
       this.tableLayoutPanel1.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
+      this.panelGrid.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.gvSectionLocation)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.sectionLocationBindingSource)).EndInit();
+      this.panelToolstrip.ResumeLayout(false);
+      this.panelToolstrip.PerformLayout();
+      this.toolStrip1.ResumeLayout(false);
+      this.toolStrip1.PerformLayout();
       this.panel3.ResumeLayout(false);
       this.gbPlexMediaServer.ResumeLayout(false);
       this.gbPlexMediaServer.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.sectionLocationBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -249,5 +303,9 @@
     private System.Windows.Forms.TextBox tbDirectorySeparator;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.ErrorProvider ep;
+    private System.Windows.Forms.Panel panelGrid;
+    private System.Windows.Forms.Panel panelToolstrip;
+    private System.Windows.Forms.ToolStrip toolStrip1;
+    private System.Windows.Forms.ToolStripButton btnShowFolders;
   }
 }

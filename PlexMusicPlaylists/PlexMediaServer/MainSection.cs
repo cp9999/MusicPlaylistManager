@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.IO;
+using System.Xml.Serialization;
+using PlexMusicPlaylists.Import;
 
 namespace PlexMusicPlaylists.PlexMediaServer
 {
@@ -20,6 +23,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
     public List<SearchSection> searchSections { get { return m_searchSections; } }
     public List<string> Locations { get { return m_locations; } }
     public List<LibrarySection> folders { get { return m_folders; } }
+
+    public PMSServer Owner { get; set; }
 
     public bool canBeSearched
     {
@@ -71,10 +76,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
-    protected void addFolder(string _url, string _baseUrl, string _parentTitle)
+    protected void addFolder(string _url, string _baseUrl, string _parentTitle, ImportManager.ProgressEventHandler _progressMessage)
     {
       if (!String.IsNullOrEmpty(_url))
       {
+        if (_progressMessage != null)
+        {
+          _progressMessage(_parentTitle, false);
+        }
         XElement folderElements = Utils.elementFromURL(_url);
         var elements =
           from element in folderElements.Elements(PMSBase.DIRECTORY)
@@ -90,12 +99,12 @@ namespace PlexMusicPlaylists.PlexMediaServer
           librarySection.SectionUrl = Utils.getSectionUrl(librarySection.Key, _url, _baseUrl, "");
           m_folders.Add(librarySection);
           Debug.WriteLine(String.Format("{0} - {1}", librarySection.Key, librarySection.Title));
-          addFolder(Utils.getSectionUrl(librarySection.Key, _url, _baseUrl, ""), _baseUrl, String.Format("{0}{1}", librarySection.Title, PMSServer.DirectorySeparator));
+          addFolder(Utils.getSectionUrl(librarySection.Key, _url, _baseUrl, ""), _baseUrl, String.Format("{0}{1}", librarySection.Title, PMSServer.DirectorySeparator), _progressMessage);
         }
       }
     }
 
-    public void loadFolders(string _baseUrl)
+    public void loadFolders(string _baseUrl, ImportManager.ProgressEventHandler _progressMessage)
     {
       if (m_folders.Count == 0)
       {
@@ -109,8 +118,63 @@ namespace PlexMusicPlaylists.PlexMediaServer
         };
         librarySection.SectionUrl = Utils.getSectionUrl(librarySection.Key, sectionUrl, _baseUrl, "");
         m_folders.Add(librarySection);
-        addFolder(String.Format("{0}/", sectionUrl), _baseUrl, "");
+        addFolder(String.Format("{0}/", sectionUrl), _baseUrl, "", _progressMessage);
+        saveToCache();
       }
     }
+
+    public void saveToCache()
+    {
+      try
+      {
+        Type objectType = m_folders.GetType();
+        XmlSerializer xmlSerializer = new XmlSerializer(objectType);
+        using (StreamWriter sw = new StreamWriter(cacheFileName()))
+        {
+          xmlSerializer.Serialize(sw, m_folders);
+        }
+      }
+      catch
+      {
+      }
+    }
+
+    public void loadFromCache(bool _forceReload, ImportManager.ProgressEventHandler _progressMessage)
+    {
+      if (_forceReload)
+      {
+        m_folders.Clear();
+      }
+      else if (File.Exists(cacheFileName()))
+      {
+        try
+        {
+          Type objectType = m_folders.GetType();
+          XmlSerializer xmlSerializer = new XmlSerializer(objectType);
+          using (StreamReader sr = new StreamReader(cacheFileName()))
+          {
+            m_folders = xmlSerializer.Deserialize(sr) as List<LibrarySection>;
+          }
+        }
+        catch
+        {
+        }
+      }
+      if (m_folders.Count == 0)
+      {
+        if (_progressMessage != null)
+        {
+          _progressMessage(String.Format("PlexMediaServer: loading folders from section {0}.....", Title), true);
+        }
+        loadFolders(Owner.baseUrl, _progressMessage);
+      }
+    }
+
+    protected string cacheFileName()
+    {
+      return Path.Combine(PlaylistSettings.SettingsFolder, String.Format("Server_{0}_Section_{1}.cache", Owner.Name, Title));
+    }
+
+
   }
 }

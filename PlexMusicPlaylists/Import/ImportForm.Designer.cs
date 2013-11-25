@@ -54,6 +54,10 @@
       this.tbImportFile = new System.Windows.Forms.TextBox();
       this.panelImport = new System.Windows.Forms.Panel();
       this.panelImportDetail = new System.Windows.Forms.Panel();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.panelImportBottom = new System.Windows.Forms.Panel();
+      this.btnClose = new System.Windows.Forms.Button();
+      this.panelImportDetailGrid = new System.Windows.Forms.Panel();
       this.gvImportList = new System.Windows.Forms.DataGridView();
       this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
       this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -77,10 +81,7 @@
       this.btnSectionLocation = new System.Windows.Forms.ToolStripButton();
       this.ofdImportFile = new System.Windows.Forms.OpenFileDialog();
       this.ep = new System.Windows.Forms.ErrorProvider(this.components);
-      this.panelImportBottom = new System.Windows.Forms.Panel();
-      this.btnClose = new System.Windows.Forms.Button();
-      this.panelImportDetailGrid = new System.Windows.Forms.Panel();
-      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.labelProgressSub = new System.Windows.Forms.Label();
       this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,13 +96,13 @@
       this.gbFileSelect.SuspendLayout();
       this.panelImport.SuspendLayout();
       this.panelImportDetail.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
+      this.panelImportBottom.SuspendLayout();
+      this.panelImportDetailGrid.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.gvImportList)).BeginInit();
       this.panelImportToolstrip.SuspendLayout();
       this.toolStripImport.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).BeginInit();
-      this.panelImportBottom.SuspendLayout();
-      this.panelImportDetailGrid.SuspendLayout();
-      this.tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
@@ -129,20 +130,21 @@
       // 
       this.panelProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
       this.panelProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.panelProgress.Controls.Add(this.labelProgressSub);
       this.panelProgress.Controls.Add(this.labelProgress);
       this.panelProgress.Dock = System.Windows.Forms.DockStyle.Bottom;
-      this.panelProgress.Location = new System.Drawing.Point(0, 93);
+      this.panelProgress.Location = new System.Drawing.Point(0, 82);
       this.panelProgress.Name = "panelProgress";
-      this.panelProgress.Size = new System.Drawing.Size(565, 50);
+      this.panelProgress.Size = new System.Drawing.Size(565, 61);
       this.panelProgress.TabIndex = 5;
       // 
       // labelProgress
       // 
-      this.labelProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.labelProgress.Dock = System.Windows.Forms.DockStyle.Top;
       this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.labelProgress.Location = new System.Drawing.Point(0, 0);
       this.labelProgress.Name = "labelProgress";
-      this.labelProgress.Size = new System.Drawing.Size(561, 46);
+      this.labelProgress.Size = new System.Drawing.Size(561, 30);
       this.labelProgress.TabIndex = 0;
       this.labelProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
@@ -317,6 +319,50 @@
       this.panelImportDetail.Name = "panelImportDetail";
       this.panelImportDetail.Size = new System.Drawing.Size(1233, 657);
       this.panelImportDetail.TabIndex = 1;
+      // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 1;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.Controls.Add(this.panelImportBottom, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.panelImportDetailGrid, 0, 0);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(1233, 657);
+      this.tableLayoutPanel1.TabIndex = 3;
+      // 
+      // panelImportBottom
+      // 
+      this.panelImportBottom.Controls.Add(this.btnClose);
+      this.panelImportBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panelImportBottom.Location = new System.Drawing.Point(3, 610);
+      this.panelImportBottom.Name = "panelImportBottom";
+      this.panelImportBottom.Size = new System.Drawing.Size(1227, 44);
+      this.panelImportBottom.TabIndex = 2;
+      // 
+      // btnClose
+      // 
+      this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
+      this.btnClose.Location = new System.Drawing.Point(1143, 12);
+      this.btnClose.Name = "btnClose";
+      this.btnClose.Size = new System.Drawing.Size(75, 23);
+      this.btnClose.TabIndex = 0;
+      this.btnClose.Text = "Close";
+      this.btnClose.UseVisualStyleBackColor = true;
+      // 
+      // panelImportDetailGrid
+      // 
+      this.panelImportDetailGrid.Controls.Add(this.gvImportList);
+      this.panelImportDetailGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panelImportDetailGrid.Location = new System.Drawing.Point(3, 3);
+      this.panelImportDetailGrid.Name = "panelImportDetailGrid";
+      this.panelImportDetailGrid.Size = new System.Drawing.Size(1227, 601);
+      this.panelImportDetailGrid.TabIndex = 1;
       // 
       // gvImportList
       // 
@@ -541,49 +587,15 @@
       // 
       this.ep.ContainerControl = this;
       // 
-      // panelImportBottom
+      // labelProgressSub
       // 
-      this.panelImportBottom.Controls.Add(this.btnClose);
-      this.panelImportBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelImportBottom.Location = new System.Drawing.Point(3, 610);
-      this.panelImportBottom.Name = "panelImportBottom";
-      this.panelImportBottom.Size = new System.Drawing.Size(1227, 44);
-      this.panelImportBottom.TabIndex = 2;
-      // 
-      // btnClose
-      // 
-      this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-      this.btnClose.Location = new System.Drawing.Point(1143, 12);
-      this.btnClose.Name = "btnClose";
-      this.btnClose.Size = new System.Drawing.Size(75, 23);
-      this.btnClose.TabIndex = 0;
-      this.btnClose.Text = "Close";
-      this.btnClose.UseVisualStyleBackColor = true;
-      // 
-      // panelImportDetailGrid
-      // 
-      this.panelImportDetailGrid.Controls.Add(this.gvImportList);
-      this.panelImportDetailGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelImportDetailGrid.Location = new System.Drawing.Point(3, 3);
-      this.panelImportDetailGrid.Name = "panelImportDetailGrid";
-      this.panelImportDetailGrid.Size = new System.Drawing.Size(1227, 601);
-      this.panelImportDetailGrid.TabIndex = 1;
-      // 
-      // tableLayoutPanel1
-      // 
-      this.tableLayoutPanel1.ColumnCount = 1;
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Controls.Add(this.panelImportBottom, 0, 1);
-      this.tableLayoutPanel1.Controls.Add(this.panelImportDetailGrid, 0, 0);
-      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 2;
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(1233, 657);
-      this.tableLayoutPanel1.TabIndex = 3;
+      this.labelProgressSub.Dock = System.Windows.Forms.DockStyle.Bottom;
+      this.labelProgressSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.labelProgressSub.Location = new System.Drawing.Point(0, 34);
+      this.labelProgressSub.Name = "labelProgressSub";
+      this.labelProgressSub.Size = new System.Drawing.Size(561, 23);
+      this.labelProgressSub.TabIndex = 1;
+      this.labelProgressSub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // artistDataGridViewTextBoxColumn
       // 
@@ -642,15 +654,15 @@
       this.gbFileSelect.PerformLayout();
       this.panelImport.ResumeLayout(false);
       this.panelImportDetail.ResumeLayout(false);
+      this.tableLayoutPanel1.ResumeLayout(false);
+      this.panelImportBottom.ResumeLayout(false);
+      this.panelImportDetailGrid.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.gvImportList)).EndInit();
       this.panelImportToolstrip.ResumeLayout(false);
       this.panelImportToolstrip.PerformLayout();
       this.toolStripImport.ResumeLayout(false);
       this.toolStripImport.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).EndInit();
-      this.panelImportBottom.ResumeLayout(false);
-      this.panelImportDetailGrid.ResumeLayout(false);
-      this.tableLayoutPanel1.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).EndInit();
       this.ResumeLayout(false);
 
@@ -711,5 +723,6 @@
     private System.Windows.Forms.Button btnClose;
     private System.Windows.Forms.Panel panelImportDetailGrid;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+    private System.Windows.Forms.Label labelProgressSub;
   }
 }
