@@ -23,7 +23,8 @@ namespace PlexMusicPlaylists.Import
     private ImportFile m_importFile = null;
     public ImportFile ImportFile { get { return m_importFile; } }
     private string m_newKey = "";
-
+    private StreamWriter m_logWriter = null;
+    private bool LoggingActive { get { return m_logWriter != null; } }
 
     public void reset()
     {
@@ -187,6 +188,29 @@ namespace PlexMusicPlaylists.Import
       return anyMatched;
     }
 
+
+    protected void startLogging(string _fileName)
+    {      
+      m_logWriter = new StreamWriter(Path.Combine(PlaylistSettings.LogFolder, _fileName));
+    }
+
+    protected void stopLogging()
+    {
+      if (m_logWriter != null)
+      {
+        m_logWriter.Dispose();
+        m_logWriter = null;
+      }
+    }
+
+    protected void add2Log(string _message, string _label)
+    {
+      if (LoggingActive)
+      {
+        m_logWriter.WriteLine(String.Format("{0}: [{1}] '{2}'", DateTime.Now, _label, _message));
+      }
+    }
+
     public bool matchOnFileInFolder(bool _checkAll)
     {
       bool anyMatched = false;
@@ -196,32 +220,44 @@ namespace PlexMusicPlaylists.Import
         where (_checkAll || !entry.Matched) && entry.FolderSection != null
         select entry;
 
-      string baseMessage = "Find matches based on (relative) folder.... ";
-      progressMessage(baseMessage, true);
-      foreach (ImportEntry entry in entries)
+      try
       {
-        entry.resetMatches(true);
-        progressMessage(entry.Title, false);
-        var tracks =
-          from track in entry.FolderSection.tracks(PMSServer) 
-          where track.Elements().FirstOrDefault(
-            media => media.Elements().FirstOrDefault(
-               part => part.Attribute("file").Value.Equals(entry.FullPlexFileName, StringComparison.OrdinalIgnoreCase)) != null) != null
-          select track;
-
-        XElement trackElement = tracks.FirstOrDefault();
-        if (trackElement != null)
+        startLogging("MatchOnFileInFolder.log");
+        string baseMessage = "Find matches based on (relative) folder.... ";
+        add2Log(baseMessage, "START");
+        progressMessage(baseMessage, true);
+        foreach (ImportEntry entry in entries)
         {
-          if (entry.AddMatch(new MatchEntry(entry.MainSection, trackElement) { MatchOnFolder = true }))
+          entry.resetMatches(true);
+          progressMessage(entry.Title, false);
+          add2Log(entry.Title, "Title");
+          add2Log(entry.FullPlexFileName, "FullPlexFileName");
+          var tracks =
+            from track in entry.FolderSection.tracks(PMSServer)
+            where track.Elements().FirstOrDefault(
+              media => media.Elements().FirstOrDefault(
+                 part => part.Attribute("file").Value.Equals(entry.FullPlexFileName, StringComparison.OrdinalIgnoreCase)) != null) != null
+            select track;
+
+          XElement trackElement = tracks.FirstOrDefault();
+          if (trackElement != null)
           {
+            if (entry.AddMatch(new MatchEntry(entry.MainSection, trackElement) { MatchOnFolder = true }))
+            {
+              anyMatched = true;
+            }
+            //entry.Key = PMSBase.attributeValue(trackElement, PMSBase.KEY);
+            entry.TrackType = entry.FolderSection.TrackType;
             anyMatched = true;
           }
-          //entry.Key = PMSBase.attributeValue(trackElement, PMSBase.KEY);
-          entry.TrackType = entry.FolderSection.TrackType;
-          anyMatched = true;
         }
+        progressMessage("", true);
       }
-      progressMessage("", true);
+      catch (Exception ex)
+      {
+
+      }
+      stopLogging();
       return anyMatched;
     }
 

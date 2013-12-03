@@ -10,6 +10,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
   public class PlaylistSettings
   {
     protected const string FOLDER = "PlexMusicPlaylists";
+    protected const string LOGFOLDER = "Logs";
     protected const string FILENAME = "PlaylistSettings.xml";
     public string IP { get; set; }
     public int Port { get; set; }
@@ -35,6 +36,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
           {
             File.Copy(oldSettingsFileName, SettingsFileName);
           }
+        }
+        if (!Directory.Exists(LogFolder))
+        {
+          // Create our logs folder
+          DirectoryInfo dir = Directory.CreateDirectory(LogFolder);
         }
       }
       catch { }
@@ -101,5 +107,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), FOLDER);
       }
     }
+
+    public static string LogFolder
+    {
+      get
+      {
+        return Path.Combine(PlaylistSettings.SettingsFolder, LOGFOLDER);
+      }
+    }
+
   }
 }

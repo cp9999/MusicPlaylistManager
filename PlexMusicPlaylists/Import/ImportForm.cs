@@ -125,6 +125,10 @@ namespace PlexMusicPlaylists.Import
           tbImportFile.Text = ofdImportFile.FileName;
           tbPlaylistTitle.Text = Path.GetFileNameWithoutExtension(ofdImportFile.FileName).Trim();
           gvImportList.DataSource = m_importManager.ImportFile.Entries;
+          if (m_importManager.matchOnFileInFolder(true))
+          {
+            gvImportList.Refresh();
+          }
           updateMatchDetails();
           enableCommands();
         }
