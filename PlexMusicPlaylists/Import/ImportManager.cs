@@ -232,6 +232,7 @@ namespace PlexMusicPlaylists.Import
           progressMessage(entry.Title, false);
           add2Log(entry.Title, "Title");
           add2Log(entry.FullPlexFileName, "FullPlexFileName");
+          add2Log(entry.FolderSection.SectionUrl, "FolderURL");
           var tracks =
             from track in entry.FolderSection.tracks(PMSServer)
             where track.Elements().FirstOrDefault(
