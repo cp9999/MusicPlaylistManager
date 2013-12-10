@@ -51,6 +51,7 @@ namespace PlexMusicPlaylists.Import
 
     protected void progressMessage(string _message, bool _mainMessage)
     {
+      _message = _message ?? "";
       if (OnProgress != null)
       {
         OnProgress(_message, _mainMessage);
@@ -207,6 +208,7 @@ namespace PlexMusicPlaylists.Import
     {
       if (LoggingActive)
       {
+        _message = _message ?? "";
         m_logWriter.WriteLine(String.Format("{0}: [{1}] '{2}'", DateTime.Now, _label, _message));
       }
     }
@@ -222,7 +224,12 @@ namespace PlexMusicPlaylists.Import
 
       try
       {
-        startLogging("MatchOnFileInFolder.log");
+        string logFileName = String.Format("MatchOnFileInFolder_{0}.log", m_importFile != null ? Path.GetFileNameWithoutExtension(m_importFile.FileName) : "");
+        startLogging(logFileName);
+        if (m_importFile != null)
+        {
+          add2Log(m_importFile.FileName, "FILENAME");
+        }
         string baseMessage = "Find matches based on (relative) folder.... ";
         add2Log(baseMessage, "START");
         progressMessage(baseMessage, true);
@@ -247,7 +254,6 @@ namespace PlexMusicPlaylists.Import
             {
               anyMatched = true;
             }
-            //entry.Key = PMSBase.attributeValue(trackElement, PMSBase.KEY);
             entry.TrackType = entry.FolderSection.TrackType;
             anyMatched = true;
           }
@@ -256,7 +262,7 @@ namespace PlexMusicPlaylists.Import
       }
       catch (Exception ex)
       {
-
+        add2Log(string.Format("{0}. Stacktrace={1}", ex.Message, ex.StackTrace), "ERROR");
       }
       stopLogging();
       return anyMatched;

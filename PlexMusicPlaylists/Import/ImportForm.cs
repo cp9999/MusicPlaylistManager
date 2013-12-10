@@ -51,6 +51,7 @@ namespace PlexMusicPlaylists.Import
 
     void m_importManager_OnProgress(string _message, bool _mainMessage)
     {
+      _message = _message ?? "";
       if (_mainMessage)
       {
         labelProgress.Text = _message.Trim();
