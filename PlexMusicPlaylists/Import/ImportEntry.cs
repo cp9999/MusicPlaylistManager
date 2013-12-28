@@ -93,7 +93,7 @@ namespace PlexMusicPlaylists.Import
     {
       string relativePath = RelativePath(_usePlexLocation ? _sectionLocation.PlexLocation : _sectionLocation.MappedLocation);
       MainSection = _sectionLocation.Owner();
-      MainSection.loadFromCache(false, _progressMessage);
+      MainSection.loadFromCache(false, true, _progressMessage);
       var folders =
         from folder in MainSection.folders
         where folder.Title.Equals(relativePath, StringComparison.OrdinalIgnoreCase)

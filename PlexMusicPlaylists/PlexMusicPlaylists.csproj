@@ -49,6 +49,7 @@
     <Compile Include="Import\ImportEntry.cs" />
     <Compile Include="Import\ImportFile.cs" />
     <Compile Include="Import\ImportFileM3U.cs" />
+    <Compile Include="Import\ImportFileWPL.cs" />
     <Compile Include="Import\ImportForm.cs">
       <SubType>Form</SubType>
     </Compile>

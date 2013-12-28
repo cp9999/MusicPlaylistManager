@@ -12,6 +12,7 @@ namespace PlexMusicPlaylists.Import
     protected List<ImportEntry> m_entries = new List<ImportEntry>();
 
     public string FileName { get; set; }
+    public string Title { get; set; }
 
     public string FullPath
     {
@@ -50,6 +51,7 @@ namespace PlexMusicPlaylists.Import
 
     public ImportFile()
     {
+      Title = "";
     }
   }
 }

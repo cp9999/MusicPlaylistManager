@@ -6,11 +6,18 @@ using System.IO;
 using PlexMusicPlaylists.PlexMediaServer;
 using System.Diagnostics;
 using System.Xml.Linq;
+using System.Windows.Forms;
 
 namespace PlexMusicPlaylists.Import
 {
   public class ImportManager
   {
+    public enum ImportFormatType
+    {
+      M3U
+      ,WPL
+      //,XSPF
+    }
     public delegate void ProgressEventHandler(string _message, bool _mainMessage);
     public event ProgressEventHandler OnProgress;
     public PlaylistManager PlaylistManager { get; set; }
@@ -25,11 +32,73 @@ namespace PlexMusicPlaylists.Import
     private string m_newKey = "";
     private StreamWriter m_logWriter = null;
     private bool LoggingActive { get { return m_logWriter != null; } }
+    public bool AutoShownLocationMappingOnEmpty { get; set; }
+    public ImportFormatType ImportFormat { get; set; }
+
+    public ImportManager()
+    {
+      ImportFormat = ImportFormatType.M3U;
+    }
+
+    public string ImportFileFilter
+    {
+      get
+      {
+        switch (ImportFormat)
+        {
+          case ImportFormatType.M3U:
+            return "m3u files|*.m3u";
+          case ImportFormatType.WPL:
+            return "Windows Media Player Playlist|*.wpl";
+          //case ImportFormatType.XSPF:
+          //  return "XML Shareable Playlist Format|*.xspf";
+        }
+        return "All files|*.*";
+      }
+    }
+    public string ImportFileTitle
+    {
+      get
+      {
+        if (m_importFile != null && !String.IsNullOrEmpty(m_importFile.Title))
+        {
+          return m_importFile.Title;
+        }
+        return null;
+      }
+    }
 
     public void reset()
     {
       m_mainSections.Clear();
       m_sectionLocations.Clear();
+    }
+
+    public void initImportFileFormat(ComboBox _comboBox)
+    {
+      _comboBox.Items.Clear();
+      _comboBox.Items.Add("m3u");
+      _comboBox.Items.Add("Windows Media Player Playlist");
+      _comboBox.SelectedIndex = ImportFormat == ImportFormatType.M3U ? 0 : 1;
+      _comboBox.SelectedIndexChanged += new EventHandler(importFileFormat_SelectedIndexChanged);
+    }
+
+    void importFileFormat_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      ComboBox comboBox = sender as ComboBox;
+
+      if (comboBox != null)
+      {
+        switch (comboBox.SelectedIndex)
+        {
+          case 0: 
+            ImportFormat = ImportFormatType.M3U;
+            break;
+          case 1:
+            ImportFormat = ImportFormatType.WPL;
+            break;
+        }
+      }
     }
 
     public void addMainSection(MainSection _mainSection)
@@ -38,6 +107,7 @@ namespace PlexMusicPlaylists.Import
       {
         _mainSection.Owner = PMSServer;
         m_mainSections.Add(_mainSection);
+        _mainSection.loadFromCache(false, false, null);
 
         foreach (string location in _mainSection.Locations)
         {
@@ -97,6 +167,7 @@ namespace PlexMusicPlaylists.Import
       PlexLocationMapping plexLocationMapping = PlexLocationMapping.ReadFromFile(locationMappingFileName());
 
       PMSServer.DirectorySeparator = plexLocationMapping.DirectorySeparator;
+      AutoShownLocationMappingOnEmpty = !plexLocationMapping.ShownOnEmptyMappedlocation;
       copyMappedLocations(plexLocationMapping.Locations, m_sectionLocations, false);
     }
 
@@ -105,6 +176,7 @@ namespace PlexMusicPlaylists.Import
       PlexLocationMapping plexLocationMapping = PlexLocationMapping.ReadFromFile(locationMappingFileName());
 
       plexLocationMapping.DirectorySeparator = PMSServer.DirectorySeparator;
+      plexLocationMapping.ShownOnEmptyMappedlocation = !AutoShownLocationMappingOnEmpty;
       copyMappedLocations(m_sectionLocations, plexLocationMapping.Locations, true);
 
       plexLocationMapping.Save(locationMappingFileName());
@@ -297,15 +369,30 @@ namespace PlexMusicPlaylists.Import
       }
       progressMessage("", true);
     }
-
+    
     public bool LoadImportFile(string _fileName)
     {
+      m_importFile = null;
       if (File.Exists(_fileName))
       {
         progressMessage("Loading file....", true);
-        m_importFile = ImportFileM3U.loadM3UFile(_fileName);
-        updateSectionLocations();
-        return true;
+        switch (ImportFormat)
+        {
+          case ImportFormatType.M3U:
+            m_importFile = ImportFileM3U.loadM3UFile(_fileName);
+            break;
+          case ImportFormatType.WPL:
+            m_importFile = ImportFileWPL.loadWPLFile(_fileName);
+            break;
+          //case ImportFormatType.XSPF:
+            // TODO
+          //  break;
+        }
+        if (m_importFile != null)
+        {
+          updateSectionLocations();
+          return true;
+        }
       }
       return false;
     }

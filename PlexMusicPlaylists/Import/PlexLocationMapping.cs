@@ -12,6 +12,7 @@ namespace PlexMusicPlaylists.Import
   {
     public char DirectorySeparator { get; set; }
     public List<SectionLocation> Locations { get; set; }
+    public bool ShownOnEmptyMappedlocation { get; set; }
     public static XmlSerializer xs;
 
     static PlexLocationMapping()
@@ -22,6 +23,7 @@ namespace PlexMusicPlaylists.Import
     public PlexLocationMapping()
     {
       DirectorySeparator = PMSBase.FORWARD_SLASH;
+      ShownOnEmptyMappedlocation = false;
     }
 
     public void SaveToFile(string _filename)

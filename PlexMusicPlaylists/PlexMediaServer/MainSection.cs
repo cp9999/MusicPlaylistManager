@@ -139,7 +139,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
-    public void loadFromCache(bool _forceReload, ImportManager.ProgressEventHandler _progressMessage)
+    public void loadFromCache(bool _forceReload, bool _loadFromServer, ImportManager.ProgressEventHandler _progressMessage)
     {
       if (_forceReload)
       {
@@ -160,7 +160,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
         {
         }
       }
-      if (m_folders.Count == 0)
+      if (m_folders.Count == 0 && _loadFromServer)
       {
         if (_progressMessage != null)
         {

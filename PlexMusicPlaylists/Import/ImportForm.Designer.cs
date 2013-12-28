@@ -36,6 +36,7 @@
       this.panelTop = new System.Windows.Forms.Panel();
       this.panelTopRight = new System.Windows.Forms.Panel();
       this.panelProgress = new System.Windows.Forms.Panel();
+      this.labelProgressSub = new System.Windows.Forms.Label();
       this.labelProgress = new System.Windows.Forms.Label();
       this.gbMatchDetails = new System.Windows.Forms.GroupBox();
       this.tbNumberMatched = new System.Windows.Forms.TextBox();
@@ -59,6 +60,13 @@
       this.btnClose = new System.Windows.Forms.Button();
       this.panelImportDetailGrid = new System.Windows.Forms.Panel();
       this.gvImportList = new System.Windows.Forms.DataGridView();
+      this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
+      this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+      this.MatchedOnTitleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.PMSFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.FullPlexFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.panelImportToolstrip = new System.Windows.Forms.Panel();
       this.toolStripImport = new System.Windows.Forms.ToolStrip();
       this.toolStripLabel = new System.Windows.Forms.ToolStripLabel();
@@ -69,24 +77,21 @@
       this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
       this.btnSelectMatch = new System.Windows.Forms.ToolStripButton();
       this.btnSearchSelected = new System.Windows.Forms.ToolStripButton();
+      this.btnSwitchTitleArtist = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
       this.btnCreate = new System.Windows.Forms.ToolStripButton();
+      this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+      this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
       this.btnSectionLocation = new System.Windows.Forms.ToolStripButton();
       this.ofdImportFile = new System.Windows.Forms.OpenFileDialog();
       this.ep = new System.Windows.Forms.ErrorProvider(this.components);
-      this.labelProgressSub = new System.Windows.Forms.Label();
-      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
-      this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
-      this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-      this.MatchedOnTitleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.comboImportFormat = new System.Windows.Forms.ComboBox();
       this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.PMSFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.FullPlexFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
+      this.label4 = new System.Windows.Forms.Label();
       this.panelTop.SuspendLayout();
       this.panelTopRight.SuspendLayout();
       this.panelProgress.SuspendLayout();
@@ -113,7 +118,7 @@
       this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelTop.Location = new System.Drawing.Point(0, 0);
       this.panelTop.Name = "panelTop";
-      this.panelTop.Size = new System.Drawing.Size(1233, 143);
+      this.panelTop.Size = new System.Drawing.Size(1233, 162);
       this.panelTop.TabIndex = 0;
       // 
       // panelTopRight
@@ -123,7 +128,7 @@
       this.panelTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelTopRight.Location = new System.Drawing.Point(668, 0);
       this.panelTopRight.Name = "panelTopRight";
-      this.panelTopRight.Size = new System.Drawing.Size(565, 143);
+      this.panelTopRight.Size = new System.Drawing.Size(565, 162);
       this.panelTopRight.TabIndex = 5;
       // 
       // panelProgress
@@ -133,10 +138,20 @@
       this.panelProgress.Controls.Add(this.labelProgressSub);
       this.panelProgress.Controls.Add(this.labelProgress);
       this.panelProgress.Dock = System.Windows.Forms.DockStyle.Bottom;
-      this.panelProgress.Location = new System.Drawing.Point(0, 82);
+      this.panelProgress.Location = new System.Drawing.Point(0, 101);
       this.panelProgress.Name = "panelProgress";
       this.panelProgress.Size = new System.Drawing.Size(565, 61);
       this.panelProgress.TabIndex = 5;
+      // 
+      // labelProgressSub
+      // 
+      this.labelProgressSub.Dock = System.Windows.Forms.DockStyle.Bottom;
+      this.labelProgressSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.labelProgressSub.Location = new System.Drawing.Point(0, 34);
+      this.labelProgressSub.Name = "labelProgressSub";
+      this.labelProgressSub.Size = new System.Drawing.Size(561, 23);
+      this.labelProgressSub.TabIndex = 1;
+      this.labelProgressSub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // labelProgress
       // 
@@ -203,17 +218,17 @@
       this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Left;
       this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
       this.panelTopLeft.Name = "panelTopLeft";
-      this.panelTopLeft.Size = new System.Drawing.Size(668, 143);
+      this.panelTopLeft.Size = new System.Drawing.Size(668, 162);
       this.panelTopLeft.TabIndex = 4;
       // 
       // gbNewPlaylist
       // 
+      this.gbNewPlaylist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.gbNewPlaylist.Controls.Add(this.lblPlaylistEditDescription);
       this.gbNewPlaylist.Controls.Add(this.lblPlaylistEditTitle);
       this.gbNewPlaylist.Controls.Add(this.tbPlaylistTitle);
       this.gbNewPlaylist.Controls.Add(this.tbPlaylistDescription);
-      this.gbNewPlaylist.Dock = System.Windows.Forms.DockStyle.Top;
-      this.gbNewPlaylist.Location = new System.Drawing.Point(0, 60);
+      this.gbNewPlaylist.Location = new System.Drawing.Point(0, 81);
       this.gbNewPlaylist.Name = "gbNewPlaylist";
       this.gbNewPlaylist.Size = new System.Drawing.Size(668, 81);
       this.gbNewPlaylist.TabIndex = 3;
@@ -259,13 +274,15 @@
       // 
       // gbFileSelect
       // 
+      this.gbFileSelect.Controls.Add(this.comboImportFormat);
       this.gbFileSelect.Controls.Add(this.btnOpenFile);
+      this.gbFileSelect.Controls.Add(this.label4);
       this.gbFileSelect.Controls.Add(this.label1);
       this.gbFileSelect.Controls.Add(this.tbImportFile);
       this.gbFileSelect.Dock = System.Windows.Forms.DockStyle.Top;
       this.gbFileSelect.Location = new System.Drawing.Point(0, 0);
       this.gbFileSelect.Name = "gbFileSelect";
-      this.gbFileSelect.Size = new System.Drawing.Size(668, 60);
+      this.gbFileSelect.Size = new System.Drawing.Size(668, 81);
       this.gbFileSelect.TabIndex = 2;
       this.gbFileSelect.TabStop = false;
       this.gbFileSelect.Text = "Select file";
@@ -274,7 +291,7 @@
       // 
       this.btnOpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.btnOpenFile.Image = global::PlexMusicPlaylists.Properties.Resources.Open_file_16x16;
-      this.btnOpenFile.Location = new System.Drawing.Point(639, 21);
+      this.btnOpenFile.Location = new System.Drawing.Point(639, 46);
       this.btnOpenFile.Name = "btnOpenFile";
       this.btnOpenFile.Size = new System.Drawing.Size(23, 23);
       this.btnOpenFile.TabIndex = 2;
@@ -285,7 +302,7 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(15, 26);
+      this.label1.Location = new System.Drawing.Point(15, 48);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(84, 13);
       this.label1.TabIndex = 1;
@@ -295,7 +312,7 @@
       // 
       this.tbImportFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.tbImportFile.Location = new System.Drawing.Point(118, 23);
+      this.tbImportFile.Location = new System.Drawing.Point(118, 45);
       this.tbImportFile.Name = "tbImportFile";
       this.tbImportFile.ReadOnly = true;
       this.tbImportFile.Size = new System.Drawing.Size(515, 20);
@@ -306,9 +323,9 @@
       this.panelImport.Controls.Add(this.panelImportDetail);
       this.panelImport.Controls.Add(this.panelImportToolstrip);
       this.panelImport.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelImport.Location = new System.Drawing.Point(0, 143);
+      this.panelImport.Location = new System.Drawing.Point(0, 162);
       this.panelImport.Name = "panelImport";
-      this.panelImport.Size = new System.Drawing.Size(1233, 688);
+      this.panelImport.Size = new System.Drawing.Size(1233, 669);
       this.panelImport.TabIndex = 1;
       // 
       // panelImportDetail
@@ -317,7 +334,7 @@
       this.panelImportDetail.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelImportDetail.Location = new System.Drawing.Point(0, 31);
       this.panelImportDetail.Name = "panelImportDetail";
-      this.panelImportDetail.Size = new System.Drawing.Size(1233, 657);
+      this.panelImportDetail.Size = new System.Drawing.Size(1233, 638);
       this.panelImportDetail.TabIndex = 1;
       // 
       // tableLayoutPanel1
@@ -332,14 +349,14 @@
       this.tableLayoutPanel1.RowCount = 2;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(1233, 657);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(1233, 638);
       this.tableLayoutPanel1.TabIndex = 3;
       // 
       // panelImportBottom
       // 
       this.panelImportBottom.Controls.Add(this.btnClose);
       this.panelImportBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelImportBottom.Location = new System.Drawing.Point(3, 610);
+      this.panelImportBottom.Location = new System.Drawing.Point(3, 591);
       this.panelImportBottom.Name = "panelImportBottom";
       this.panelImportBottom.Size = new System.Drawing.Size(1227, 44);
       this.panelImportBottom.TabIndex = 2;
@@ -361,7 +378,7 @@
       this.panelImportDetailGrid.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelImportDetailGrid.Location = new System.Drawing.Point(3, 3);
       this.panelImportDetailGrid.Name = "panelImportDetailGrid";
-      this.panelImportDetailGrid.Size = new System.Drawing.Size(1227, 601);
+      this.panelImportDetailGrid.Size = new System.Drawing.Size(1227, 582);
       this.panelImportDetailGrid.TabIndex = 1;
       // 
       // gvImportList
@@ -386,17 +403,76 @@
       this.gvImportList.DataSource = this.importEntryBindingSource;
       this.gvImportList.Dock = System.Windows.Forms.DockStyle.Fill;
       this.gvImportList.Location = new System.Drawing.Point(0, 0);
-      this.gvImportList.MultiSelect = false;
       this.gvImportList.Name = "gvImportList";
       dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
       this.gvImportList.RowsDefaultCellStyle = dataGridViewCellStyle3;
       this.gvImportList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvImportList.Size = new System.Drawing.Size(1227, 601);
+      this.gvImportList.Size = new System.Drawing.Size(1227, 582);
       this.gvImportList.TabIndex = 0;
       this.gvImportList.VirtualMode = true;
       this.gvImportList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvImportList_CellMouseClick);
       this.gvImportList.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gvImportList_CellValueNeeded);
       this.gvImportList.SelectionChanged += new System.EventHandler(this.gvImportList_SelectionChanged);
+      // 
+      // MatchIcon
+      // 
+      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+      dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+      dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
+      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+      this.MatchIcon.DefaultCellStyle = dataGridViewCellStyle2;
+      this.MatchIcon.HeaderText = "";
+      this.MatchIcon.Name = "MatchIcon";
+      this.MatchIcon.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+      this.MatchIcon.Width = 32;
+      // 
+      // Matched
+      // 
+      this.Matched.DataPropertyName = "Matched";
+      this.Matched.HeaderText = "Matched";
+      this.Matched.Name = "Matched";
+      this.Matched.ReadOnly = true;
+      this.Matched.Width = 50;
+      // 
+      // MatchedOnTitleCount
+      // 
+      this.MatchedOnTitleCount.DataPropertyName = "MatchedOnTitleCount";
+      this.MatchedOnTitleCount.HeaderText = "Title matches";
+      this.MatchedOnTitleCount.Name = "MatchedOnTitleCount";
+      this.MatchedOnTitleCount.ReadOnly = true;
+      // 
+      // MainSectionName
+      // 
+      this.MainSectionName.DataPropertyName = "MainSectionName";
+      this.MainSectionName.HeaderText = "Main section";
+      this.MainSectionName.Name = "MainSectionName";
+      this.MainSectionName.ReadOnly = true;
+      // 
+      // PMSFolder
+      // 
+      this.PMSFolder.DataPropertyName = "PMSFolder";
+      this.PMSFolder.HeaderText = "Folder (Plex Media Server)";
+      this.PMSFolder.Name = "PMSFolder";
+      this.PMSFolder.ReadOnly = true;
+      this.PMSFolder.Width = 240;
+      // 
+      // Key
+      // 
+      this.Key.DataPropertyName = "Key";
+      this.Key.HeaderText = "Key";
+      this.Key.Name = "Key";
+      this.Key.ReadOnly = true;
+      this.Key.Width = 120;
+      // 
+      // FullPlexFileName
+      // 
+      this.FullPlexFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      this.FullPlexFileName.DataPropertyName = "FullPlexFileName";
+      this.FullPlexFileName.HeaderText = "Full filename (Plex)";
+      this.FullPlexFileName.Name = "FullPlexFileName";
+      this.FullPlexFileName.ReadOnly = true;
       // 
       // panelImportToolstrip
       // 
@@ -419,9 +495,12 @@
             this.toolStripLabel1,
             this.btnSelectMatch,
             this.btnSearchSelected,
+            this.btnSwitchTitleArtist,
             this.toolStripSeparator2,
             this.toolStripLabel2,
             this.btnCreate,
+            this.toolStripSeparator4,
+            this.toolStripLabel3,
             this.btnSectionLocation});
       this.toolStripImport.Location = new System.Drawing.Point(0, 0);
       this.toolStripImport.Name = "toolStripImport";
@@ -493,6 +572,16 @@
       this.btnSearchSelected.Text = "(Re)search on title";
       this.btnSearchSelected.Click += new System.EventHandler(this.btnSearchSelected_Click);
       // 
+      // btnSwitchTitleArtist
+      // 
+      this.btnSwitchTitleArtist.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.btnSwitchTitleArtist.Image = ((System.Drawing.Image)(resources.GetObject("btnSwitchTitleArtist.Image")));
+      this.btnSwitchTitleArtist.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.btnSwitchTitleArtist.Name = "btnSwitchTitleArtist";
+      this.btnSwitchTitleArtist.Size = new System.Drawing.Size(111, 28);
+      this.btnSwitchTitleArtist.Text = "Switch Title / Artist";
+      this.btnSwitchTitleArtist.Click += new System.EventHandler(this.btnSwitchTitleArtist_Click);
+      // 
       // toolStripSeparator2
       // 
       this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -514,14 +603,26 @@
       this.btnCreate.Text = "Create playlist";
       this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
       // 
+      // toolStripSeparator4
+      // 
+      this.toolStripSeparator4.Name = "toolStripSeparator4";
+      this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
+      // 
+      // toolStripLabel3
+      // 
+      this.toolStripLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toolStripLabel3.Name = "toolStripLabel3";
+      this.toolStripLabel3.Size = new System.Drawing.Size(40, 28);
+      this.toolStripLabel3.Text = "Setup";
+      // 
       // btnSectionLocation
       // 
       this.btnSectionLocation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
       this.btnSectionLocation.Image = ((System.Drawing.Image)(resources.GetObject("btnSectionLocation.Image")));
       this.btnSectionLocation.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnSectionLocation.Name = "btnSectionLocation";
-      this.btnSectionLocation.Size = new System.Drawing.Size(131, 28);
-      this.btnSectionLocation.Text = "Setup folder mappings";
+      this.btnSectionLocation.Size = new System.Drawing.Size(100, 28);
+      this.btnSectionLocation.Text = "Folder mappings";
       this.btnSectionLocation.Click += new System.EventHandler(this.btnSectionLocation_Click);
       // 
       // ofdImportFile
@@ -535,48 +636,14 @@
       // 
       this.ep.ContainerControl = this;
       // 
-      // labelProgressSub
+      // comboImportFormat
       // 
-      this.labelProgressSub.Dock = System.Windows.Forms.DockStyle.Bottom;
-      this.labelProgressSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.labelProgressSub.Location = new System.Drawing.Point(0, 34);
-      this.labelProgressSub.Name = "labelProgressSub";
-      this.labelProgressSub.Size = new System.Drawing.Size(561, 23);
-      this.labelProgressSub.TabIndex = 1;
-      this.labelProgressSub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-      // 
-      // importEntryBindingSource
-      // 
-      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
-      // 
-      // MatchIcon
-      // 
-      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-      dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-      dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-      dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
-      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
-      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-      this.MatchIcon.DefaultCellStyle = dataGridViewCellStyle2;
-      this.MatchIcon.HeaderText = "";
-      this.MatchIcon.Name = "MatchIcon";
-      this.MatchIcon.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-      this.MatchIcon.Width = 32;
-      // 
-      // Matched
-      // 
-      this.Matched.DataPropertyName = "Matched";
-      this.Matched.HeaderText = "Matched";
-      this.Matched.Name = "Matched";
-      this.Matched.ReadOnly = true;
-      this.Matched.Width = 50;
-      // 
-      // MatchedOnTitleCount
-      // 
-      this.MatchedOnTitleCount.DataPropertyName = "MatchedOnTitleCount";
-      this.MatchedOnTitleCount.HeaderText = "Title matches";
-      this.MatchedOnTitleCount.Name = "MatchedOnTitleCount";
-      this.MatchedOnTitleCount.ReadOnly = true;
+      this.comboImportFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.comboImportFormat.FormattingEnabled = true;
+      this.comboImportFormat.Location = new System.Drawing.Point(118, 19);
+      this.comboImportFormat.Name = "comboImportFormat";
+      this.comboImportFormat.Size = new System.Drawing.Size(222, 21);
+      this.comboImportFormat.TabIndex = 3;
       // 
       // artistDataGridViewTextBoxColumn
       // 
@@ -599,36 +666,18 @@
       this.fileNameDataGridViewTextBoxColumn.ReadOnly = true;
       this.fileNameDataGridViewTextBoxColumn.Width = 150;
       // 
-      // MainSectionName
+      // importEntryBindingSource
       // 
-      this.MainSectionName.DataPropertyName = "MainSectionName";
-      this.MainSectionName.HeaderText = "Main section";
-      this.MainSectionName.Name = "MainSectionName";
-      this.MainSectionName.ReadOnly = true;
+      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
       // 
-      // PMSFolder
+      // label4
       // 
-      this.PMSFolder.DataPropertyName = "PMSFolder";
-      this.PMSFolder.HeaderText = "Folder (Plex Media Server)";
-      this.PMSFolder.Name = "PMSFolder";
-      this.PMSFolder.ReadOnly = true;
-      this.PMSFolder.Width = 240;
-      // 
-      // Key
-      // 
-      this.Key.DataPropertyName = "Key";
-      this.Key.HeaderText = "Key";
-      this.Key.Name = "Key";
-      this.Key.ReadOnly = true;
-      this.Key.Width = 120;
-      // 
-      // FullPlexFileName
-      // 
-      this.FullPlexFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.FullPlexFileName.DataPropertyName = "FullPlexFileName";
-      this.FullPlexFileName.HeaderText = "Full filename (Plex)";
-      this.FullPlexFileName.Name = "FullPlexFileName";
-      this.FullPlexFileName.ReadOnly = true;
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(15, 22);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(84, 13);
+      this.label4.TabIndex = 1;
+      this.label4.Text = "Import file format";
       // 
       // ImportForm
       // 
@@ -724,5 +773,10 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn PMSFolder;
     private System.Windows.Forms.DataGridViewTextBoxColumn Key;
     private System.Windows.Forms.DataGridViewTextBoxColumn FullPlexFileName;
+    private System.Windows.Forms.ToolStripButton btnSwitchTitleArtist;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+    private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+    private System.Windows.Forms.ComboBox comboImportFormat;
+    private System.Windows.Forms.Label label4;
   }
 }

@@ -45,6 +45,7 @@ namespace PlexMusicPlaylists.Import
         m_importManager.OnProgress += new ImportManager.ProgressEventHandler(m_importManager_OnProgress);
       }
       btnSectionLocation.Enabled = (m_importManager != null && m_importManager.SectionLocations.Count > 0);
+      m_importManager.initImportFileFormat(comboImportFormat);
       updateMatchDetails();
       enableCommands();
     }
@@ -73,8 +74,10 @@ namespace PlexMusicPlaylists.Import
         gvImportList.DataSource = m_importManager.ImportFile.Entries;
       }
       btnSectionLocation.Enabled = (m_importManager != null && m_importManager.SectionLocations.Count > 0);
-      if (btnSectionLocation.Enabled && m_importManager.SectionLocations.FirstOrDefault(location => String.IsNullOrEmpty(location.MappedLocation)) != null)
+      if (btnSectionLocation.Enabled && m_importManager.AutoShownLocationMappingOnEmpty &&
+        m_importManager.SectionLocations.FirstOrDefault(location => String.IsNullOrEmpty(location.MappedLocation)) != null)
       {
+        m_importManager.AutoShownLocationMappingOnEmpty = false;
         m_importManager.showLocationMapping();
       }
     }
@@ -94,6 +97,7 @@ namespace PlexMusicPlaylists.Import
       ImportEntry importEntry = getSingleSelectedImportEntry();
       btnSelectMatch.Enabled = importEntry != null && importEntry.MatchedOnTitleCount > 0;
       btnSearchSelected.Enabled = importEntry != null && !String.IsNullOrEmpty(importEntry.Title);
+      btnSwitchTitleArtist.Enabled = gvImportList.SelectedRows.Count > 0;
     }
 
     private void btnMatchFolder_Click(object sender, EventArgs e)
@@ -118,13 +122,14 @@ namespace PlexMusicPlaylists.Import
 
     private void btnOpenFile_Click(object sender, EventArgs e)
     {
+      ofdImportFile.Filter = m_importManager.ImportFileFilter;
       if (ofdImportFile.ShowDialog() == System.Windows.Forms.DialogResult.OK && m_importManager != null)
       {        
         if (m_importManager.LoadImportFile(ofdImportFile.FileName))
         {
           m_importManager_OnProgress("", true);
           tbImportFile.Text = ofdImportFile.FileName;
-          tbPlaylistTitle.Text = Path.GetFileNameWithoutExtension(ofdImportFile.FileName).Trim();
+          tbPlaylistTitle.Text = m_importManager.ImportFileTitle ?? Path.GetFileNameWithoutExtension(ofdImportFile.FileName).Trim();
           gvImportList.DataSource = m_importManager.ImportFile.Entries;
           if (m_importManager.matchOnFileInFolder(true))
           {
@@ -260,6 +265,23 @@ namespace PlexMusicPlaylists.Import
       {
         e.Cancel = MessageBox.Show("No playlist created for loaded file.\nClose anyway?", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No;
       }
+    }
+
+    private void btnSwitchTitleArtist_Click(object sender, EventArgs e)
+    {
+      foreach (DataGridViewRow row in gvImportList.SelectedRows)
+      {
+        ImportEntry importEntry = row.DataBoundItem as ImportEntry;
+        if (importEntry != null)
+        {
+          string temp = importEntry.Artist;
+          importEntry.Artist = importEntry.Title;
+          importEntry.Title = temp;
+        }
+      }
+      gvImportList.Refresh();
+      updateMatchDetails();
+      enableCommands();
     }
 
   }

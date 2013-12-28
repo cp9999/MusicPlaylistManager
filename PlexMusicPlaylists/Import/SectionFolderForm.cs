@@ -47,7 +47,7 @@ namespace PlexMusicPlaylists.Import
         {
           gvFolders.DataSource = null;
           gvFolders.Refresh();
-          m_mainSection.loadFromCache(true, this.showProgress);
+          m_mainSection.loadFromCache(true, true, this.showProgress);
           this.showProgress("", true);
           gvFolders.DataSource = m_mainSection.folders;
         }
