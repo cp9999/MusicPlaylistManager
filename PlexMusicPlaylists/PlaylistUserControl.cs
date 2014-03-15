@@ -352,6 +352,7 @@ namespace PlexMusicPlaylists
       int tracksSelectedServer = gvServerTrack.SelectedRows.Count;
       btnServerTracksAppend.Enabled = tracksSelectedServer > 0 && playlist != null;
       btnServerTracksInsert.Enabled = tracksSelectedServer > 0 && playlist != null && tracksSelected == 1;
+      btnServerTrackAppendAll.Enabled = gvServerTrack.Rows.Count > 0;
     }
 
     private void addSelectedTracks(bool _append)
@@ -378,6 +379,51 @@ namespace PlexMusicPlaylists
           selectedRows.Add(selectedRow);
         }
         foreach (DataGridViewRow row in selectedRows.OrderBy(r => r.Index))
+        {
+          LibrarySection section = row.DataBoundItem as LibrarySection;
+          if (section != null)
+          {
+            logMessage(playlistManager.addTrack(playlist.Key, section.Key, section.TrackType, atPosition, out trackAdded));
+            if (trackAdded)
+            {
+              firstKey = firstKey ?? section.Key;
+              added++;
+              if (atPosition > 0)
+              {
+                atPosition++;
+              }
+            }
+          }
+        }
+        logMessage(String.Format("{0} tracks added to the playlist", added));
+        if (added > 0)
+        {
+          // Reload the playlist
+          loadSinglePlaylist(playlist.Key, firstKey, true);
+          gvPlaylists.Refresh();
+        }
+      }
+    }
+
+    private void addAllTracks(bool _append)
+    {
+      Playlist playlist = selectedPlaylist;
+      string firstKey = null;
+
+      if (playlist != null && MessageBox.Show("All tracks will be added to the selected playlist!", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+      {
+        int atPosition = 0;
+        if (!_append && gvSinglePlayList.SelectedRows.Count == 1)
+        {
+          Track track = gvSinglePlayList.SelectedRows[0].DataBoundItem as Track;
+          if (track != null)
+          {
+            atPosition = track.Index;
+          }
+        }
+        bool trackAdded;
+        int added = 0;
+        foreach (DataGridViewRow row in gvServerTrack.Rows)
         {
           LibrarySection section = row.DataBoundItem as LibrarySection;
           if (section != null)
@@ -588,6 +634,11 @@ namespace PlexMusicPlaylists
     private void btnServerTracksInsert_Click(object sender, EventArgs e)
     {
       addSelectedTracks(false);
+    }
+
+    private void btnServerTrackAppendAll_Click(object sender, EventArgs e)
+    {
+      addAllTracks(true);
     }
 
     private void btnTrackRemove_Click(object sender, EventArgs e)
