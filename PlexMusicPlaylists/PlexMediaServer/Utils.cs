@@ -19,6 +19,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
       var client = new WebClient();
       try
       {
+        // CP 2015-01-26: Proposed changesfrom marc_al
+        client.Encoding = Encoding.UTF8;
+        // CP 2015-01-26
         client.Headers.Add(HEADER_ENTRY_PLEX_CLIENT, PLEX_CLIENT_IDENTIFIER);
         return client.DownloadString(_url);
       }

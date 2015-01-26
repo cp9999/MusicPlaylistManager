@@ -74,6 +74,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
           section.IsEpisode = attributeValue(element, PMSBase.ATTR_TYPE).Equals(PMSBase.TYPE_EPISODE, StringComparison.OrdinalIgnoreCase);
         }
       }
+      // CP 2015-01-26: Proposed changesfrom marc_al
+      sections.Sort(new CustomLibrarySectiontringComparer());
+      // CP 2015-01-26
       return sections;
     }
 
@@ -123,5 +126,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
       return listFromElements(getSectionElements(_section, true), _section.SectionUrl, _section.HasTracks, false, _section.IsMusic);
     }
 
+  }
+
+  // CP 2015-01-26: Proposed changesfrom marc_al
+  class CustomLibrarySectiontringComparer : IComparer<LibrarySection>
+  {
+    int IComparer<LibrarySection>.Compare(LibrarySection x, LibrarySection y)
+    {
+      return string.Compare(x.Title, y.Title);
+    }
   }
 }
