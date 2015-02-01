@@ -29,7 +29,19 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
-    public string TrackType { get; set; }
+    private float _order;
+    public float Order 
+    {
+      get { return _order; }
+      set { SetPropertyField("Órder", ref _order, value); }
+    }
+
+    private string _trackType;
+    public string TrackType 
+    {
+      get { return _trackType; }
+      set { SetPropertyField("TrackType", ref _trackType, value); }
+    }
 
     public Track() : base()
     {
@@ -40,5 +52,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       ownerList = _ownerList;
     }
+
+    public void setOwnerList(IList<Track> _ownerList)
+    {
+      ownerList = _ownerList;
+    }
+
   }
 }

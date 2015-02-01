@@ -30,6 +30,8 @@
     {
       this.splitMain = new System.Windows.Forms.SplitContainer();
       this.gbServer = new System.Windows.Forms.GroupBox();
+      this.label3 = new System.Windows.Forms.Label();
+      this.tbPlexDatabase = new System.Windows.Forms.TextBox();
       this.udPlexPort = new System.Windows.Forms.NumericUpDown();
       this.btnConnect = new System.Windows.Forms.Button();
       this.label2 = new System.Windows.Forms.Label();
@@ -37,8 +39,9 @@
       this.label1 = new System.Windows.Forms.Label();
       this.splitBottom = new System.Windows.Forms.SplitContainer();
       this.splitDetail = new System.Windows.Forms.SplitContainer();
-      this.playlistUC = new PlexMusicPlaylists.PlaylistUserControl();
       this.rtbLog = new System.Windows.Forms.RichTextBox();
+      this.btnSettings = new System.Windows.Forms.Button();
+      this.playlistUC = new PlexMusicPlaylists.PlaylistUserControl();
       ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
       this.splitMain.Panel1.SuspendLayout();
       this.splitMain.Panel2.SuspendLayout();
@@ -77,6 +80,9 @@
       // 
       this.gbServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.gbServer.Controls.Add(this.btnSettings);
+      this.gbServer.Controls.Add(this.label3);
+      this.gbServer.Controls.Add(this.tbPlexDatabase);
       this.gbServer.Controls.Add(this.udPlexPort);
       this.gbServer.Controls.Add(this.btnConnect);
       this.gbServer.Controls.Add(this.label2);
@@ -88,6 +94,25 @@
       this.gbServer.TabIndex = 1;
       this.gbServer.TabStop = false;
       this.gbServer.Text = "Plex Media Server";
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(469, 22);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(74, 13);
+      this.label3.TabIndex = 7;
+      this.label3.Text = "Plex database";
+      // 
+      // tbPlexDatabase
+      // 
+      this.tbPlexDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.tbPlexDatabase.Location = new System.Drawing.Point(549, 19);
+      this.tbPlexDatabase.Name = "tbPlexDatabase";
+      this.tbPlexDatabase.ReadOnly = true;
+      this.tbPlexDatabase.Size = new System.Drawing.Size(575, 20);
+      this.tbPlexDatabase.TabIndex = 6;
       // 
       // udPlexPort
       // 
@@ -171,15 +196,6 @@
       this.splitDetail.SplitterDistance = 664;
       this.splitDetail.TabIndex = 1;
       // 
-      // playlistUC
-      // 
-      this.playlistUC.Caption = "Playlist configurator";
-      this.playlistUC.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.playlistUC.Location = new System.Drawing.Point(0, 0);
-      this.playlistUC.Name = "playlistUC";
-      this.playlistUC.Size = new System.Drawing.Size(1255, 610);
-      this.playlistUC.TabIndex = 0;
-      // 
       // rtbLog
       // 
       this.rtbLog.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -189,6 +205,26 @@
       this.rtbLog.Size = new System.Drawing.Size(1255, 109);
       this.rtbLog.TabIndex = 0;
       this.rtbLog.Text = "";
+      // 
+      // btnSettings
+      // 
+      this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnSettings.Location = new System.Drawing.Point(1140, 18);
+      this.btnSettings.Name = "btnSettings";
+      this.btnSettings.Size = new System.Drawing.Size(75, 23);
+      this.btnSettings.TabIndex = 9;
+      this.btnSettings.Text = "Settings";
+      this.btnSettings.UseVisualStyleBackColor = true;
+      this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+      // 
+      // playlistUC
+      // 
+      this.playlistUC.Caption = "Playlist configurator";
+      this.playlistUC.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.playlistUC.Location = new System.Drawing.Point(0, 0);
+      this.playlistUC.Name = "playlistUC";
+      this.playlistUC.Size = new System.Drawing.Size(1255, 610);
+      this.playlistUC.TabIndex = 0;
       // 
       // MainForm
       // 
@@ -229,6 +265,9 @@
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.TextBox tbPlexIP;
     private System.Windows.Forms.NumericUpDown udPlexPort;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.TextBox tbPlexDatabase;
+    private System.Windows.Forms.Button btnSettings;
   }
 }
 

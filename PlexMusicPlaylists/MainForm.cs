@@ -43,6 +43,7 @@ namespace PlexMusicPlaylists
     {
       tbPlexIP.Text = playlistSettings.IP;
       udPlexPort.Value = playlistSettings.Port;
+      tbPlexDatabase.Text = playlistSettings.PlaylistDB;
       enableCommands();
     }
     private void enableCommands()
@@ -74,6 +75,16 @@ namespace PlexMusicPlaylists
     private void udPlexPort_ValueChanged(object sender, EventArgs e)
     {
       enableCommands();
+    }
+
+
+    private void btnSettings_Click(object sender, EventArgs e)
+    {
+      SettingsForm settingsForm = new SettingsForm();
+      settingsForm.ShowDialog();
+      tbPlexDatabase.Text = playlistSettings.PlaylistDB;
+      playlistSettings.Save();
+      playlistUC.settingsChanged();
     }
   }
 }

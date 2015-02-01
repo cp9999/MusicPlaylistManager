@@ -49,7 +49,15 @@ namespace PlexMusicPlaylists
       InitializeComponent();
       importManager.PlaylistManager = playlistManager;
       importManager.PMSServer = server;
+      playlistManager.PlexPlaylistCreator.OnLogMessage += logMessage;
       initPlaylistControls();
+      if (playlistManager.playlistMode == PlaylistManager.PlaylistMode.PlexNative)
+      {
+        loadedListKey = "";
+        fillUserList();
+        loadPlaylists();
+        enableEditCommands();
+      }
     }
 
     public bool setPlexMediaServerIP(string _ip, int _port)
@@ -59,6 +67,8 @@ namespace PlexMusicPlaylists
       playlistManager.Port = _port;
       server.IP = _ip;
       server.Port = _port;
+      btnUserAdd.Visible = playlistManager.allowUserMaintenance;
+      btnUserDelete.Visible = playlistManager.allowUserMaintenance;
       try
       {
         updateCaption();
@@ -79,6 +89,31 @@ namespace PlexMusicPlaylists
         MessageBox.Show(ex.Message);
       }
       return false;
+    }
+    public void settingsChanged()
+    {
+      playlistManager.PlexDatabaseName = PlaylistSettings.theSettings().PlaylistDB;
+      if (playlistManager.playlistMode != PlaylistSettings.theSettings().GUIPlaylistMode)
+      {
+        playlistManager.playlistMode = PlaylistSettings.theSettings().GUIPlaylistMode;
+        if (!plexConnected && playlistManager.playlistMode == PlaylistManager.PlaylistMode.ChannelMusicPlaylist)
+        {
+          // Clear the lists
+          loadedListKey = "";
+          comboUsers.Items.Clear();
+          gvPlaylists.DataSource = null;
+          gvSinglePlayList.DataSource = null;
+        }
+        if (plexConnected || playlistManager.playlistMode == PlaylistManager.PlaylistMode.PlexNative)
+        {
+          loadedListKey = "";
+          fillUserList();
+          loadPlaylists();
+        }
+      }
+      btnUserAdd.Visible = playlistManager.allowUserMaintenance;
+      btnUserDelete.Visible = playlistManager.allowUserMaintenance;
+      enableEditCommands();
     }
 
     #endregion
@@ -156,7 +191,8 @@ namespace PlexMusicPlaylists
 
     private void loadPlaylists()
     {
-      playlistManager.currentAllPlaylists = playlistManager.allPlaylists();
+      gvPlaylists.DataSource = null;
+      playlistManager.currentAllPlaylists = playlistManager.allPlaylists(false);
       gvPlaylists.DataSource = playlistManager.currentAllPlaylists;
       if (playlistManager.currentAllPlaylists.Count() == 0)
       {
@@ -172,17 +208,17 @@ namespace PlexMusicPlaylists
       }
     }
 
-    private void loadSinglePlaylist(string _key)
+    private void loadSinglePlaylist(Playlist _playlist)
     {
-      loadSinglePlaylist(_key, "", false);
+      loadSinglePlaylist(_playlist, "", false);
     }
 
-    private void loadSinglePlaylist(string _key, string _selectkey, bool _force)
+    private void loadSinglePlaylist(Playlist _playlist, string _selectkey, bool _force)
     {
-      if (_force || !loadedListKey.Equals(_key))
+      if (_playlist != null && (_force || !loadedListKey.Equals(_playlist.Key)))
       {
-        loadedListKey = _key;
-        playlistManager.currentTrackList = playlistManager.singlePlaylist(_key);
+        loadedListKey = _playlist.Key;
+        playlistManager.currentTrackList = playlistManager.singlePlaylist(_playlist, false);
         gvSinglePlayList.DataSource = playlistManager.currentTrackList;
         if (gvSinglePlayList.Rows.Count > 0)
         {
@@ -200,7 +236,11 @@ namespace PlexMusicPlaylists
 
     private void enableEditCommands()
     {
-      toolStripPlaylists.Enabled = plexConnected;
+      //toolStripPlaylists.Enabled = plexConnected;
+      btnImport.Enabled = plexConnected;
+      btnPlaylistAdd.Enabled = plexConnected;
+      btnPlaylistRename.Enabled = plexConnected;
+      btnUserAdd.Enabled = plexConnected;
       toolStripSinglePlaylist.Enabled = plexConnected;
       toolStripServerSections.Enabled = plexConnected;
       toolStripServerTracks.Enabled = plexConnected;
@@ -214,8 +254,12 @@ namespace PlexMusicPlaylists
       }
       Playlist playlist = selectedPlaylist;
       btnPlaylistEditRename.Enabled = playlist != null && playlist.canRenameTo(tbPlaylistEditRenameTitle.Text);
-      btnPlaylistDelete.Enabled = playlistBindingSource != null;
-      btnUserDelete.Enabled = playlistManager.isNormalUser(playlistManager.currentUser.Name);
+      btnPlaylistDelete.Enabled = plexConnected && playlistBindingSource != null;
+      btnUserDelete.Enabled = plexConnected && playlistManager.isNormalUser(playlistManager.currentUser.Name);
+      saveSelectedToolStripMenuItem.Enabled = playlist != null;
+      btnImportChannelPlaylist.Enabled = plexConnected && playlistManager.MusicPlaylistsAvailable && playlistManager.playlistMode == PlaylistManager.PlaylistMode.PlexNative;
+      btnPlaylistSaveToSql.Enabled = playlistManager.playlistMode == PlaylistManager.PlaylistMode.PlexNative &&
+        (PlaylistSettings.theSettings().DatabaseCreateSqlFiles || PlaylistSettings.theSettings().DatabaseDirectUpdate);
     }
 
     private void enableTrackCommands()
@@ -288,7 +332,7 @@ namespace PlexMusicPlaylists
           {
             logMessage(String.Format("{0}: {1}", message, track.Title));
             // Reload the track list
-            loadSinglePlaylist(playlist.Key, track.Key, true);
+            loadSinglePlaylist(playlist, track.Key, true);
           }
         }
       }
@@ -399,7 +443,7 @@ namespace PlexMusicPlaylists
         if (added > 0)
         {
           // Reload the playlist
-          loadSinglePlaylist(playlist.Key, firstKey, true);
+          loadSinglePlaylist(playlist, firstKey, true);
           gvPlaylists.Refresh();
         }
       }
@@ -444,7 +488,7 @@ namespace PlexMusicPlaylists
         if (added > 0)
         {
           // Reload the playlist
-          loadSinglePlaylist(playlist.Key, firstKey, true);
+          loadSinglePlaylist(playlist, firstKey, true);
           gvPlaylists.Refresh();
         }
       }
@@ -462,7 +506,7 @@ namespace PlexMusicPlaylists
     private void fillUserList()
     {
       comboUsers.Items.Clear();
-      playlistManager.currentUserlist = playlistManager.userList();
+      playlistManager.currentUserlist = playlistManager.userList(false);
       foreach (PLUser user in playlistManager.currentUserlist)
       {
         comboUsers.Items.Add(user.Name);
@@ -483,7 +527,7 @@ namespace PlexMusicPlaylists
         tbPlaylistEditKey.Text = playlist.Key;
         tbPlaylistEditRenameTitle.Text = playlist.Title;
         tbPlaylistEditRenameDescription.Text = playlist.Description;
-        loadSinglePlaylist(playlist.Key);
+        loadSinglePlaylist(playlist);
       } 
       enableEditCommands();
     }
@@ -653,10 +697,10 @@ namespace PlexMusicPlaylists
             Track track = row.DataBoundItem as Track;
             if (track != null)
             {
-              playlistManager.removeTrack(playlist.Key, track.Key);
+              logMessage(playlistManager.removeTrack(playlist.Key, track.Key));
             }
           }
-          loadSinglePlaylist(playlist.Key, "", true);
+          loadSinglePlaylist(playlist, "", true);
           gvPlaylists.Refresh();
         }
       }
@@ -671,27 +715,33 @@ namespace PlexMusicPlaylists
 
     private void btnUserAdd_Click(object sender, EventArgs e)
     {
-      showPlaylistEditPanel(true, true);
+      if (playlistManager.allowUserMaintenance)
+      {
+        showPlaylistEditPanel(true, true);
+      }
     }
 
     #endregion
 
     private void btnUserDelete_Click(object sender, EventArgs e)
     {
-      string userName = comboUsers.SelectedItem.ToString();
-
-      if (playlistManager.isNormalUser(userName))
+      if (playlistManager.allowUserMaintenance)
       {
-        if (MessageBox.Show(String.Format("Remove user {0} and all associated playlists?", userName),
-          "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        string userName = comboUsers.SelectedItem.ToString();
+
+        if (playlistManager.isNormalUser(userName))
         {
-          if (playlistManager.deleteCurrentUser(userName))
+          if (MessageBox.Show(String.Format("Remove user {0} and all associated playlists?", userName),
+            "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
           {
-            gvPlaylists.DataSource = null;
-            gvSinglePlayList.DataSource = null;
-            loadedListKey = "";
-            fillUserList();
-            loadPlaylists();
+            if (playlistManager.deleteCurrentUser(userName))
+            {
+              gvPlaylists.DataSource = null;
+              gvSinglePlayList.DataSource = null;
+              loadedListKey = "";
+              fillUserList();
+              loadPlaylists();
+            }
           }
         }
       }
@@ -719,6 +769,44 @@ namespace PlexMusicPlaylists
         }
       }
     }
+
+    private void btnImportChannelPlaylist_Click(object sender, EventArgs e)
+    {
+      ImportFormChannel importFormChannel = new ImportFormChannel();
+      importFormChannel.setPlaylistManager(playlistManager);
+      if (importFormChannel.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        string newKey = importFormChannel.LastCreatedKey;
+        if (!String.IsNullOrEmpty(newKey))
+        {
+          // Reload the playlists and select the new one!
+          loadPlaylists();
+          if (gvPlaylists.Rows.Count > 0)
+          {
+            DataGridViewRow newRow = gvPlaylists.Rows.OfType<DataGridViewRow>().FirstOrDefault(row => ((Playlist)row.DataBoundItem).Key == newKey);
+            if (newRow != null)
+            {
+              newRow.Selected = true;
+            }
+          }
+        }
+      }
+    }
+
+
+    private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      if (selectedPlaylist != null)
+      {
+        playlistManager.PlexPlaylistCreator.generatePlaylistSql(selectedPlaylist);
+      }
+    }
+
+    private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      playlistManager.PlexPlaylistCreator.generatePlaylistSql();
+    }
+
 
   }
 }

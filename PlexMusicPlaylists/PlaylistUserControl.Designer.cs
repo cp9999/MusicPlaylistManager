@@ -63,6 +63,7 @@
       this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.btnPlaylistRename = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+      this.btnImportChannelPlaylist = new System.Windows.Forms.ToolStripButton();
       this.btnImport = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
       this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -102,16 +103,19 @@
       this.toolStripServerTracks = new System.Windows.Forms.ToolStrip();
       this.toolStripLabelServerTracks = new System.Windows.Forms.ToolStripLabel();
       this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+      this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
       this.btnServerTracksAppend = new System.Windows.Forms.ToolStripButton();
       this.btnServerTracksInsert = new System.Windows.Forms.ToolStripButton();
+      this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+      this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+      this.btnServerTrackAppendAll = new System.Windows.Forms.ToolStripButton();
       this.panelServerLeft = new System.Windows.Forms.Panel();
       this.panelMainCaption = new System.Windows.Forms.Panel();
       this.lblCaption = new System.Windows.Forms.Label();
       this.panelMainDetail = new System.Windows.Forms.Panel();
-      this.btnServerTrackAppendAll = new System.Windows.Forms.ToolStripButton();
-      this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-      this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-      this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+      this.btnPlaylistSaveToSql = new System.Windows.Forms.ToolStripDropDownButton();
+      this.saveSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.playlistBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -390,7 +394,9 @@
             this.btnPlaylistDelete,
             this.toolStripSeparator4,
             this.btnPlaylistRename,
+            this.btnPlaylistSaveToSql,
             this.toolStripSeparator9,
+            this.btnImportChannelPlaylist,
             this.btnImport,
             this.toolStripSeparator7,
             this.toolStripLabel1,
@@ -452,6 +458,15 @@
       this.toolStripSeparator9.Name = "toolStripSeparator9";
       this.toolStripSeparator9.Size = new System.Drawing.Size(6, 31);
       // 
+      // btnImportChannelPlaylist
+      // 
+      this.btnImportChannelPlaylist.Image = ((System.Drawing.Image)(resources.GetObject("btnImportChannelPlaylist.Image")));
+      this.btnImportChannelPlaylist.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.btnImportChannelPlaylist.Name = "btnImportChannelPlaylist";
+      this.btnImportChannelPlaylist.Size = new System.Drawing.Size(110, 28);
+      this.btnImportChannelPlaylist.Text = "Import Channel";
+      this.btnImportChannelPlaylist.Click += new System.EventHandler(this.btnImportChannelPlaylist_Click);
+      // 
       // btnImport
       // 
       this.btnImport.Image = global::PlexMusicPlaylists.Properties.Resources.Import_16x16;
@@ -477,7 +492,7 @@
       this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.comboUsers.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
       this.comboUsers.Name = "comboUsers";
-      this.comboUsers.Size = new System.Drawing.Size(121, 31);
+      this.comboUsers.Size = new System.Drawing.Size(121, 23);
       this.comboUsers.SelectedIndexChanged += new System.EventHandler(this.comboUsers_SelectedIndexChanged);
       // 
       // btnUserAdd
@@ -485,7 +500,7 @@
       this.btnUserAdd.Image = global::PlexMusicPlaylists.Properties.Resources.Add_user;
       this.btnUserAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnUserAdd.Name = "btnUserAdd";
-      this.btnUserAdd.Size = new System.Drawing.Size(51, 28);
+      this.btnUserAdd.Size = new System.Drawing.Size(51, 20);
       this.btnUserAdd.Text = "New";
       this.btnUserAdd.ToolTipText = "Add new user";
       this.btnUserAdd.Click += new System.EventHandler(this.btnUserAdd_Click);
@@ -495,7 +510,7 @@
       this.btnUserDelete.Image = global::PlexMusicPlaylists.Properties.Resources.Delete_user;
       this.btnUserDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnUserDelete.Name = "btnUserDelete";
-      this.btnUserDelete.Size = new System.Drawing.Size(70, 28);
+      this.btnUserDelete.Size = new System.Drawing.Size(70, 20);
       this.btnUserDelete.Text = "Remove";
       this.btnUserDelete.ToolTipText = "Remove selected user";
       this.btnUserDelete.Click += new System.EventHandler(this.btnUserDelete_Click);
@@ -589,7 +604,7 @@
       // 
       this.toolStripLabelTracks.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
       this.toolStripLabelTracks.Name = "toolStripLabelTracks";
-      this.toolStripLabelTracks.Size = new System.Drawing.Size(43, 22);
+      this.toolStripLabelTracks.Size = new System.Drawing.Size(42, 22);
       this.toolStripLabelTracks.Text = "Tracks";
       // 
       // toolStripSeparator2
@@ -832,13 +847,20 @@
       // 
       this.toolStripLabelServerTracks.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
       this.toolStripLabelServerTracks.Name = "toolStripLabelServerTracks";
-      this.toolStripLabelServerTracks.Size = new System.Drawing.Size(99, 22);
+      this.toolStripLabelServerTracks.Size = new System.Drawing.Size(98, 22);
       this.toolStripLabelServerTracks.Text = "Tracks on server";
       // 
       // toolStripSeparator6
       // 
       this.toolStripSeparator6.Name = "toolStripSeparator6";
       this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+      // 
+      // toolStripLabel3
+      // 
+      this.toolStripLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toolStripLabel3.Name = "toolStripLabel3";
+      this.toolStripLabel3.Size = new System.Drawing.Size(53, 22);
+      this.toolStripLabel3.Text = "Selected:";
       // 
       // btnServerTracksAppend
       // 
@@ -857,6 +879,27 @@
       this.btnServerTracksInsert.Size = new System.Drawing.Size(109, 22);
       this.btnServerTracksInsert.Text = "Insert in playlist";
       this.btnServerTracksInsert.Click += new System.EventHandler(this.btnServerTracksInsert_Click);
+      // 
+      // toolStripSeparator10
+      // 
+      this.toolStripSeparator10.Name = "toolStripSeparator10";
+      this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
+      // 
+      // toolStripLabel2
+      // 
+      this.toolStripLabel2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toolStripLabel2.Name = "toolStripLabel2";
+      this.toolStripLabel2.Size = new System.Drawing.Size(24, 22);
+      this.toolStripLabel2.Text = "All:";
+      // 
+      // btnServerTrackAppendAll
+      // 
+      this.btnServerTrackAppendAll.Image = ((System.Drawing.Image)(resources.GetObject("btnServerTrackAppendAll.Image")));
+      this.btnServerTrackAppendAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.btnServerTrackAppendAll.Name = "btnServerTrackAppendAll";
+      this.btnServerTrackAppendAll.Size = new System.Drawing.Size(84, 22);
+      this.btnServerTrackAppendAll.Text = "Append all";
+      this.btnServerTrackAppendAll.Click += new System.EventHandler(this.btnServerTrackAppendAll_Click);
       // 
       // panelServerLeft
       // 
@@ -898,33 +941,31 @@
       this.panelMainDetail.Size = new System.Drawing.Size(1240, 616);
       this.panelMainDetail.TabIndex = 3;
       // 
-      // btnServerTrackAppendAll
+      // btnPlaylistSaveToSql
       // 
-      this.btnServerTrackAppendAll.Image = ((System.Drawing.Image)(resources.GetObject("btnServerTrackAppendAll.Image")));
-      this.btnServerTrackAppendAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnServerTrackAppendAll.Name = "btnServerTrackAppendAll";
-      this.btnServerTrackAppendAll.Size = new System.Drawing.Size(84, 22);
-      this.btnServerTrackAppendAll.Text = "Append all";
-      this.btnServerTrackAppendAll.Click += new System.EventHandler(this.btnServerTrackAppendAll_Click);
+      this.btnPlaylistSaveToSql.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.btnPlaylistSaveToSql.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveSelectedToolStripMenuItem,
+            this.saveAllToolStripMenuItem});
+      this.btnPlaylistSaveToSql.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaylistSaveToSql.Image")));
+      this.btnPlaylistSaveToSql.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.btnPlaylistSaveToSql.Name = "btnPlaylistSaveToSql";
+      this.btnPlaylistSaveToSql.Size = new System.Drawing.Size(122, 28);
+      this.btnPlaylistSaveToSql.Text = "Save [sql/database]";
       // 
-      // toolStripLabel2
+      // saveSelectedToolStripMenuItem
       // 
-      this.toolStripLabel2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.toolStripLabel2.Name = "toolStripLabel2";
-      this.toolStripLabel2.Size = new System.Drawing.Size(24, 22);
-      this.toolStripLabel2.Text = "All:";
+      this.saveSelectedToolStripMenuItem.Name = "saveSelectedToolStripMenuItem";
+      this.saveSelectedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.saveSelectedToolStripMenuItem.Text = "Save selected";
+      this.saveSelectedToolStripMenuItem.Click += new System.EventHandler(this.saveSelectedToolStripMenuItem_Click);
       // 
-      // toolStripLabel3
+      // saveAllToolStripMenuItem
       // 
-      this.toolStripLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.toolStripLabel3.Name = "toolStripLabel3";
-      this.toolStripLabel3.Size = new System.Drawing.Size(53, 22);
-      this.toolStripLabel3.Text = "Selected:";
-      // 
-      // toolStripSeparator10
-      // 
-      this.toolStripSeparator10.Name = "toolStripSeparator10";
-      this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
+      this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+      this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.saveAllToolStripMenuItem.Text = "Save all";
+      this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
       // 
       // dataGridViewTextBoxColumn2
       // 
@@ -1128,5 +1169,9 @@
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
     private System.Windows.Forms.ToolStripLabel toolStripLabel2;
     private System.Windows.Forms.ToolStripButton btnServerTrackAppendAll;
+    private System.Windows.Forms.ToolStripButton btnImportChannelPlaylist;
+    private System.Windows.Forms.ToolStripDropDownButton btnPlaylistSaveToSql;
+    private System.Windows.Forms.ToolStripMenuItem saveSelectedToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
   }
 }

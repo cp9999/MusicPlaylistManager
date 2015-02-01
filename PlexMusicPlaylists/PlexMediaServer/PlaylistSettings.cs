@@ -11,10 +11,20 @@ namespace PlexMusicPlaylists.PlexMediaServer
   {
     protected const string FOLDER = "PlexMusicPlaylists";
     protected const string LOGFOLDER = "Logs";
+    protected const string PLAYLISTFOLDER = "Playlists";
+    protected const string SQLPLAYLISTFOLDER = "Sql";
     protected const string FILENAME = "PlaylistSettings.xml";
     public string IP { get; set; }
     public int Port { get; set; }
-    public static XmlSerializer xs;
+    public string ChannelDataFolder { get; set; }
+    public bool ChannelPreferDataFolder { get; set; }
+    public string PlaylistDB { get; set; }
+    public bool DatabaseCreateSqlFiles { get; set; }
+    public bool DatabaseDirectUpdate { get; set; }
+    public bool DatabaseModifiedTracksOnly { get; set; }
+    public PlaylistManager.PlaylistMode GUIPlaylistMode { get; set; }
+    private static XmlSerializer xs;
+    private static PlaylistSettings m_playlistSettings = null;
 
     static PlaylistSettings()
     {
@@ -42,6 +52,16 @@ namespace PlexMusicPlaylists.PlexMediaServer
           // Create our logs folder
           DirectoryInfo dir = Directory.CreateDirectory(LogFolder);
         }
+        if (!Directory.Exists(PlaylistFolder))
+        {
+          // Create our logs folder
+          DirectoryInfo dir = Directory.CreateDirectory(PlaylistFolder);
+        }
+        if (!Directory.Exists(SqlPlaylistFolder))
+        {
+          // Create our logs folder
+          DirectoryInfo dir = Directory.CreateDirectory(SqlPlaylistFolder);
+        }
       }
       catch { }
     }
@@ -50,6 +70,13 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       IP = "";
       Port = 32400;
+      ChannelDataFolder = "";
+      ChannelPreferDataFolder = false;
+      PlaylistDB = "";
+      DatabaseCreateSqlFiles = true;
+      DatabaseDirectUpdate = false;
+      DatabaseModifiedTracksOnly = true;
+      GUIPlaylistMode = PlaylistManager.PlaylistMode.PlexNative;
     }
 
     public void SaveToFile(string _filename)
@@ -66,9 +93,18 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
+    public static bool ValidChannelDataFolder
+    {
+      get { return m_playlistSettings != null && !String.IsNullOrEmpty(m_playlistSettings.ChannelDataFolder) && Directory.Exists(m_playlistSettings.ChannelDataFolder); }
+    }
+
     public static PlaylistSettings theSettings()
     {
-      return ReadFromFile(SettingsFileName);
+      if (m_playlistSettings == null)
+      {
+        m_playlistSettings = ReadFromFile(SettingsFileName);
+      }
+      return m_playlistSettings;
     }
 
     public void Save()
@@ -80,7 +116,6 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       try
       {
-
         using (StreamReader sr = new StreamReader(_fileName))
         {
           return xs.Deserialize(sr) as PlaylistSettings;
@@ -113,6 +148,22 @@ namespace PlexMusicPlaylists.PlexMediaServer
       get
       {
         return Path.Combine(PlaylistSettings.SettingsFolder, LOGFOLDER);
+      }
+    }
+
+    public static string PlaylistFolder
+    {
+      get
+      {
+        return Path.Combine(PlaylistSettings.SettingsFolder, PLAYLISTFOLDER);
+      }
+    }
+
+    public static string SqlPlaylistFolder
+    {
+      get
+      {
+        return Path.Combine(PlaylistFolder, SQLPLAYLISTFOLDER);
       }
     }
 

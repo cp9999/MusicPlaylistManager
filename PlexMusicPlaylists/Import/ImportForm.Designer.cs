@@ -50,7 +50,9 @@
       this.tbPlaylistTitle = new System.Windows.Forms.TextBox();
       this.tbPlaylistDescription = new System.Windows.Forms.TextBox();
       this.gbFileSelect = new System.Windows.Forms.GroupBox();
+      this.comboImportFormat = new System.Windows.Forms.ComboBox();
       this.btnOpenFile = new System.Windows.Forms.Button();
+      this.label4 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
       this.tbImportFile = new System.Windows.Forms.TextBox();
       this.panelImport = new System.Windows.Forms.Panel();
@@ -63,10 +65,14 @@
       this.MatchIcon = new System.Windows.Forms.DataGridViewImageColumn();
       this.Matched = new System.Windows.Forms.DataGridViewCheckBoxColumn();
       this.MatchedOnTitleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.MainSectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.PMSFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.FullPlexFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.panelImportToolstrip = new System.Windows.Forms.Panel();
       this.toolStripImport = new System.Windows.Forms.ToolStrip();
       this.toolStripLabel = new System.Windows.Forms.ToolStripLabel();
@@ -86,12 +92,6 @@
       this.btnSectionLocation = new System.Windows.Forms.ToolStripButton();
       this.ofdImportFile = new System.Windows.Forms.OpenFileDialog();
       this.ep = new System.Windows.Forms.ErrorProvider(this.components);
-      this.comboImportFormat = new System.Windows.Forms.ComboBox();
-      this.artistDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.importEntryBindingSource = new System.Windows.Forms.BindingSource(this.components);
-      this.label4 = new System.Windows.Forms.Label();
       this.panelTop.SuspendLayout();
       this.panelTopRight.SuspendLayout();
       this.panelProgress.SuspendLayout();
@@ -105,10 +105,10 @@
       this.panelImportBottom.SuspendLayout();
       this.panelImportDetailGrid.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.gvImportList)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).BeginInit();
       this.panelImportToolstrip.SuspendLayout();
       this.toolStripImport.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // panelTop
@@ -287,6 +287,15 @@
       this.gbFileSelect.TabStop = false;
       this.gbFileSelect.Text = "Select file";
       // 
+      // comboImportFormat
+      // 
+      this.comboImportFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.comboImportFormat.FormattingEnabled = true;
+      this.comboImportFormat.Location = new System.Drawing.Point(118, 19);
+      this.comboImportFormat.Name = "comboImportFormat";
+      this.comboImportFormat.Size = new System.Drawing.Size(222, 21);
+      this.comboImportFormat.TabIndex = 3;
+      // 
       // btnOpenFile
       // 
       this.btnOpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -298,6 +307,15 @@
       this.btnOpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.btnOpenFile.UseVisualStyleBackColor = true;
       this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(15, 22);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(84, 13);
+      this.label4.TabIndex = 1;
+      this.label4.Text = "Import file format";
       // 
       // label1
       // 
@@ -443,6 +461,27 @@
       this.MatchedOnTitleCount.Name = "MatchedOnTitleCount";
       this.MatchedOnTitleCount.ReadOnly = true;
       // 
+      // artistDataGridViewTextBoxColumn
+      // 
+      this.artistDataGridViewTextBoxColumn.DataPropertyName = "Artist";
+      this.artistDataGridViewTextBoxColumn.HeaderText = "Artist";
+      this.artistDataGridViewTextBoxColumn.Name = "artistDataGridViewTextBoxColumn";
+      // 
+      // titleDataGridViewTextBoxColumn
+      // 
+      this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+      this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+      this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+      this.titleDataGridViewTextBoxColumn.Width = 150;
+      // 
+      // fileNameDataGridViewTextBoxColumn
+      // 
+      this.fileNameDataGridViewTextBoxColumn.DataPropertyName = "FileName";
+      this.fileNameDataGridViewTextBoxColumn.HeaderText = "FileName";
+      this.fileNameDataGridViewTextBoxColumn.Name = "fileNameDataGridViewTextBoxColumn";
+      this.fileNameDataGridViewTextBoxColumn.ReadOnly = true;
+      this.fileNameDataGridViewTextBoxColumn.Width = 150;
+      // 
       // MainSectionName
       // 
       this.MainSectionName.DataPropertyName = "MainSectionName";
@@ -473,6 +512,10 @@
       this.FullPlexFileName.HeaderText = "Full filename (Plex)";
       this.FullPlexFileName.Name = "FullPlexFileName";
       this.FullPlexFileName.ReadOnly = true;
+      // 
+      // importEntryBindingSource
+      // 
+      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
       // 
       // panelImportToolstrip
       // 
@@ -636,49 +679,6 @@
       // 
       this.ep.ContainerControl = this;
       // 
-      // comboImportFormat
-      // 
-      this.comboImportFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-      this.comboImportFormat.FormattingEnabled = true;
-      this.comboImportFormat.Location = new System.Drawing.Point(118, 19);
-      this.comboImportFormat.Name = "comboImportFormat";
-      this.comboImportFormat.Size = new System.Drawing.Size(222, 21);
-      this.comboImportFormat.TabIndex = 3;
-      // 
-      // artistDataGridViewTextBoxColumn
-      // 
-      this.artistDataGridViewTextBoxColumn.DataPropertyName = "Artist";
-      this.artistDataGridViewTextBoxColumn.HeaderText = "Artist";
-      this.artistDataGridViewTextBoxColumn.Name = "artistDataGridViewTextBoxColumn";
-      // 
-      // titleDataGridViewTextBoxColumn
-      // 
-      this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-      this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-      this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-      this.titleDataGridViewTextBoxColumn.Width = 150;
-      // 
-      // fileNameDataGridViewTextBoxColumn
-      // 
-      this.fileNameDataGridViewTextBoxColumn.DataPropertyName = "FileName";
-      this.fileNameDataGridViewTextBoxColumn.HeaderText = "FileName";
-      this.fileNameDataGridViewTextBoxColumn.Name = "fileNameDataGridViewTextBoxColumn";
-      this.fileNameDataGridViewTextBoxColumn.ReadOnly = true;
-      this.fileNameDataGridViewTextBoxColumn.Width = 150;
-      // 
-      // importEntryBindingSource
-      // 
-      this.importEntryBindingSource.DataSource = typeof(PlexMusicPlaylists.Import.ImportEntry);
-      // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(15, 22);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(84, 13);
-      this.label4.TabIndex = 1;
-      this.label4.Text = "Import file format";
-      // 
       // ImportForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -707,12 +707,12 @@
       this.panelImportBottom.ResumeLayout(false);
       this.panelImportDetailGrid.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.gvImportList)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).EndInit();
       this.panelImportToolstrip.ResumeLayout(false);
       this.panelImportToolstrip.PerformLayout();
       this.toolStripImport.ResumeLayout(false);
       this.toolStripImport.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ep)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.importEntryBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }

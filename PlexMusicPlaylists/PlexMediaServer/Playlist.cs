@@ -8,6 +8,13 @@ namespace PlexMusicPlaylists.PlexMediaServer
   public class Playlist : PlaylistBase
   {
     public string Description { get; set; }
+    public Guid UniqueId { get; set; }
+
+    public Playlist()
+      : base()
+    {
+      UniqueId = Guid.Empty;
+    }
 
     public string DurationStr
     {
