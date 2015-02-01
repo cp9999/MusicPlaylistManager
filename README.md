@@ -1,8 +1,25 @@
 MusicPlaylistManager
 ====================
 
-Utitlity to manage music playlists for Plex channel plugin: MusicPlaylist. 
+Utitlity to manage music playlists for Plex AND for the Plex channel plugin: MusicPlaylist. 
 This is a Windows application that requires .Net framework 4.0
+
+[2015-02-01]
+PlaylistManager can now be used to maintain native plex playlists.
+The following features are available
+1.  Import playlists from the Music Playlist Channel into plex playlists
+    Note: This requires either the Music Playlist channel to be installed on PMS 
+          OR access to the data folder (or a copy) of the music playlist channel, typically:
+		     ($Plex Media Server)\Plug-in Support\Data\com.plexapp.plugins.playlist\DataItems
+2.  Create / maintain playlists (all stored locally at ($UserAppDataLocal)\PlexMusicPlaylists).
+    Note: This requires connection to the running Plex Media Server where playlists are targetted for
+3.  Generate SQL file per playlist with all sql commands to update / insert a playlist to the plex database
+4.  and/or Update the sqlite database directly from the playlist manager
+
+Known issue:
+I found that I cannot access the .db file using an unc coded path when I store it on my NAS.
+For now i copy the database locally
+
 
 [2013-11-23]
 Added import function for m3u playlist files.
