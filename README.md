@@ -15,10 +15,12 @@ The following features are available
     Note: This requires connection to the running Plex Media Server where playlists are targetted for
 3.  Generate SQL file per playlist with all sql commands to update / insert a playlist to the plex database
 4.  and/or Update the sqlite database directly from the playlist manager
+5.  Added Artist and Album to the playlist grid
+6.  Added auto connect option
 
 Known issue:
-I found that I cannot access the .db file using an unc coded path when I store it on my NAS.
-For now i copy the database locally
+When using an UNC path for the .db file, make sure to use forward slashes (e.g. //../),
+otherwise the .db file cannot be accessed.
 
 
 [2013-11-23]

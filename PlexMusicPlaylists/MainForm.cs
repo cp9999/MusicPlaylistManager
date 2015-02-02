@@ -86,6 +86,8 @@ namespace PlexMusicPlaylists
     {
       SettingsForm settingsForm = new SettingsForm();
       settingsForm.ShowDialog();
+      playlistSettings.PlaylistDB = playlistSettings.PlaylistDB.Replace("\\", "/");
+      playlistSettings.ChannelDataFolder = playlistSettings.ChannelDataFolder.Replace("\\", "/");
       tbPlexDatabase.Text = playlistSettings.PlaylistDB;
       playlistSettings.Save();
       playlistUC.settingsChanged();
