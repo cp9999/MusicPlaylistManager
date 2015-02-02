@@ -62,6 +62,9 @@
       this.btnPlaylistDelete = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.btnPlaylistRename = new System.Windows.Forms.ToolStripButton();
+      this.btnPlaylistSaveToSql = new System.Windows.Forms.ToolStripDropDownButton();
+      this.saveSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
       this.btnImportChannelPlaylist = new System.Windows.Forms.ToolStripButton();
       this.btnImport = new System.Windows.Forms.ToolStripButton();
@@ -73,6 +76,8 @@
       this.panelTrackGridview = new System.Windows.Forms.Panel();
       this.gvSinglePlayList = new System.Windows.Forms.DataGridView();
       this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.Artist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.Album = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.TrackType = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.panelTrackToolstrip = new System.Windows.Forms.Panel();
@@ -113,9 +118,6 @@
       this.panelMainCaption = new System.Windows.Forms.Panel();
       this.lblCaption = new System.Windows.Forms.Label();
       this.panelMainDetail = new System.Windows.Forms.Panel();
-      this.btnPlaylistSaveToSql = new System.Windows.Forms.ToolStripDropDownButton();
-      this.saveSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.playlistBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -179,7 +181,7 @@
       // 
       this.splitContainerMain.Panel2.Controls.Add(this.panelTrackGridview);
       this.splitContainerMain.Panel2.Controls.Add(this.panelTrackToolstrip);
-      this.splitContainerMain.Size = new System.Drawing.Size(658, 616);
+      this.splitContainerMain.Size = new System.Drawing.Size(750, 616);
       this.splitContainerMain.SplitterDistance = 218;
       this.splitContainerMain.TabIndex = 0;
       // 
@@ -190,7 +192,7 @@
       this.panelPlaylistGriedView.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelPlaylistGriedView.Location = new System.Drawing.Point(0, 31);
       this.panelPlaylistGriedView.Name = "panelPlaylistGriedView";
-      this.panelPlaylistGriedView.Size = new System.Drawing.Size(658, 187);
+      this.panelPlaylistGriedView.Size = new System.Drawing.Size(750, 187);
       this.panelPlaylistGriedView.TabIndex = 5;
       // 
       // gvPlaylists
@@ -215,7 +217,7 @@
       dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
       this.gvPlaylists.RowsDefaultCellStyle = dataGridViewCellStyle2;
       this.gvPlaylists.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvPlaylists.Size = new System.Drawing.Size(658, 70);
+      this.gvPlaylists.Size = new System.Drawing.Size(750, 70);
       this.gvPlaylists.TabIndex = 5;
       this.gvPlaylists.SelectionChanged += new System.EventHandler(this.gvPlaylists_SelectionChanged);
       // 
@@ -241,7 +243,7 @@
       this.panelPlaylistEdit.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelPlaylistEdit.Location = new System.Drawing.Point(0, 0);
       this.panelPlaylistEdit.Name = "panelPlaylistEdit";
-      this.panelPlaylistEdit.Size = new System.Drawing.Size(658, 117);
+      this.panelPlaylistEdit.Size = new System.Drawing.Size(750, 117);
       this.panelPlaylistEdit.TabIndex = 4;
       // 
       // gbPlaylistEdit
@@ -261,7 +263,7 @@
       this.gbPlaylistEdit.Controls.Add(this.tbPlaylistEditAddTitle);
       this.gbPlaylistEdit.Location = new System.Drawing.Point(3, 6);
       this.gbPlaylistEdit.Name = "gbPlaylistEdit";
-      this.gbPlaylistEdit.Size = new System.Drawing.Size(652, 105);
+      this.gbPlaylistEdit.Size = new System.Drawing.Size(744, 105);
       this.gbPlaylistEdit.TabIndex = 0;
       this.gbPlaylistEdit.TabStop = false;
       this.gbPlaylistEdit.Text = "Add new playlist";
@@ -269,7 +271,7 @@
       // btnPlaylistEditHide
       // 
       this.btnPlaylistEditHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnPlaylistEditHide.Location = new System.Drawing.Point(558, 48);
+      this.btnPlaylistEditHide.Location = new System.Drawing.Point(650, 48);
       this.btnPlaylistEditHide.Name = "btnPlaylistEditHide";
       this.btnPlaylistEditHide.Size = new System.Drawing.Size(88, 23);
       this.btnPlaylistEditHide.TabIndex = 5;
@@ -280,7 +282,7 @@
       // btnPlaylistEditRename
       // 
       this.btnPlaylistEditRename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnPlaylistEditRename.Location = new System.Drawing.Point(558, 65);
+      this.btnPlaylistEditRename.Location = new System.Drawing.Point(650, 65);
       this.btnPlaylistEditRename.Name = "btnPlaylistEditRename";
       this.btnPlaylistEditRename.Size = new System.Drawing.Size(88, 23);
       this.btnPlaylistEditRename.TabIndex = 4;
@@ -292,7 +294,7 @@
       // 
       this.btnPlaylistEditCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.btnPlaylistEditCreate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      this.btnPlaylistEditCreate.Location = new System.Drawing.Point(558, 19);
+      this.btnPlaylistEditCreate.Location = new System.Drawing.Point(650, 19);
       this.btnPlaylistEditCreate.Name = "btnPlaylistEditCreate";
       this.btnPlaylistEditCreate.Size = new System.Drawing.Size(88, 23);
       this.btnPlaylistEditCreate.TabIndex = 3;
@@ -307,7 +309,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.tbPlaylistEditRenameTitle.Location = new System.Drawing.Point(80, 57);
       this.tbPlaylistEditRenameTitle.Name = "tbPlaylistEditRenameTitle";
-      this.tbPlaylistEditRenameTitle.Size = new System.Drawing.Size(463, 20);
+      this.tbPlaylistEditRenameTitle.Size = new System.Drawing.Size(555, 20);
       this.tbPlaylistEditRenameTitle.TabIndex = 2;
       this.tbPlaylistEditRenameTitle.TextChanged += new System.EventHandler(this.tbPlaylistEditRenameTitle_TextChanged);
       // 
@@ -344,7 +346,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.tbPlaylistEditRenameDescription.Location = new System.Drawing.Point(80, 79);
       this.tbPlaylistEditRenameDescription.Name = "tbPlaylistEditRenameDescription";
-      this.tbPlaylistEditRenameDescription.Size = new System.Drawing.Size(463, 20);
+      this.tbPlaylistEditRenameDescription.Size = new System.Drawing.Size(555, 20);
       this.tbPlaylistEditRenameDescription.TabIndex = 0;
       // 
       // tbPlaylistEditAddDescription
@@ -353,7 +355,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.tbPlaylistEditAddDescription.Location = new System.Drawing.Point(71, 71);
       this.tbPlaylistEditAddDescription.Name = "tbPlaylistEditAddDescription";
-      this.tbPlaylistEditAddDescription.Size = new System.Drawing.Size(463, 20);
+      this.tbPlaylistEditAddDescription.Size = new System.Drawing.Size(555, 20);
       this.tbPlaylistEditAddDescription.TabIndex = 0;
       // 
       // tbPlaylistEditKey
@@ -371,7 +373,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.tbPlaylistEditAddTitle.Location = new System.Drawing.Point(71, 45);
       this.tbPlaylistEditAddTitle.Name = "tbPlaylistEditAddTitle";
-      this.tbPlaylistEditAddTitle.Size = new System.Drawing.Size(463, 20);
+      this.tbPlaylistEditAddTitle.Size = new System.Drawing.Size(555, 20);
       this.tbPlaylistEditAddTitle.TabIndex = 0;
       this.tbPlaylistEditAddTitle.TextChanged += new System.EventHandler(this.tbPlaylistEditAddTitle_TextChanged);
       // 
@@ -381,7 +383,7 @@
       this.panelPlaylistToolStrip.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelPlaylistToolStrip.Location = new System.Drawing.Point(0, 0);
       this.panelPlaylistToolStrip.Name = "panelPlaylistToolStrip";
-      this.panelPlaylistToolStrip.Size = new System.Drawing.Size(658, 31);
+      this.panelPlaylistToolStrip.Size = new System.Drawing.Size(750, 31);
       this.panelPlaylistToolStrip.TabIndex = 4;
       // 
       // toolStripPlaylists
@@ -405,7 +407,7 @@
             this.btnUserDelete});
       this.toolStripPlaylists.Location = new System.Drawing.Point(0, 0);
       this.toolStripPlaylists.Name = "toolStripPlaylists";
-      this.toolStripPlaylists.Size = new System.Drawing.Size(658, 31);
+      this.toolStripPlaylists.Size = new System.Drawing.Size(750, 31);
       this.toolStripPlaylists.TabIndex = 4;
       this.toolStripPlaylists.Text = "toolStrip1";
       // 
@@ -453,6 +455,32 @@
       this.btnPlaylistRename.Text = "Rename";
       this.btnPlaylistRename.Click += new System.EventHandler(this.btnPlaylistRename_Click);
       // 
+      // btnPlaylistSaveToSql
+      // 
+      this.btnPlaylistSaveToSql.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.btnPlaylistSaveToSql.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveSelectedToolStripMenuItem,
+            this.saveAllToolStripMenuItem});
+      this.btnPlaylistSaveToSql.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaylistSaveToSql.Image")));
+      this.btnPlaylistSaveToSql.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.btnPlaylistSaveToSql.Name = "btnPlaylistSaveToSql";
+      this.btnPlaylistSaveToSql.Size = new System.Drawing.Size(122, 28);
+      this.btnPlaylistSaveToSql.Text = "Save [sql/database]";
+      // 
+      // saveSelectedToolStripMenuItem
+      // 
+      this.saveSelectedToolStripMenuItem.Name = "saveSelectedToolStripMenuItem";
+      this.saveSelectedToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+      this.saveSelectedToolStripMenuItem.Text = "Save selected";
+      this.saveSelectedToolStripMenuItem.Click += new System.EventHandler(this.saveSelectedToolStripMenuItem_Click);
+      // 
+      // saveAllToolStripMenuItem
+      // 
+      this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+      this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+      this.saveAllToolStripMenuItem.Text = "Save all";
+      this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
+      // 
       // toolStripSeparator9
       // 
       this.toolStripSeparator9.Name = "toolStripSeparator9";
@@ -492,7 +520,7 @@
       this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.comboUsers.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
       this.comboUsers.Name = "comboUsers";
-      this.comboUsers.Size = new System.Drawing.Size(121, 23);
+      this.comboUsers.Size = new System.Drawing.Size(121, 31);
       this.comboUsers.SelectedIndexChanged += new System.EventHandler(this.comboUsers_SelectedIndexChanged);
       // 
       // btnUserAdd
@@ -500,7 +528,7 @@
       this.btnUserAdd.Image = global::PlexMusicPlaylists.Properties.Resources.Add_user;
       this.btnUserAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnUserAdd.Name = "btnUserAdd";
-      this.btnUserAdd.Size = new System.Drawing.Size(51, 20);
+      this.btnUserAdd.Size = new System.Drawing.Size(51, 28);
       this.btnUserAdd.Text = "New";
       this.btnUserAdd.ToolTipText = "Add new user";
       this.btnUserAdd.Click += new System.EventHandler(this.btnUserAdd_Click);
@@ -510,7 +538,7 @@
       this.btnUserDelete.Image = global::PlexMusicPlaylists.Properties.Resources.Delete_user;
       this.btnUserDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnUserDelete.Name = "btnUserDelete";
-      this.btnUserDelete.Size = new System.Drawing.Size(70, 20);
+      this.btnUserDelete.Size = new System.Drawing.Size(70, 28);
       this.btnUserDelete.Text = "Remove";
       this.btnUserDelete.ToolTipText = "Remove selected user";
       this.btnUserDelete.Click += new System.EventHandler(this.btnUserDelete_Click);
@@ -521,7 +549,7 @@
       this.panelTrackGridview.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelTrackGridview.Location = new System.Drawing.Point(0, 48);
       this.panelTrackGridview.Name = "panelTrackGridview";
-      this.panelTrackGridview.Size = new System.Drawing.Size(658, 346);
+      this.panelTrackGridview.Size = new System.Drawing.Size(750, 346);
       this.panelTrackGridview.TabIndex = 4;
       // 
       // gvSinglePlayList
@@ -535,6 +563,8 @@
       this.gvSinglePlayList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column2,
             this.titleDataGridViewTextBoxColumn,
+            this.Artist,
+            this.Album,
             this.dataGridViewTextBoxColumn3,
             this.TrackType,
             this.keyDataGridViewTextBoxColumn});
@@ -546,7 +576,7 @@
       dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
       this.gvSinglePlayList.RowsDefaultCellStyle = dataGridViewCellStyle4;
       this.gvSinglePlayList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvSinglePlayList.Size = new System.Drawing.Size(658, 346);
+      this.gvSinglePlayList.Size = new System.Drawing.Size(750, 346);
       this.gvSinglePlayList.TabIndex = 2;
       this.gvSinglePlayList.SelectionChanged += new System.EventHandler(this.gvSinglePlayList_SelectionChanged);
       // 
@@ -557,6 +587,20 @@
       this.Column2.Name = "Column2";
       this.Column2.ReadOnly = true;
       this.Column2.Width = 60;
+      // 
+      // Artist
+      // 
+      this.Artist.DataPropertyName = "Artist";
+      this.Artist.HeaderText = "Artist";
+      this.Artist.Name = "Artist";
+      this.Artist.ReadOnly = true;
+      // 
+      // Album
+      // 
+      this.Album.DataPropertyName = "Album";
+      this.Album.HeaderText = "Album";
+      this.Album.Name = "Album";
+      this.Album.ReadOnly = true;
       // 
       // dataGridViewTextBoxColumn3
       // 
@@ -580,7 +624,7 @@
       this.panelTrackToolstrip.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelTrackToolstrip.Location = new System.Drawing.Point(0, 0);
       this.panelTrackToolstrip.Name = "panelTrackToolstrip";
-      this.panelTrackToolstrip.Size = new System.Drawing.Size(658, 48);
+      this.panelTrackToolstrip.Size = new System.Drawing.Size(750, 48);
       this.panelTrackToolstrip.TabIndex = 3;
       // 
       // toolStripSinglePlaylist
@@ -596,7 +640,7 @@
             this.btTrackBrowseMusice});
       this.toolStripSinglePlaylist.Location = new System.Drawing.Point(0, 0);
       this.toolStripSinglePlaylist.Name = "toolStripSinglePlaylist";
-      this.toolStripSinglePlaylist.Size = new System.Drawing.Size(658, 25);
+      this.toolStripSinglePlaylist.Size = new System.Drawing.Size(750, 25);
       this.toolStripSinglePlaylist.TabIndex = 3;
       this.toolStripSinglePlaylist.Text = "toolStrip1";
       // 
@@ -676,7 +720,7 @@
       this.splitContainerGlobal.Panel2.Controls.Add(this.panelServerLeft);
       this.splitContainerGlobal.Panel2MinSize = 350;
       this.splitContainerGlobal.Size = new System.Drawing.Size(1240, 616);
-      this.splitContainerGlobal.SplitterDistance = 658;
+      this.splitContainerGlobal.SplitterDistance = 750;
       this.splitContainerGlobal.TabIndex = 1;
       // 
       // panelServerRight
@@ -685,7 +729,7 @@
       this.panelServerRight.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelServerRight.Location = new System.Drawing.Point(17, 0);
       this.panelServerRight.Name = "panelServerRight";
-      this.panelServerRight.Size = new System.Drawing.Size(561, 616);
+      this.panelServerRight.Size = new System.Drawing.Size(469, 616);
       this.panelServerRight.TabIndex = 2;
       // 
       // splitContainerServerMain
@@ -704,7 +748,7 @@
       // 
       this.splitContainerServerMain.Panel2.Controls.Add(this.panelServerTrack);
       this.splitContainerServerMain.Panel2.Controls.Add(this.panelServerTrackToolstrip);
-      this.splitContainerServerMain.Size = new System.Drawing.Size(561, 616);
+      this.splitContainerServerMain.Size = new System.Drawing.Size(469, 616);
       this.splitContainerServerMain.SplitterDistance = 226;
       this.splitContainerServerMain.TabIndex = 1;
       // 
@@ -714,7 +758,7 @@
       this.panelServerSection.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelServerSection.Location = new System.Drawing.Point(0, 52);
       this.panelServerSection.Name = "panelServerSection";
-      this.panelServerSection.Size = new System.Drawing.Size(561, 174);
+      this.panelServerSection.Size = new System.Drawing.Size(469, 174);
       this.panelServerSection.TabIndex = 1;
       // 
       // tvServerSection
@@ -722,7 +766,7 @@
       this.tvServerSection.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tvServerSection.Location = new System.Drawing.Point(0, 0);
       this.tvServerSection.Name = "tvServerSection";
-      this.tvServerSection.Size = new System.Drawing.Size(561, 174);
+      this.tvServerSection.Size = new System.Drawing.Size(469, 174);
       this.tvServerSection.TabIndex = 0;
       this.tvServerSection.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServerSection_AfterSelect);
       // 
@@ -732,7 +776,7 @@
       this.panelServerSectionToolstrip.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelServerSectionToolstrip.Location = new System.Drawing.Point(0, 0);
       this.panelServerSectionToolstrip.Name = "panelServerSectionToolstrip";
-      this.panelServerSectionToolstrip.Size = new System.Drawing.Size(561, 52);
+      this.panelServerSectionToolstrip.Size = new System.Drawing.Size(469, 52);
       this.panelServerSectionToolstrip.TabIndex = 0;
       // 
       // toolStripServerSections
@@ -743,7 +787,7 @@
             this.btnServerSectionSearch});
       this.toolStripServerSections.Location = new System.Drawing.Point(0, 0);
       this.toolStripServerSections.Name = "toolStripServerSections";
-      this.toolStripServerSections.Size = new System.Drawing.Size(561, 25);
+      this.toolStripServerSections.Size = new System.Drawing.Size(469, 25);
       this.toolStripServerSections.TabIndex = 0;
       this.toolStripServerSections.Text = "toolStrip2";
       // 
@@ -782,7 +826,7 @@
       this.panelServerTrack.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelServerTrack.Location = new System.Drawing.Point(0, 50);
       this.panelServerTrack.Name = "panelServerTrack";
-      this.panelServerTrack.Size = new System.Drawing.Size(561, 336);
+      this.panelServerTrack.Size = new System.Drawing.Size(469, 336);
       this.panelServerTrack.TabIndex = 1;
       // 
       // gvServerTrack
@@ -805,7 +849,7 @@
       dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
       this.gvServerTrack.RowsDefaultCellStyle = dataGridViewCellStyle6;
       this.gvServerTrack.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvServerTrack.Size = new System.Drawing.Size(561, 336);
+      this.gvServerTrack.Size = new System.Drawing.Size(469, 336);
       this.gvServerTrack.TabIndex = 3;
       this.gvServerTrack.SelectionChanged += new System.EventHandler(this.gvServerTrack_SelectionChanged);
       // 
@@ -823,7 +867,7 @@
       this.panelServerTrackToolstrip.Dock = System.Windows.Forms.DockStyle.Top;
       this.panelServerTrackToolstrip.Location = new System.Drawing.Point(0, 0);
       this.panelServerTrackToolstrip.Name = "panelServerTrackToolstrip";
-      this.panelServerTrackToolstrip.Size = new System.Drawing.Size(561, 50);
+      this.panelServerTrackToolstrip.Size = new System.Drawing.Size(469, 50);
       this.panelServerTrackToolstrip.TabIndex = 0;
       // 
       // toolStripServerTracks
@@ -839,7 +883,7 @@
             this.btnServerTrackAppendAll});
       this.toolStripServerTracks.Location = new System.Drawing.Point(0, 0);
       this.toolStripServerTracks.Name = "toolStripServerTracks";
-      this.toolStripServerTracks.Size = new System.Drawing.Size(561, 25);
+      this.toolStripServerTracks.Size = new System.Drawing.Size(469, 25);
       this.toolStripServerTracks.TabIndex = 0;
       this.toolStripServerTracks.Text = "toolStrip1";
       // 
@@ -940,32 +984,6 @@
       this.panelMainDetail.Name = "panelMainDetail";
       this.panelMainDetail.Size = new System.Drawing.Size(1240, 616);
       this.panelMainDetail.TabIndex = 3;
-      // 
-      // btnPlaylistSaveToSql
-      // 
-      this.btnPlaylistSaveToSql.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-      this.btnPlaylistSaveToSql.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveSelectedToolStripMenuItem,
-            this.saveAllToolStripMenuItem});
-      this.btnPlaylistSaveToSql.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaylistSaveToSql.Image")));
-      this.btnPlaylistSaveToSql.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnPlaylistSaveToSql.Name = "btnPlaylistSaveToSql";
-      this.btnPlaylistSaveToSql.Size = new System.Drawing.Size(122, 28);
-      this.btnPlaylistSaveToSql.Text = "Save [sql/database]";
-      // 
-      // saveSelectedToolStripMenuItem
-      // 
-      this.saveSelectedToolStripMenuItem.Name = "saveSelectedToolStripMenuItem";
-      this.saveSelectedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-      this.saveSelectedToolStripMenuItem.Text = "Save selected";
-      this.saveSelectedToolStripMenuItem.Click += new System.EventHandler(this.saveSelectedToolStripMenuItem_Click);
-      // 
-      // saveAllToolStripMenuItem
-      // 
-      this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-      this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-      this.saveAllToolStripMenuItem.Text = "Save all";
-      this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
       // 
       // dataGridViewTextBoxColumn2
       // 
@@ -1155,11 +1173,6 @@
     private System.Windows.Forms.ToolStripDropDownButton btnServerSectionSearch;
     private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-    private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-    private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-    private System.Windows.Forms.DataGridViewTextBoxColumn TrackType;
-    private System.Windows.Forms.DataGridViewTextBoxColumn keyDataGridViewTextBoxColumn;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
@@ -1173,5 +1186,12 @@
     private System.Windows.Forms.ToolStripDropDownButton btnPlaylistSaveToSql;
     private System.Windows.Forms.ToolStripMenuItem saveSelectedToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+    private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Artist;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Album;
+    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+    private System.Windows.Forms.DataGridViewTextBoxColumn TrackType;
+    private System.Windows.Forms.DataGridViewTextBoxColumn keyDataGridViewTextBoxColumn;
   }
 }

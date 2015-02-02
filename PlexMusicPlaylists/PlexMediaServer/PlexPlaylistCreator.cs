@@ -218,7 +218,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
             Key = metadataItem.Id.ToString(),
             Title = metadataItem.Title,
             Duration = (metadataItem.Duration ?? 0) / 1000,
-            TrackType = metadataItem.MetadataType()
+            TrackType = metadataItem.MetadataType(),
+            Artist = metadataItem.Artist,
+            Album = metadataItem.Album
           });
           bool normalizeOrder = false;
           if (_atPosition >= 0 && _atPosition < _trackList.Count())
@@ -489,6 +491,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
             pl.Key = pl.UniqueId.ToString("D");
             List<Track> trackList = this.loadSinglePlaylist(pl, out dbTotalDuration, false);
             trackList.ForEach(t => t.Id = 0);
+            this.loadMissingArtists(trackList);
             this.saveSinglePlaylist(pl, trackList, false, true);
           }
           else 
@@ -541,15 +544,24 @@ namespace PlexMusicPlaylists.PlexMediaServer
         bool playlistUpdated = false;
         List<Track> dbTrackList = this.loadSinglePlaylistFromDatabase(_playlist, out totalDuration);
         // Check entries in the playlist wiht an Id that does not exist anymore in the db
-        if (_trackList.Any(t => t.Id != 0))
+        if (_trackList.Any(t => t.Id != 0) && dbTrackList.Count() > 0)
         {
-          // There are 'new' entries in the tracklist
           var excludedIDs = new HashSet<int>(dbTrackList.Select(track => track.Id));
-          // Get a list of all tracks in the database that are not in our tracklist yet
+          // Get a list of all tracks in our tracklist that are not in the database (anymore)
           foreach (Track t in _trackList.Where(t => t.Id != 0 && !excludedIDs.Contains(t.Id)))
           {
             t.Id = 0;
             playlistUpdated = true;
+          }
+          foreach (Track t in _trackList.Where(t => String.IsNullOrEmpty(t.Artist)))
+          {
+            Track newdbTrack = dbTrackList.FirstOrDefault(dbt => dbt.Id == t.Id);
+            if (newdbTrack != null)
+            {
+              t.Artist = newdbTrack.Artist;
+              t.Album = newdbTrack.Album;
+              playlistUpdated = true;
+            }
           }
         }
         if (_trackList.Any(t => t.Id == 0))
@@ -584,6 +596,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
                 {
                   // single hit, use it
                   track.Id = newdbTrack != null ? newdbTrack.Id : 0;
+                  track.Artist = newdbTrack.Artist;
+                  track.Album = newdbTrack.Album;
                   if (resetProperty)
                   {
                     track.resetPropertyModified();
@@ -595,11 +609,37 @@ namespace PlexMusicPlaylists.PlexMediaServer
             }
           }
         }
+        if (this.loadMissingArtists(_trackList))
+        {
+          playlistUpdated = true;
+        }
         if (playlistUpdated)
         {
           this.saveSinglePlaylist(_playlist, _trackList, false, true);
         }
       }
+    }
+    private bool loadMissingArtists(List<Track> _trackList)
+    {
+      bool updated = false;
+      if (_trackList != null)
+      {
+        foreach (Track track in _trackList.Where(t => String.IsNullOrEmpty(t.Artist)))
+        {
+          int metadata_id = this.idFromKey(track.Key);
+          if (metadata_id != 0)
+          {
+            Metadata_Media_Item metadataItem = this.loadMetadataItemFromDatabase(metadata_id);
+            if (metadataItem != null)
+            {
+              track.Artist = metadataItem.Artist;
+              track.Album = metadataItem.Album;
+              updated = true;
+            }
+          }
+        }
+      }
+      return updated;
     }
     private void revertSinglePlaylist(Playlist _playlist)
     {
@@ -823,7 +863,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
                   Title = item.Title,
                   Duration = item.Duration / 1000,
                   Order = item.Order,
-                  TrackType = item.MetadataType()
+                  TrackType = item.MetadataType(),
+                  Artist = item.Artist,
+                  Album = item.Album
                 };
                 playlist.Add(track);
                 _totalDuration += track.Duration;
@@ -1166,6 +1208,12 @@ namespace PlexMusicPlaylists.PlexMediaServer
     [Column(Name = "duration")]
     public int? Duration { get; set; }
 
+    [Column(Name = "artist")]
+    public string Artist { get; set; }
+
+    [Column(Name = "album")]
+    public string Album { get; set; }
+
     public string MetadataType()
     {
       return PlexPlaylistCreator.MetadataType(Metadata_type ?? 0);
@@ -1173,10 +1221,18 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     static internal string sqlSelect()
     {
-      string sql = "SELECT mdi.id, mdi.title, mdi.title_sort, mdi.metadata_type, mi.duration FROM metadata_items as mdi ";
-      sql += "join media_items mi ";
-      sql += "where mi.metadata_item_id = mdi.id ";
-      return sql;
+      //string sql = "SELECT mdi.id, mdi.title, mdi.title_sort, mdi.metadata_type, mi.duration FROM metadata_items as mdi ";
+      //sql += "join media_items mi ";
+      //sql += "where mi.metadata_item_id = mdi.id ";
+      //return sql;
+      StringBuilder sb = new StringBuilder();
+      sb.Append("SELECT tr.id, tr.title, tr.title_sort, tr.metadata_type, mi.duration, al.title as album, ar.title as artist ");
+      sb.Append("FROM metadata_items as tr ");
+      sb.Append("join media_items mi ");
+      sb.Append("join metadata_items al ");
+      sb.Append("join metadata_items ar ");
+      sb.Append("where mi.metadata_item_id = tr.id and tr.parent_id = al.id and al.parent_id = ar.id and al.metadata_type = 9 and ar.metadata_type = 8");
+      return sb.ToString();
     }
   }
 
@@ -1212,6 +1268,12 @@ namespace PlexMusicPlaylists.PlexMediaServer
     [Column(Name = "duration")]
     public int Duration { get; set; }
 
+    [Column(Name = "artist")]
+    public string Artist { get; set; }
+
+    [Column(Name = "album")]
+    public string Album { get; set; }
+
     public string MetadataType()
     {
       return PlexPlaylistCreator.MetadataType(Metadata_type);
@@ -1219,11 +1281,15 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     static internal string sqlSelect()
     {
-      string sql = "SELECT pqg.id, pqg.playlist_id, pqg.metadata_item_id, pqg.[order] , pqg.created_at, pqg.updated_at, mdi.title, mdi.title_sort, mdi.metadata_type, mi.duration FROM play_queue_generators as pqg ";
-      sql += "join metadata_items  as mdi ";
-      sql += "join media_items mi ";
-      sql += "where pqg.metadata_item_id = mdi.id and mi.metadata_item_id = mdi.id ";
-      return sql;
+      StringBuilder sb = new StringBuilder();
+      sb.Append("SELECT pqg.id, pqg.playlist_id, pqg.metadata_item_id, pqg.[order] , pqg.created_at, pqg.updated_at, tr.title, tr.title_sort, tr.metadata_type, mi.duration, al.title as album, ar.title as artist "); 
+      sb.Append("FROM play_queue_generators as pqg ");
+      sb.Append("join metadata_items as tr ");
+      sb.Append("join media_items mi ");
+      sb.Append("join metadata_items al ");
+      sb.Append("join metadata_items ar ");
+      sb.Append("where pqg.metadata_item_id = tr.id and mi.metadata_item_id = tr.id and tr.parent_id = al.id and al.parent_id = ar.id and al.metadata_type = 9 and ar.metadata_type = 8");
+      return sb.ToString();
     }
   }  
   #endregion

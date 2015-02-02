@@ -30,6 +30,7 @@
     {
       this.splitMain = new System.Windows.Forms.SplitContainer();
       this.gbServer = new System.Windows.Forms.GroupBox();
+      this.btnSettings = new System.Windows.Forms.Button();
       this.label3 = new System.Windows.Forms.Label();
       this.tbPlexDatabase = new System.Windows.Forms.TextBox();
       this.udPlexPort = new System.Windows.Forms.NumericUpDown();
@@ -40,7 +41,6 @@
       this.splitBottom = new System.Windows.Forms.SplitContainer();
       this.splitDetail = new System.Windows.Forms.SplitContainer();
       this.rtbLog = new System.Windows.Forms.RichTextBox();
-      this.btnSettings = new System.Windows.Forms.Button();
       this.playlistUC = new PlexMusicPlaylists.PlaylistUserControl();
       ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
       this.splitMain.Panel1.SuspendLayout();
@@ -72,7 +72,7 @@
       // splitMain.Panel2
       // 
       this.splitMain.Panel2.Controls.Add(this.splitBottom);
-      this.splitMain.Size = new System.Drawing.Size(1255, 795);
+      this.splitMain.Size = new System.Drawing.Size(1415, 782);
       this.splitMain.SplitterDistance = 68;
       this.splitMain.TabIndex = 0;
       // 
@@ -90,10 +90,21 @@
       this.gbServer.Controls.Add(this.label1);
       this.gbServer.Location = new System.Drawing.Point(12, 12);
       this.gbServer.Name = "gbServer";
-      this.gbServer.Size = new System.Drawing.Size(1231, 46);
+      this.gbServer.Size = new System.Drawing.Size(1391, 46);
       this.gbServer.TabIndex = 1;
       this.gbServer.TabStop = false;
       this.gbServer.Text = "Plex Media Server";
+      // 
+      // btnSettings
+      // 
+      this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnSettings.Location = new System.Drawing.Point(1300, 18);
+      this.btnSettings.Name = "btnSettings";
+      this.btnSettings.Size = new System.Drawing.Size(75, 23);
+      this.btnSettings.TabIndex = 9;
+      this.btnSettings.Text = "Settings";
+      this.btnSettings.UseVisualStyleBackColor = true;
+      this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
       // 
       // label3
       // 
@@ -111,7 +122,7 @@
       this.tbPlexDatabase.Location = new System.Drawing.Point(549, 19);
       this.tbPlexDatabase.Name = "tbPlexDatabase";
       this.tbPlexDatabase.ReadOnly = true;
-      this.tbPlexDatabase.Size = new System.Drawing.Size(575, 20);
+      this.tbPlexDatabase.Size = new System.Drawing.Size(735, 20);
       this.tbPlexDatabase.TabIndex = 6;
       // 
       // udPlexPort
@@ -178,13 +189,14 @@
       // splitBottom.Panel2
       // 
       this.splitBottom.Panel2.Controls.Add(this.rtbLog);
-      this.splitBottom.Size = new System.Drawing.Size(1255, 723);
-      this.splitBottom.SplitterDistance = 610;
+      this.splitBottom.Size = new System.Drawing.Size(1415, 710);
+      this.splitBottom.SplitterDistance = 649;
       this.splitBottom.TabIndex = 1;
       // 
       // splitDetail
       // 
       this.splitDetail.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.splitDetail.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
       this.splitDetail.Location = new System.Drawing.Point(0, 0);
       this.splitDetail.Name = "splitDetail";
       // 
@@ -192,8 +204,8 @@
       // 
       this.splitDetail.Panel1.Controls.Add(this.playlistUC);
       this.splitDetail.Panel2Collapsed = true;
-      this.splitDetail.Size = new System.Drawing.Size(1255, 610);
-      this.splitDetail.SplitterDistance = 664;
+      this.splitDetail.Size = new System.Drawing.Size(1415, 649);
+      this.splitDetail.SplitterDistance = 1000;
       this.splitDetail.TabIndex = 1;
       // 
       // rtbLog
@@ -202,20 +214,9 @@
       this.rtbLog.Location = new System.Drawing.Point(0, 0);
       this.rtbLog.Name = "rtbLog";
       this.rtbLog.ReadOnly = true;
-      this.rtbLog.Size = new System.Drawing.Size(1255, 109);
+      this.rtbLog.Size = new System.Drawing.Size(1415, 57);
       this.rtbLog.TabIndex = 0;
       this.rtbLog.Text = "";
-      // 
-      // btnSettings
-      // 
-      this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSettings.Location = new System.Drawing.Point(1140, 18);
-      this.btnSettings.Name = "btnSettings";
-      this.btnSettings.Size = new System.Drawing.Size(75, 23);
-      this.btnSettings.TabIndex = 9;
-      this.btnSettings.Text = "Settings";
-      this.btnSettings.UseVisualStyleBackColor = true;
-      this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
       // 
       // playlistUC
       // 
@@ -223,14 +224,14 @@
       this.playlistUC.Dock = System.Windows.Forms.DockStyle.Fill;
       this.playlistUC.Location = new System.Drawing.Point(0, 0);
       this.playlistUC.Name = "playlistUC";
-      this.playlistUC.Size = new System.Drawing.Size(1255, 610);
+      this.playlistUC.Size = new System.Drawing.Size(1415, 649);
       this.playlistUC.TabIndex = 0;
       // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1255, 795);
+      this.ClientSize = new System.Drawing.Size(1415, 782);
       this.Controls.Add(this.splitMain);
       this.Name = "MainForm";
       this.Text = "Plex - Music playlist configurator";

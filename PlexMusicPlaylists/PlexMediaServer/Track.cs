@@ -43,6 +43,10 @@ namespace PlexMusicPlaylists.PlexMediaServer
       set { SetPropertyField("TrackType", ref _trackType, value); }
     }
 
+    public string Artist { get; set; }
+
+    public string Album { get; set; }
+
     public Track() : base()
     {
     }

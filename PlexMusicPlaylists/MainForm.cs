@@ -45,6 +45,10 @@ namespace PlexMusicPlaylists
       udPlexPort.Value = playlistSettings.Port;
       tbPlexDatabase.Text = playlistSettings.PlaylistDB;
       enableCommands();
+      if (btnConnect.Enabled && playlistSettings.AutoConnect)
+      {
+        btnConnect_Click(btnConnect, null);
+      }
     }
     private void enableCommands()
     {
