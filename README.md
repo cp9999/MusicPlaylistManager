@@ -4,6 +4,11 @@ MusicPlaylistManager
 Utitlity to manage music playlists for Plex AND for the Plex channel plugin: MusicPlaylist. 
 This is a Windows application that requires .Net framework 4.0
 
+[2015-02-04]
+1.  Fixed searching in music sections
+2.	Added option to show the PMS server in a separate window
+
+
 [2015-02-01]
 PlaylistManager can now be used to maintain native plex playlists.
 The following features are available
