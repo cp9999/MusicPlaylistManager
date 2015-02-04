@@ -41,6 +41,7 @@
       this.splitBottom = new System.Windows.Forms.SplitContainer();
       this.splitDetail = new System.Windows.Forms.SplitContainer();
       this.rtbLog = new System.Windows.Forms.RichTextBox();
+      this.btnOpenServer = new System.Windows.Forms.Button();
       this.playlistUC = new PlexMusicPlaylists.PlaylistUserControl();
       ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
       this.splitMain.Panel1.SuspendLayout();
@@ -72,7 +73,7 @@
       // splitMain.Panel2
       // 
       this.splitMain.Panel2.Controls.Add(this.splitBottom);
-      this.splitMain.Size = new System.Drawing.Size(1415, 782);
+      this.splitMain.Size = new System.Drawing.Size(1213, 782);
       this.splitMain.SplitterDistance = 68;
       this.splitMain.TabIndex = 0;
       // 
@@ -80,6 +81,7 @@
       // 
       this.gbServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.gbServer.Controls.Add(this.btnOpenServer);
       this.gbServer.Controls.Add(this.btnSettings);
       this.gbServer.Controls.Add(this.label3);
       this.gbServer.Controls.Add(this.tbPlexDatabase);
@@ -90,7 +92,7 @@
       this.gbServer.Controls.Add(this.label1);
       this.gbServer.Location = new System.Drawing.Point(12, 12);
       this.gbServer.Name = "gbServer";
-      this.gbServer.Size = new System.Drawing.Size(1391, 46);
+      this.gbServer.Size = new System.Drawing.Size(1189, 46);
       this.gbServer.TabIndex = 1;
       this.gbServer.TabStop = false;
       this.gbServer.Text = "Plex Media Server";
@@ -98,7 +100,7 @@
       // btnSettings
       // 
       this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSettings.Location = new System.Drawing.Point(1300, 18);
+      this.btnSettings.Location = new System.Drawing.Point(1098, 18);
       this.btnSettings.Name = "btnSettings";
       this.btnSettings.Size = new System.Drawing.Size(75, 23);
       this.btnSettings.TabIndex = 9;
@@ -122,12 +124,12 @@
       this.tbPlexDatabase.Location = new System.Drawing.Point(549, 19);
       this.tbPlexDatabase.Name = "tbPlexDatabase";
       this.tbPlexDatabase.ReadOnly = true;
-      this.tbPlexDatabase.Size = new System.Drawing.Size(735, 20);
+      this.tbPlexDatabase.Size = new System.Drawing.Size(533, 20);
       this.tbPlexDatabase.TabIndex = 6;
       // 
       // udPlexPort
       // 
-      this.udPlexPort.Location = new System.Drawing.Point(276, 20);
+      this.udPlexPort.Location = new System.Drawing.Point(254, 20);
       this.udPlexPort.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -140,9 +142,9 @@
       // 
       // btnConnect
       // 
-      this.btnConnect.Location = new System.Drawing.Point(376, 17);
+      this.btnConnect.Location = new System.Drawing.Point(337, 17);
       this.btnConnect.Name = "btnConnect";
-      this.btnConnect.Size = new System.Drawing.Size(75, 23);
+      this.btnConnect.Size = new System.Drawing.Size(65, 23);
       this.btnConnect.TabIndex = 4;
       this.btnConnect.Text = "Connect";
       this.btnConnect.UseVisualStyleBackColor = true;
@@ -151,7 +153,7 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(244, 23);
+      this.label2.Location = new System.Drawing.Point(222, 23);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(26, 13);
       this.label2.TabIndex = 2;
@@ -189,7 +191,7 @@
       // splitBottom.Panel2
       // 
       this.splitBottom.Panel2.Controls.Add(this.rtbLog);
-      this.splitBottom.Size = new System.Drawing.Size(1415, 710);
+      this.splitBottom.Size = new System.Drawing.Size(1213, 710);
       this.splitBottom.SplitterDistance = 649;
       this.splitBottom.TabIndex = 1;
       // 
@@ -204,8 +206,8 @@
       // 
       this.splitDetail.Panel1.Controls.Add(this.playlistUC);
       this.splitDetail.Panel2Collapsed = true;
-      this.splitDetail.Size = new System.Drawing.Size(1415, 649);
-      this.splitDetail.SplitterDistance = 1000;
+      this.splitDetail.Size = new System.Drawing.Size(1213, 649);
+      this.splitDetail.SplitterDistance = 853;
       this.splitDetail.TabIndex = 1;
       // 
       // rtbLog
@@ -214,9 +216,19 @@
       this.rtbLog.Location = new System.Drawing.Point(0, 0);
       this.rtbLog.Name = "rtbLog";
       this.rtbLog.ReadOnly = true;
-      this.rtbLog.Size = new System.Drawing.Size(1415, 57);
+      this.rtbLog.Size = new System.Drawing.Size(1213, 57);
       this.rtbLog.TabIndex = 0;
       this.rtbLog.Text = "";
+      // 
+      // btnOpenServer
+      // 
+      this.btnOpenServer.Location = new System.Drawing.Point(408, 16);
+      this.btnOpenServer.Name = "btnOpenServer";
+      this.btnOpenServer.Size = new System.Drawing.Size(52, 23);
+      this.btnOpenServer.TabIndex = 10;
+      this.btnOpenServer.Text = "Open";
+      this.btnOpenServer.UseVisualStyleBackColor = true;
+      this.btnOpenServer.Click += new System.EventHandler(this.btnOpenServer_Click);
       // 
       // playlistUC
       // 
@@ -224,17 +236,18 @@
       this.playlistUC.Dock = System.Windows.Forms.DockStyle.Fill;
       this.playlistUC.Location = new System.Drawing.Point(0, 0);
       this.playlistUC.Name = "playlistUC";
-      this.playlistUC.Size = new System.Drawing.Size(1415, 649);
+      this.playlistUC.Size = new System.Drawing.Size(1213, 649);
       this.playlistUC.TabIndex = 0;
       // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1415, 782);
+      this.ClientSize = new System.Drawing.Size(1213, 782);
       this.Controls.Add(this.splitMain);
       this.Name = "MainForm";
       this.Text = "Plex - Music playlist configurator";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.splitMain.Panel1.ResumeLayout(false);
       this.splitMain.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.splitMain)).EndInit();
@@ -269,6 +282,7 @@
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.TextBox tbPlexDatabase;
     private System.Windows.Forms.Button btnSettings;
+    private System.Windows.Forms.Button btnOpenServer;
   }
 }
 

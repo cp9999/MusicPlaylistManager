@@ -23,6 +23,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
     public bool DatabaseDirectUpdate { get; set; }
     public bool DatabaseModifiedTracksOnly { get; set; }
     public bool AutoConnect { get; set; }
+    public bool ServerInSeparatedWindow { get; set; }
+    public bool ServerAllowMultipleWindows { get; set; }
     public PlaylistManager.PlaylistMode GUIPlaylistMode { get; set; }
     private static XmlSerializer xs;
     private static PlaylistSettings m_playlistSettings = null;

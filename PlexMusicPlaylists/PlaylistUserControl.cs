@@ -14,10 +14,13 @@ namespace PlexMusicPlaylists
 {
   public partial class PlaylistUserControl : UserControl
   {
-    public delegate bool SearchInputHandler(SearchSection _searchSection, out string _query);
-    public event SearchInputHandler OnSearchInput;
+    public event PMSServerUserControl.SearchInputHandler OnSearchInput;
     public delegate void LogMessageEventHandler(string _message);
     public event LogMessageEventHandler OnLogMessage;
+    public delegate void EnableServerTrackCommandsHandler(bool _playlistSelected, bool _singleTrackSelected);
+    public event EnableServerTrackCommandsHandler OnEnableServerTrackCommandsHandler;
+    public delegate void ServerConnectionChanged(bool _connected);
+    public event ServerConnectionChanged OnServerConnectionChanged;
 
     #region data members
     PlaylistManager playlistManager = new PlaylistManager("", 32400);
@@ -40,6 +43,7 @@ namespace PlexMusicPlaylists
         updateCaption();
       }
     }
+    //public bool Hori
     #endregion
 
     #region public methods
@@ -47,6 +51,7 @@ namespace PlexMusicPlaylists
     public PlaylistUserControl()
     {
       InitializeComponent();
+      ucPMSServerUserControl.OnSearchInput += new PMSServerUserControl.SearchInputHandler(doSearchInput);
       importManager.PlaylistManager = playlistManager;
       importManager.PMSServer = server;
       playlistManager.PlexPlaylistCreator.OnLogMessage += logMessage;
@@ -77,18 +82,21 @@ namespace PlexMusicPlaylists
         playlistManager.loadPreferences();
         fillUserList();
         loadPlaylists();
-        loadMainSections();
+        //loadMainSections();
         enableEditCommands();
         enableTrackCommands();
-        enableServerSectionCommands();
-        return true;
+        //enableServerSectionCommands();
+        this.triggerEnableServerTrackCommands();
       }
       catch (Exception ex)
       {
+        plexConnected = false;
         logMessage(ex.Message);
         MessageBox.Show(ex.Message);
       }
-      return false;
+      if (OnServerConnectionChanged != null)
+        OnServerConnectionChanged(plexConnected);
+      return plexConnected;
     }
     public void settingsChanged()
     {
@@ -111,21 +119,41 @@ namespace PlexMusicPlaylists
           loadPlaylists();
         }
       }
+      this.updateServerPanel(false);
       btnUserAdd.Visible = playlistManager.allowUserMaintenance;
       btnUserDelete.Visible = playlistManager.allowUserMaintenance;
       enableEditCommands();
     }
-
+    public void connectPMSServer(PMSServerUserControl _PMSServerUserControl, bool _linkSplitter = false)
+    {
+      if (_PMSServerUserControl != null && !_PMSServerUserControl.isConnectedToPlaylist)
+      {
+        _PMSServerUserControl.OnAddTracksEventHandler += new PMSServerUserControl.AddTracksEventHandler(addTracksFromList);
+        _PMSServerUserControl.AllowVideos = playlistManager.Preferences.AllowVideos;
+        _PMSServerUserControl.PMSServer = server;
+        if (_linkSplitter)
+        {
+          _PMSServerUserControl.linkToSplitter(splitContainerMain, panelPlaylistToolStrip.Height);
+        }
+        _PMSServerUserControl.connectedToPlaylist(this);
+        this.triggerEnableServerTrackCommands();
+      }
+    }
+    public void disconnectPMSServer(PMSServerUserControl _PMSServerUserControl)
+    {
+      if (_PMSServerUserControl != null && _PMSServerUserControl.isConnectedToPlaylist)
+      {
+        _PMSServerUserControl.OnAddTracksEventHandler -= new PMSServerUserControl.AddTracksEventHandler(addTracksFromList);
+        _PMSServerUserControl.disconnectedFromPlaylist(this);
+      }
+    }
     #endregion
 
-
     #region Playlist Helper methods
-
     private void updateCaption()
     {
       lblCaption.Text = String.Format("{0}: {1} [{2}]", caption, playlistManager.Name, playlistManager.baseUrl);
     }
-
     private Playlist selectedPlaylist
     {
       get
@@ -137,7 +165,6 @@ namespace PlexMusicPlaylists
         return null;
       }
     }
-
     private void showPlaylistEditPanel(bool _addnew, bool _isUser)
     {
       panelPlaylistEdit.Visible = true;
@@ -164,15 +191,28 @@ namespace PlexMusicPlaylists
         lblPlaylistEditTitle.Text = "New title";
       }
     }
-
     private void hidePlaylistEditPanel()
     {
       panelPlaylistEdit.Visible = false;
     }
-
+    private void updateServerPanel(bool _force = false)
+    {
+      if (_force || splitContainerGlobal.Panel2Collapsed != PlaylistSettings.theSettings().ServerInSeparatedWindow)
+      {
+        if (PlaylistSettings.theSettings().ServerInSeparatedWindow)
+        {
+          this.disconnectPMSServer(ucPMSServerUserControl);
+        }
+        else
+        {
+          this.connectPMSServer(ucPMSServerUserControl, true);
+        }
+        splitContainerGlobal.Panel2Collapsed = PlaylistSettings.theSettings().ServerInSeparatedWindow;
+      }
+    }
     private void initPlaylistControls()
-    {      
-      //splitContainerGlobal.Panel2Collapsed = true;
+    {
+      this.updateServerPanel(true);
       btnPlaylistEditRename.Top = btnPlaylistEditCreate.Top;
       btnPlaylistEditRename.Left = btnPlaylistEditCreate.Left;
       tbPlaylistEditRenameTitle.Top = tbPlaylistEditAddTitle.Top;
@@ -181,14 +221,9 @@ namespace PlexMusicPlaylists
       tbPlaylistEditRenameDescription.Left = tbPlaylistEditAddDescription.Left;
       hidePlaylistEditPanel();
       panelTrackToolstrip.Height = panelPlaylistToolStrip.Height;
-      panelServerSectionToolstrip.Height = panelPlaylistToolStrip.Height;
-      panelServerTrackToolstrip.Height = panelPlaylistToolStrip.Height;
-      splitContainerServerMain.SplitterDistance = splitContainerMain.SplitterDistance;
-
       enableEditCommands();
-      enableServerTrackCommands();
+      triggerEnableServerTrackCommands();
     }
-
     private void loadPlaylists()
     {
       gvPlaylists.DataSource = null;
@@ -199,7 +234,6 @@ namespace PlexMusicPlaylists
         gvSinglePlayList.DataSource = null;
       }
     }
-
     private void logMessage(string _message)
     {
       if (!String.IsNullOrEmpty(_message) && OnLogMessage != null)
@@ -207,12 +241,10 @@ namespace PlexMusicPlaylists
         OnLogMessage(_message);
       }
     }
-
     private void loadSinglePlaylist(Playlist _playlist)
     {
       loadSinglePlaylist(_playlist, "", false);
     }
-
     private void loadSinglePlaylist(Playlist _playlist, string _selectkey, bool _force)
     {
       if (_playlist != null && (_force || !loadedListKey.Equals(_playlist.Key)))
@@ -233,17 +265,13 @@ namespace PlexMusicPlaylists
         }
       }
     }
-
     private void enableEditCommands()
     {
-      //toolStripPlaylists.Enabled = plexConnected;
       btnImport.Enabled = plexConnected;
       btnPlaylistAdd.Enabled = plexConnected;
       btnPlaylistRename.Enabled = plexConnected;
       btnUserAdd.Enabled = plexConnected;
       toolStripSinglePlaylist.Enabled = plexConnected;
-      toolStripServerSections.Enabled = plexConnected;
-      toolStripServerTracks.Enabled = plexConnected;
       if (editIsUser)
       {
         btnPlaylistEditCreate.Enabled = !String.IsNullOrEmpty(tbPlaylistEditAddTitle.Text) && !playlistManager.userExist(tbPlaylistEditAddTitle.Text);
@@ -261,64 +289,23 @@ namespace PlexMusicPlaylists
       btnPlaylistSaveToSql.Enabled = playlistManager.playlistMode == PlaylistManager.PlaylistMode.PlexNative &&
         (PlaylistSettings.theSettings().DatabaseCreateSqlFiles || PlaylistSettings.theSettings().DatabaseDirectUpdate);
     }
-
     private void enableTrackCommands()
     {
       int tracksSelected = gvSinglePlayList.SelectedRows.Count;
       btnTrackUp.Enabled = tracksSelected == 1 && gvSinglePlayList.Rows.IndexOf(gvSinglePlayList.SelectedRows[0]) > 0;
       btnTrackDown.Enabled = tracksSelected == 1 && gvSinglePlayList.Rows.IndexOf(gvSinglePlayList.SelectedRows[0]) < gvSinglePlayList.Rows.Count - 1;
       btnTrackRemove.Enabled = tracksSelected > 0;
-      enableServerTrackCommands();
+      triggerEnableServerTrackCommands();
     }
-
-    private void enableServerSectionCommands()
+    private void triggerEnableServerTrackCommands()
     {
-      MainSection section = selectedServerSection as MainSection;
-      btnServerSectionSearch.Enabled = OnSearchInput != null && section != null && section.canBeSearched;
-      if (btnServerSectionSearch.Enabled && btnServerSectionSearch.Tag != section)
+      if (OnEnableServerTrackCommandsHandler != null)
       {
-        btnServerSectionSearch.DropDownItems.Clear();
-        foreach (SearchSection search in section.searchSections)
-        {
-          ToolStripMenuItem tsi = (ToolStripMenuItem)btnServerSectionSearch.DropDownItems.Add(search.Title);
-          tsi.Tag = search;      
-          tsi.Click += new EventHandler(serverSearch_Click);
-        }
+        Playlist playlist = selectedPlaylist;
+        int tracksSelected = gvSinglePlayList.SelectedRows.Count;
+        OnEnableServerTrackCommandsHandler(playlist != null, tracksSelected == 1);
       }
     }
-
-    void serverSearch_Click(object sender, EventArgs e)
-    {
-      MainSection section = selectedServerSection as MainSection;
-      ToolStripMenuItem tsi = sender as ToolStripMenuItem;
-      SearchSection searchSection = tsi != null ? tsi.Tag as SearchSection : null;
-      if (OnSearchInput != null && section != null && searchSection != null)
-      {
-        // Show search dialog
-        string query = "";
-        if (OnSearchInput(searchSection, out query))
-        {
-          LibrarySection librarySection = searchSection.createFromSearch(query);
-          if (librarySection != null)
-          {
-            // Add a new child node to the musicsection node
-            TreeNode tn = tvServerSection.SelectedNode.Nodes.Add(librarySection.Key, librarySection.Title);
-            tn.Tag = librarySection;
-            // Select the newly added node in the tree
-            tvServerSection.SelectedNode = tn;
-          }
-        }
-      }
-    }
-
-    private LibrarySection selectedServerSection
-    {
-      get
-      {
-        return tvServerSection.SelectedNode != null ? (LibrarySection)tvServerSection.SelectedNode.Tag : null;
-      }
-    }
-
     private void moveTrack(int _offset)
     {
       Playlist playlist = selectedPlaylist;
@@ -337,163 +324,60 @@ namespace PlexMusicPlaylists
         }
       }
     }
+    private void addTracksFromList(IEnumerable<DataGridViewRow> _tracks, bool _append, string _confirmMessage = "")
+    {
+      Playlist playlist = selectedPlaylist;
+
+      if (playlist != null && _tracks != null && _tracks.Count() > 0 &&
+        (String.IsNullOrEmpty(_confirmMessage) || MessageBox.Show(String.Format("{0} will be added to the selected playlist!", _confirmMessage), "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes))
+      {
+        int atPosition = 0;
+        string firstKey = null;
+        if (!_append && gvSinglePlayList.SelectedRows.Count == 1)
+        {
+          Track track = gvSinglePlayList.SelectedRows[0].DataBoundItem as Track;
+          if (track != null)
+          {
+            atPosition = track.Index;
+          }
+        }
+        bool trackAdded;
+        int added = 0;
+        foreach (DataGridViewRow row in _tracks.OrderBy(r => r.Index))
+        {
+          LibrarySection section = row.DataBoundItem as LibrarySection;
+          if (section != null)
+          {
+            logMessage(playlistManager.addTrack(playlist.Key, section.Key, section.TrackType, atPosition, out trackAdded));
+            if (trackAdded)
+            {
+              firstKey = firstKey ?? section.Key;
+              added++;
+              if (atPosition > 0)
+              {
+                atPosition++;
+              }
+            }
+          }
+        }
+        logMessage(String.Format("{0} tracks added to the playlist", added));
+        if (added > 0)
+        {
+          // Reload the playlist
+          loadSinglePlaylist(playlist, firstKey, true);
+          gvPlaylists.Refresh();
+        }
+      }
+    }
+    private bool doSearchInput(PlexMediaServer.SearchSection _searchSection, out string _query)
+    {
+      _query = "";
+      return (OnSearchInput != null && OnSearchInput(_searchSection, out _query));
+    }
 
     #endregion
 
-
-    #region PMS Server Helper methods
-
-    private void loadMainSections()
-    {
-      gvServerTrack.DataSource = null;
-      tvServerSection.Nodes.Clear();
-      importManager.reset();
-      // Add the root node
-      TreeNode rootNode = tvServerSection.Nodes.Add(String.Format("{0} [{1}]", server.Name, server.baseUrl));
-
-      foreach (LibrarySection section in server.musicSections())
-      {
-        importManager.addMainSection(section as MainSection);
-        TreeNode tn = rootNode.Nodes.Add(section.Key, section.Title);
-        tn.Tag = section;
-        loadSubSection(tn);
-      }
-
-      if (playlistManager.Preferences.AllowVideos)
-      {
-        foreach (LibrarySection section in server.movieSections())
-        {
-          importManager.addMainSection(section as MainSection);
-          TreeNode tn = rootNode.Nodes.Add(section.Key, section.Title);
-          tn.Tag = section;
-          loadSubSection(tn);
-        }
-      }
-      rootNode.ExpandAll();
-    }
-
-    private void loadSubSection(TreeNode _parentNode)
-    {
-      LibrarySection librarySection = (LibrarySection)_parentNode.Tag;
-      if (librarySection != null)
-      {
-        List<LibrarySection> sections = server.librarySections(librarySection);
-        if (!librarySection.HasTracks)
-        {
-          foreach (LibrarySection section in sections)
-          {
-            TreeNode tn = _parentNode.Nodes.Add(section.Key, section.Title);
-            tn.Tag = section;
-          }
-        }
-      }
-    }
-
-    private void enableServerTrackCommands()
-    {
-      Playlist playlist = selectedPlaylist;
-      int tracksSelected = gvSinglePlayList.SelectedRows.Count;
-      int tracksSelectedServer = gvServerTrack.SelectedRows.Count;
-      btnServerTracksAppend.Enabled = tracksSelectedServer > 0 && playlist != null;
-      btnServerTracksInsert.Enabled = tracksSelectedServer > 0 && playlist != null && tracksSelected == 1;
-      btnServerTrackAppendAll.Enabled = gvServerTrack.Rows.Count > 0;
-    }
-
-    private void addSelectedTracks(bool _append)
-    {
-      Playlist playlist = selectedPlaylist;
-      int atPosition = 0;
-      string firstKey = null;
-
-      if (playlist != null)
-      {
-        if (!_append && gvSinglePlayList.SelectedRows.Count == 1)
-        {
-          Track track = gvSinglePlayList.SelectedRows[0].DataBoundItem as Track;
-          if (track != null)
-          {
-            atPosition = track.Index;
-          }
-        }
-        bool trackAdded;
-        int added = 0;
-        List<DataGridViewRow> selectedRows = new List<DataGridViewRow>();
-        foreach (DataGridViewRow selectedRow in gvServerTrack.SelectedRows)
-        {
-          selectedRows.Add(selectedRow);
-        }
-        foreach (DataGridViewRow row in selectedRows.OrderBy(r => r.Index))
-        {
-          LibrarySection section = row.DataBoundItem as LibrarySection;
-          if (section != null)
-          {
-            logMessage(playlistManager.addTrack(playlist.Key, section.Key, section.TrackType, atPosition, out trackAdded));
-            if (trackAdded)
-            {
-              firstKey = firstKey ?? section.Key;
-              added++;
-              if (atPosition > 0)
-              {
-                atPosition++;
-              }
-            }
-          }
-        }
-        logMessage(String.Format("{0} tracks added to the playlist", added));
-        if (added > 0)
-        {
-          // Reload the playlist
-          loadSinglePlaylist(playlist, firstKey, true);
-          gvPlaylists.Refresh();
-        }
-      }
-    }
-
-    private void addAllTracks(bool _append)
-    {
-      Playlist playlist = selectedPlaylist;
-      string firstKey = null;
-
-      if (playlist != null && MessageBox.Show("All tracks will be added to the selected playlist!", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
-      {
-        int atPosition = 0;
-        if (!_append && gvSinglePlayList.SelectedRows.Count == 1)
-        {
-          Track track = gvSinglePlayList.SelectedRows[0].DataBoundItem as Track;
-          if (track != null)
-          {
-            atPosition = track.Index;
-          }
-        }
-        bool trackAdded;
-        int added = 0;
-        foreach (DataGridViewRow row in gvServerTrack.Rows)
-        {
-          LibrarySection section = row.DataBoundItem as LibrarySection;
-          if (section != null)
-          {
-            logMessage(playlistManager.addTrack(playlist.Key, section.Key, section.TrackType, atPosition, out trackAdded));
-            if (trackAdded)
-            {
-              firstKey = firstKey ?? section.Key;
-              added++;
-              if (atPosition > 0)
-              {
-                atPosition++;
-              }
-            }
-          }
-        }
-        logMessage(String.Format("{0} tracks added to the playlist", added));
-        if (added > 0)
-        {
-          // Reload the playlist
-          loadSinglePlaylist(playlist, firstKey, true);
-          gvPlaylists.Refresh();
-        }
-      }
-    }
-
+    #region user helper methods
     private void changeUser(string _newName)
     {
       if (playlistManager.setCurrentUser(_newName))
@@ -502,7 +386,6 @@ namespace PlexMusicPlaylists
         loadPlaylists();
       }
     }
-
     private void fillUserList()
     {
       comboUsers.Items.Clear();
@@ -513,9 +396,7 @@ namespace PlexMusicPlaylists
       }
       comboUsers.SelectedIndex = comboUsers.Items.IndexOf(playlistManager.currentUser.Name);
     }
-
     #endregion
-
 
     #region control event handlers
 
@@ -638,53 +519,6 @@ namespace PlexMusicPlaylists
       moveTrack(1);
     }
 
-    private void btTrackBrowseMusice_Click(object sender, EventArgs e)
-    {
-      splitContainerGlobal.Panel2Collapsed = !splitContainerGlobal.Panel2Collapsed;
-    }
-
-    private void tvServerSection_AfterSelect(object sender, TreeViewEventArgs e)
-    {
-      gvServerTrack.DataSource = null;
-      if (e.Node != null && e.Node.Tag != null)
-      {
-        LibrarySection librarySection = e.Node.Tag as LibrarySection;
-        if (librarySection != null)
-        {
-          if (!librarySection.HasTracks && e.Node.Nodes.Count == 0)
-          {
-            loadSubSection(e.Node);
-            e.Node.Expand();
-          }
-          if (librarySection.HasTracks)
-          {
-            gvServerTrack.DataSource = server.librarySections(librarySection);
-          }
-        }
-      }
-      enableServerSectionCommands();
-    }
-
-    private void gvServerTrack_SelectionChanged(object sender, EventArgs e)
-    {
-      enableServerTrackCommands();
-    }
-
-    private void btnServerTracksAppend_Click(object sender, EventArgs e)
-    {
-      addSelectedTracks(true);
-    }
-
-    private void btnServerTracksInsert_Click(object sender, EventArgs e)
-    {
-      addSelectedTracks(false);
-    }
-
-    private void btnServerTrackAppendAll_Click(object sender, EventArgs e)
-    {
-      addAllTracks(true);
-    }
-
     private void btnTrackRemove_Click(object sender, EventArgs e)
     {
       Playlist playlist = selectedPlaylist;
@@ -720,8 +554,6 @@ namespace PlexMusicPlaylists
         showPlaylistEditPanel(true, true);
       }
     }
-
-    #endregion
 
     private void btnUserDelete_Click(object sender, EventArgs e)
     {
@@ -793,7 +625,6 @@ namespace PlexMusicPlaylists
       }
     }
 
-
     private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
     {
       if (selectedPlaylist != null)
@@ -807,6 +638,6 @@ namespace PlexMusicPlaylists
       playlistManager.PlexPlaylistCreator.generatePlaylistSql();
     }
 
-
+    #endregion
   }
 }

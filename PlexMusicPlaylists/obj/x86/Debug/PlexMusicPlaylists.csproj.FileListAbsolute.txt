@@ -18,7 +18,6 @@ F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistMa
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.SearchForm.resources
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.Import.LocationMappingForm.resources
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.Import.SectionFolderForm.resources
-F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.csprojResolveAssemblyReference.cache
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.csproj.GenerateResource.Cache
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\bin\Debug\PlexMusicPlaylists.exe.config
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\bin\Debug\EntityFramework.dll
@@ -32,3 +31,6 @@ F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistMa
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.Import.ImportForm.resources
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.Import.ImportFormChannel.resources
 F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.SettingsForm.resources
+F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.PMSServerUserControl.resources
+F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.PMSServerForm.resources
+F:\DEVELOP on mcep4\VisualStudio.NET\Projects\PlexMusicPlaylists\MusicPlaylistManager\PlexMusicPlaylists\obj\x86\Debug\PlexMusicPlaylists.csprojResolveAssemblyReference.cache

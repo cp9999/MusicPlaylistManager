@@ -204,6 +204,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     #region track handling
     public string addTrack(List<Track> _trackList, string _playlistKey, string _key, int _atPosition)
     {
+      // _atPosition 0 = Append
       Playlist playlist = this.getPlaylist(_playlistKey);
       if (_trackList != null && playlist != null && !String.IsNullOrEmpty(_key))
       {
@@ -223,14 +224,24 @@ namespace PlexMusicPlaylists.PlexMediaServer
             Album = metadataItem.Album
           });
           bool normalizeOrder = false;
-          if (_atPosition >= 0 && _atPosition < _trackList.Count())
+          if (_atPosition >= 0 && _atPosition <= _trackList.Count())
           {
-            float targetOrder = ((_atPosition > 0) ? _trackList.ElementAt(_atPosition - 1).Order : 0) + MINIMUM_ORDER_STEPSIZE;
-            if (targetOrder < _trackList.ElementAt(_atPosition).Order)
-              track.Order = targetOrder;
+            _atPosition--;
+            float targetOrder = 0;
+            if (_atPosition == -1)
+            {
+              targetOrder = (_trackList.Count() > 0) ? _trackList.Last().Order + OrderStepSize : OrderStepSize;
+              _trackList.Add(track);
+            }
             else
-              normalizeOrder = true;
-            _trackList.Insert(_atPosition, track);
+            {
+              targetOrder = ((_atPosition > 0) ? _trackList.ElementAt(_atPosition - 1).Order : 0) + MINIMUM_ORDER_STEPSIZE;
+              if (targetOrder < _trackList.ElementAt(_atPosition).Order)
+                track.Order = targetOrder;
+              else
+                normalizeOrder = true;
+              _trackList.Insert(_atPosition, track);
+            }
           }
           else
           {

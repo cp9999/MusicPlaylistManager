@@ -94,6 +94,18 @@
     <Compile Include="Import\SectionFolderForm.Designer.cs">
       <DependentUpon>SectionFolderForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PMSServerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PMSServerForm.Designer.cs">
+      <DependentUpon>PMSServerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PMSServerUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PMSServerUserControl.Designer.cs">
+      <DependentUpon>PMSServerUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,6 +159,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Import\SectionFolderForm.resx">
       <DependentUpon>SectionFolderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PMSServerForm.resx">
+      <DependentUpon>PMSServerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PMSServerUserControl.resx">
+      <DependentUpon>PMSServerUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>

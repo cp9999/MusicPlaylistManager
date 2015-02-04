@@ -32,11 +32,13 @@
       this.panelMain = new System.Windows.Forms.Panel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.panelTop = new System.Windows.Forms.Panel();
+      this.lblCaption = new System.Windows.Forms.Label();
       this.panelBottom = new System.Windows.Forms.Panel();
       this.btnClose = new System.Windows.Forms.Button();
       this.panelData = new System.Windows.Forms.Panel();
       this.groupBoxOptions = new System.Windows.Forms.GroupBox();
       this.checkBoxAutoConnect = new System.Windows.Forms.CheckBox();
+      this.playlistSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.groupBoxGUI = new System.Windows.Forms.GroupBox();
       this.rbPlexNative = new System.Windows.Forms.RadioButton();
       this.rbMusicPlaylistChannel = new System.Windows.Forms.RadioButton();
@@ -55,18 +57,18 @@
       this.label3 = new System.Windows.Forms.Label();
       this.ofdPlexDatabase = new System.Windows.Forms.OpenFileDialog();
       this.fbdDataFolder = new System.Windows.Forms.FolderBrowserDialog();
-      this.playlistSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-      this.lblCaption = new System.Windows.Forms.Label();
+      this.checkBoxServerInSeparatedWindow = new System.Windows.Forms.CheckBox();
+      this.checkBoxServerAllowMultipleWindows = new System.Windows.Forms.CheckBox();
       this.panelMain.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       this.panelTop.SuspendLayout();
       this.panelBottom.SuspendLayout();
       this.panelData.SuspendLayout();
       this.groupBoxOptions.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).BeginInit();
       this.groupBoxGUI.SuspendLayout();
       this.groupBoxChannel.SuspendLayout();
       this.groupBoxDatabase.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // panelMain
@@ -75,7 +77,7 @@
       this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelMain.Location = new System.Drawing.Point(0, 0);
       this.panelMain.Name = "panelMain";
-      this.panelMain.Size = new System.Drawing.Size(579, 500);
+      this.panelMain.Size = new System.Drawing.Size(584, 554);
       this.panelMain.TabIndex = 0;
       // 
       // tableLayoutPanel1
@@ -93,7 +95,7 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.066667F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.93333F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(579, 500);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(584, 554);
       this.tableLayoutPanel1.TabIndex = 0;
       // 
       // panelTop
@@ -102,23 +104,35 @@
       this.panelTop.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelTop.Location = new System.Drawing.Point(3, 3);
       this.panelTop.Name = "panelTop";
-      this.panelTop.Size = new System.Drawing.Size(573, 34);
+      this.panelTop.Size = new System.Drawing.Size(578, 39);
       this.panelTop.TabIndex = 0;
+      // 
+      // lblCaption
+      // 
+      this.lblCaption.BackColor = System.Drawing.Color.LightGreen;
+      this.lblCaption.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.lblCaption.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblCaption.Location = new System.Drawing.Point(0, 0);
+      this.lblCaption.Name = "lblCaption";
+      this.lblCaption.Size = new System.Drawing.Size(578, 39);
+      this.lblCaption.TabIndex = 1;
+      this.lblCaption.Text = "Settings";
+      this.lblCaption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // panelBottom
       // 
       this.panelBottom.Controls.Add(this.btnClose);
       this.panelBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelBottom.Location = new System.Drawing.Point(3, 446);
+      this.panelBottom.Location = new System.Drawing.Point(3, 500);
       this.panelBottom.Name = "panelBottom";
-      this.panelBottom.Size = new System.Drawing.Size(573, 51);
+      this.panelBottom.Size = new System.Drawing.Size(578, 51);
       this.panelBottom.TabIndex = 1;
       // 
       // btnClose
       // 
       this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-      this.btnClose.Location = new System.Drawing.Point(463, 12);
+      this.btnClose.Location = new System.Drawing.Point(468, 12);
       this.btnClose.Name = "btnClose";
       this.btnClose.Size = new System.Drawing.Size(101, 30);
       this.btnClose.TabIndex = 0;
@@ -132,17 +146,19 @@
       this.panelData.Controls.Add(this.groupBoxChannel);
       this.panelData.Controls.Add(this.groupBoxDatabase);
       this.panelData.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelData.Location = new System.Drawing.Point(3, 43);
+      this.panelData.Location = new System.Drawing.Point(3, 48);
       this.panelData.Name = "panelData";
-      this.panelData.Size = new System.Drawing.Size(573, 397);
+      this.panelData.Size = new System.Drawing.Size(578, 446);
       this.panelData.TabIndex = 2;
       // 
       // groupBoxOptions
       // 
+      this.groupBoxOptions.Controls.Add(this.checkBoxServerAllowMultipleWindows);
+      this.groupBoxOptions.Controls.Add(this.checkBoxServerInSeparatedWindow);
       this.groupBoxOptions.Controls.Add(this.checkBoxAutoConnect);
       this.groupBoxOptions.Location = new System.Drawing.Point(9, 13);
       this.groupBoxOptions.Name = "groupBoxOptions";
-      this.groupBoxOptions.Size = new System.Drawing.Size(555, 50);
+      this.groupBoxOptions.Size = new System.Drawing.Size(555, 95);
       this.groupBoxOptions.TabIndex = 15;
       this.groupBoxOptions.TabStop = false;
       this.groupBoxOptions.Text = "Options";
@@ -158,12 +174,16 @@
       this.checkBoxAutoConnect.Text = "Automatically connect at startup";
       this.checkBoxAutoConnect.UseVisualStyleBackColor = true;
       // 
+      // playlistSettingsBindingSource
+      // 
+      this.playlistSettingsBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.PlaylistSettings);
+      // 
       // groupBoxGUI
       // 
       this.groupBoxGUI.Controls.Add(this.rbPlexNative);
       this.groupBoxGUI.Controls.Add(this.rbMusicPlaylistChannel);
       this.groupBoxGUI.Controls.Add(this.label2);
-      this.groupBoxGUI.Location = new System.Drawing.Point(10, 333);
+      this.groupBoxGUI.Location = new System.Drawing.Point(10, 378);
       this.groupBoxGUI.Name = "groupBoxGUI";
       this.groupBoxGUI.Size = new System.Drawing.Size(554, 53);
       this.groupBoxGUI.TabIndex = 14;
@@ -209,7 +229,7 @@
       this.groupBoxChannel.Controls.Add(this.tbDataFolder);
       this.groupBoxChannel.Controls.Add(this.checkBoxPreferDataFolder);
       this.groupBoxChannel.Controls.Add(this.btnSelectDataFolder);
-      this.groupBoxChannel.Location = new System.Drawing.Point(9, 226);
+      this.groupBoxChannel.Location = new System.Drawing.Point(9, 273);
       this.groupBoxChannel.Name = "groupBoxChannel";
       this.groupBoxChannel.Size = new System.Drawing.Size(555, 95);
       this.groupBoxChannel.TabIndex = 13;
@@ -267,9 +287,9 @@
       this.groupBoxDatabase.Controls.Add(this.tbPlexDatabase);
       this.groupBoxDatabase.Controls.Add(this.btnSelectDatabase);
       this.groupBoxDatabase.Controls.Add(this.label3);
-      this.groupBoxDatabase.Location = new System.Drawing.Point(9, 69);
+      this.groupBoxDatabase.Location = new System.Drawing.Point(9, 123);
       this.groupBoxDatabase.Name = "groupBoxDatabase";
-      this.groupBoxDatabase.Size = new System.Drawing.Size(555, 141);
+      this.groupBoxDatabase.Size = new System.Drawing.Size(555, 131);
       this.groupBoxDatabase.TabIndex = 12;
       this.groupBoxDatabase.TabStop = false;
       this.groupBoxDatabase.Text = "Database";
@@ -278,7 +298,7 @@
       // 
       this.checkBoxDatabaseDirectUpdate.AutoSize = true;
       this.checkBoxDatabaseDirectUpdate.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "DatabaseDirectUpdate", true));
-      this.checkBoxDatabaseDirectUpdate.Location = new System.Drawing.Point(96, 88);
+      this.checkBoxDatabaseDirectUpdate.Location = new System.Drawing.Point(96, 79);
       this.checkBoxDatabaseDirectUpdate.Name = "checkBoxDatabaseDirectUpdate";
       this.checkBoxDatabaseDirectUpdate.Size = new System.Drawing.Size(212, 17);
       this.checkBoxDatabaseDirectUpdate.TabIndex = 12;
@@ -289,7 +309,7 @@
       // 
       this.checkBoxDatabaseModifiedOnly.AutoSize = true;
       this.checkBoxDatabaseModifiedOnly.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "DatabaseModifiedTracksOnly", true));
-      this.checkBoxDatabaseModifiedOnly.Location = new System.Drawing.Point(96, 118);
+      this.checkBoxDatabaseModifiedOnly.Location = new System.Drawing.Point(96, 102);
       this.checkBoxDatabaseModifiedOnly.Name = "checkBoxDatabaseModifiedOnly";
       this.checkBoxDatabaseModifiedOnly.Size = new System.Drawing.Size(204, 17);
       this.checkBoxDatabaseModifiedOnly.TabIndex = 12;
@@ -350,27 +370,33 @@
       // 
       this.fbdDataFolder.ShowNewFolderButton = false;
       // 
-      // playlistSettingsBindingSource
+      // checkBoxServerInSeparatedWindow
       // 
-      this.playlistSettingsBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.PlaylistSettings);
+      this.checkBoxServerInSeparatedWindow.AutoSize = true;
+      this.checkBoxServerInSeparatedWindow.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "ServerInSeparatedWindow", true));
+      this.checkBoxServerInSeparatedWindow.Location = new System.Drawing.Point(96, 42);
+      this.checkBoxServerInSeparatedWindow.Name = "checkBoxServerInSeparatedWindow";
+      this.checkBoxServerInSeparatedWindow.Size = new System.Drawing.Size(236, 17);
+      this.checkBoxServerInSeparatedWindow.TabIndex = 12;
+      this.checkBoxServerInSeparatedWindow.Text = "Show Plex Media Server in separate window";
+      this.checkBoxServerInSeparatedWindow.UseVisualStyleBackColor = true;
       // 
-      // lblCaption
+      // checkBoxServerAllowMultipleWindows
       // 
-      this.lblCaption.BackColor = System.Drawing.Color.LightGreen;
-      this.lblCaption.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lblCaption.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblCaption.Location = new System.Drawing.Point(0, 0);
-      this.lblCaption.Name = "lblCaption";
-      this.lblCaption.Size = new System.Drawing.Size(573, 34);
-      this.lblCaption.TabIndex = 1;
-      this.lblCaption.Text = "Settings";
-      this.lblCaption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.checkBoxServerAllowMultipleWindows.AutoSize = true;
+      this.checkBoxServerAllowMultipleWindows.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "ServerAllowMultipleWindows", true));
+      this.checkBoxServerAllowMultipleWindows.Location = new System.Drawing.Point(96, 65);
+      this.checkBoxServerAllowMultipleWindows.Name = "checkBoxServerAllowMultipleWindows";
+      this.checkBoxServerAllowMultipleWindows.Size = new System.Drawing.Size(225, 17);
+      this.checkBoxServerAllowMultipleWindows.TabIndex = 12;
+      this.checkBoxServerAllowMultipleWindows.Text = "Allow multiple Plex Media Server windows ";
+      this.checkBoxServerAllowMultipleWindows.UseVisualStyleBackColor = true;
       // 
       // SettingsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(579, 500);
+      this.ClientSize = new System.Drawing.Size(584, 554);
       this.Controls.Add(this.panelMain);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
       this.Name = "SettingsForm";
@@ -382,13 +408,13 @@
       this.panelData.ResumeLayout(false);
       this.groupBoxOptions.ResumeLayout(false);
       this.groupBoxOptions.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).EndInit();
       this.groupBoxGUI.ResumeLayout(false);
       this.groupBoxGUI.PerformLayout();
       this.groupBoxChannel.ResumeLayout(false);
       this.groupBoxChannel.PerformLayout();
       this.groupBoxDatabase.ResumeLayout(false);
       this.groupBoxDatabase.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -423,5 +449,7 @@
     private System.Windows.Forms.GroupBox groupBoxOptions;
     private System.Windows.Forms.CheckBox checkBoxAutoConnect;
     private System.Windows.Forms.Label lblCaption;
+    private System.Windows.Forms.CheckBox checkBoxServerAllowMultipleWindows;
+    private System.Windows.Forms.CheckBox checkBoxServerInSeparatedWindow;
   }
 }

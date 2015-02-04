@@ -34,8 +34,6 @@
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlaylistUserControl));
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
       this.splitContainerMain = new System.Windows.Forms.SplitContainer();
       this.panelPlaylistGriedView = new System.Windows.Forms.Panel();
       this.gvPlaylists = new System.Windows.Forms.DataGridView();
@@ -89,31 +87,8 @@
       this.btnTrackUp = new System.Windows.Forms.ToolStripButton();
       this.btnTrackDown = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-      this.btTrackBrowseMusice = new System.Windows.Forms.ToolStripButton();
       this.splitContainerGlobal = new System.Windows.Forms.SplitContainer();
       this.panelServerRight = new System.Windows.Forms.Panel();
-      this.splitContainerServerMain = new System.Windows.Forms.SplitContainer();
-      this.panelServerSection = new System.Windows.Forms.Panel();
-      this.tvServerSection = new System.Windows.Forms.TreeView();
-      this.panelServerSectionToolstrip = new System.Windows.Forms.Panel();
-      this.toolStripServerSections = new System.Windows.Forms.ToolStrip();
-      this.toolStripLabelServerSection = new System.Windows.Forms.ToolStripLabel();
-      this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-      this.btnServerSectionSearch = new System.Windows.Forms.ToolStripDropDownButton();
-      this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.panelServerTrack = new System.Windows.Forms.Panel();
-      this.gvServerTrack = new System.Windows.Forms.DataGridView();
-      this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.panelServerTrackToolstrip = new System.Windows.Forms.Panel();
-      this.toolStripServerTracks = new System.Windows.Forms.ToolStrip();
-      this.toolStripLabelServerTracks = new System.Windows.Forms.ToolStripLabel();
-      this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-      this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-      this.btnServerTracksAppend = new System.Windows.Forms.ToolStripButton();
-      this.btnServerTracksInsert = new System.Windows.Forms.ToolStripButton();
-      this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-      this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-      this.btnServerTrackAppendAll = new System.Windows.Forms.ToolStripButton();
       this.panelServerLeft = new System.Windows.Forms.Panel();
       this.panelMainCaption = new System.Windows.Forms.Panel();
       this.lblCaption = new System.Windows.Forms.Label();
@@ -124,9 +99,7 @@
       this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.keyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.trackBindingSource = new System.Windows.Forms.BindingSource(this.components);
-      this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.librarySectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
+      this.ucPMSServerUserControl = new PlexMusicPlaylists.PMSServerUserControl();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
       this.splitContainerMain.Panel1.SuspendLayout();
       this.splitContainerMain.Panel2.SuspendLayout();
@@ -146,22 +119,10 @@
       this.splitContainerGlobal.Panel2.SuspendLayout();
       this.splitContainerGlobal.SuspendLayout();
       this.panelServerRight.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.splitContainerServerMain)).BeginInit();
-      this.splitContainerServerMain.Panel1.SuspendLayout();
-      this.splitContainerServerMain.Panel2.SuspendLayout();
-      this.splitContainerServerMain.SuspendLayout();
-      this.panelServerSection.SuspendLayout();
-      this.panelServerSectionToolstrip.SuspendLayout();
-      this.toolStripServerSections.SuspendLayout();
-      this.panelServerTrack.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.gvServerTrack)).BeginInit();
-      this.panelServerTrackToolstrip.SuspendLayout();
-      this.toolStripServerTracks.SuspendLayout();
       this.panelMainCaption.SuspendLayout();
       this.panelMainDetail.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.playlistBindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.trackBindingSource)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.librarySectionBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // splitContainerMain
@@ -528,7 +489,7 @@
       this.btnUserAdd.Image = global::PlexMusicPlaylists.Properties.Resources.Add_user;
       this.btnUserAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnUserAdd.Name = "btnUserAdd";
-      this.btnUserAdd.Size = new System.Drawing.Size(51, 28);
+      this.btnUserAdd.Size = new System.Drawing.Size(51, 20);
       this.btnUserAdd.Text = "New";
       this.btnUserAdd.ToolTipText = "Add new user";
       this.btnUserAdd.Click += new System.EventHandler(this.btnUserAdd_Click);
@@ -538,7 +499,7 @@
       this.btnUserDelete.Image = global::PlexMusicPlaylists.Properties.Resources.Delete_user;
       this.btnUserDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnUserDelete.Name = "btnUserDelete";
-      this.btnUserDelete.Size = new System.Drawing.Size(70, 28);
+      this.btnUserDelete.Size = new System.Drawing.Size(70, 20);
       this.btnUserDelete.Text = "Remove";
       this.btnUserDelete.ToolTipText = "Remove selected user";
       this.btnUserDelete.Click += new System.EventHandler(this.btnUserDelete_Click);
@@ -636,8 +597,7 @@
             this.toolStripSeparator3,
             this.btnTrackUp,
             this.btnTrackDown,
-            this.toolStripSeparator5,
-            this.btTrackBrowseMusice});
+            this.toolStripSeparator5});
       this.toolStripSinglePlaylist.Location = new System.Drawing.Point(0, 0);
       this.toolStripSinglePlaylist.Name = "toolStripSinglePlaylist";
       this.toolStripSinglePlaylist.Size = new System.Drawing.Size(750, 25);
@@ -693,16 +653,6 @@
       this.toolStripSeparator5.Name = "toolStripSeparator5";
       this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
       // 
-      // btTrackBrowseMusice
-      // 
-      this.btTrackBrowseMusice.Image = ((System.Drawing.Image)(resources.GetObject("btTrackBrowseMusice.Image")));
-      this.btTrackBrowseMusice.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btTrackBrowseMusice.Name = "btTrackBrowseMusice";
-      this.btTrackBrowseMusice.Size = new System.Drawing.Size(99, 22);
-      this.btTrackBrowseMusice.Text = "Browse server";
-      this.btTrackBrowseMusice.Visible = false;
-      this.btTrackBrowseMusice.Click += new System.EventHandler(this.btTrackBrowseMusice_Click);
-      // 
       // splitContainerGlobal
       // 
       this.splitContainerGlobal.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -725,225 +675,12 @@
       // 
       // panelServerRight
       // 
-      this.panelServerRight.Controls.Add(this.splitContainerServerMain);
+      this.panelServerRight.Controls.Add(this.ucPMSServerUserControl);
       this.panelServerRight.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panelServerRight.Location = new System.Drawing.Point(17, 0);
       this.panelServerRight.Name = "panelServerRight";
       this.panelServerRight.Size = new System.Drawing.Size(469, 616);
       this.panelServerRight.TabIndex = 2;
-      // 
-      // splitContainerServerMain
-      // 
-      this.splitContainerServerMain.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.splitContainerServerMain.Location = new System.Drawing.Point(0, 0);
-      this.splitContainerServerMain.Name = "splitContainerServerMain";
-      this.splitContainerServerMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
-      // 
-      // splitContainerServerMain.Panel1
-      // 
-      this.splitContainerServerMain.Panel1.Controls.Add(this.panelServerSection);
-      this.splitContainerServerMain.Panel1.Controls.Add(this.panelServerSectionToolstrip);
-      // 
-      // splitContainerServerMain.Panel2
-      // 
-      this.splitContainerServerMain.Panel2.Controls.Add(this.panelServerTrack);
-      this.splitContainerServerMain.Panel2.Controls.Add(this.panelServerTrackToolstrip);
-      this.splitContainerServerMain.Size = new System.Drawing.Size(469, 616);
-      this.splitContainerServerMain.SplitterDistance = 226;
-      this.splitContainerServerMain.TabIndex = 1;
-      // 
-      // panelServerSection
-      // 
-      this.panelServerSection.Controls.Add(this.tvServerSection);
-      this.panelServerSection.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelServerSection.Location = new System.Drawing.Point(0, 52);
-      this.panelServerSection.Name = "panelServerSection";
-      this.panelServerSection.Size = new System.Drawing.Size(469, 174);
-      this.panelServerSection.TabIndex = 1;
-      // 
-      // tvServerSection
-      // 
-      this.tvServerSection.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tvServerSection.Location = new System.Drawing.Point(0, 0);
-      this.tvServerSection.Name = "tvServerSection";
-      this.tvServerSection.Size = new System.Drawing.Size(469, 174);
-      this.tvServerSection.TabIndex = 0;
-      this.tvServerSection.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServerSection_AfterSelect);
-      // 
-      // panelServerSectionToolstrip
-      // 
-      this.panelServerSectionToolstrip.Controls.Add(this.toolStripServerSections);
-      this.panelServerSectionToolstrip.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelServerSectionToolstrip.Location = new System.Drawing.Point(0, 0);
-      this.panelServerSectionToolstrip.Name = "panelServerSectionToolstrip";
-      this.panelServerSectionToolstrip.Size = new System.Drawing.Size(469, 52);
-      this.panelServerSectionToolstrip.TabIndex = 0;
-      // 
-      // toolStripServerSections
-      // 
-      this.toolStripServerSections.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabelServerSection,
-            this.toolStripSeparator8,
-            this.btnServerSectionSearch});
-      this.toolStripServerSections.Location = new System.Drawing.Point(0, 0);
-      this.toolStripServerSections.Name = "toolStripServerSections";
-      this.toolStripServerSections.Size = new System.Drawing.Size(469, 25);
-      this.toolStripServerSections.TabIndex = 0;
-      this.toolStripServerSections.Text = "toolStrip2";
-      // 
-      // toolStripLabelServerSection
-      // 
-      this.toolStripLabelServerSection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-      this.toolStripLabelServerSection.Name = "toolStripLabelServerSection";
-      this.toolStripLabelServerSection.Size = new System.Drawing.Size(128, 22);
-      this.toolStripLabelServerSection.Text = "Server music sections";
-      // 
-      // toolStripSeparator8
-      // 
-      this.toolStripSeparator8.Name = "toolStripSeparator8";
-      this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
-      // 
-      // btnServerSectionSearch
-      // 
-      this.btnServerSectionSearch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.searchToolStripMenuItem});
-      this.btnServerSectionSearch.Image = global::PlexMusicPlaylists.Properties.Resources._22;
-      this.btnServerSectionSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnServerSectionSearch.Name = "btnServerSectionSearch";
-      this.btnServerSectionSearch.Size = new System.Drawing.Size(71, 22);
-      this.btnServerSectionSearch.Text = "Search";
-      // 
-      // searchToolStripMenuItem
-      // 
-      this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-      this.searchToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
-      this.searchToolStripMenuItem.Text = "Search";
-      this.searchToolStripMenuItem.Click += new System.EventHandler(this.serverSearch_Click);
-      // 
-      // panelServerTrack
-      // 
-      this.panelServerTrack.Controls.Add(this.gvServerTrack);
-      this.panelServerTrack.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelServerTrack.Location = new System.Drawing.Point(0, 50);
-      this.panelServerTrack.Name = "panelServerTrack";
-      this.panelServerTrack.Size = new System.Drawing.Size(469, 336);
-      this.panelServerTrack.TabIndex = 1;
-      // 
-      // gvServerTrack
-      // 
-      this.gvServerTrack.AllowUserToAddRows = false;
-      this.gvServerTrack.AllowUserToDeleteRows = false;
-      dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-      this.gvServerTrack.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
-      this.gvServerTrack.AutoGenerateColumns = false;
-      this.gvServerTrack.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.gvServerTrack.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6});
-      this.gvServerTrack.DataSource = this.librarySectionBindingSource;
-      this.gvServerTrack.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.gvServerTrack.Location = new System.Drawing.Point(0, 0);
-      this.gvServerTrack.Name = "gvServerTrack";
-      this.gvServerTrack.ReadOnly = true;
-      dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-      this.gvServerTrack.RowsDefaultCellStyle = dataGridViewCellStyle6;
-      this.gvServerTrack.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.gvServerTrack.Size = new System.Drawing.Size(469, 336);
-      this.gvServerTrack.TabIndex = 3;
-      this.gvServerTrack.SelectionChanged += new System.EventHandler(this.gvServerTrack_SelectionChanged);
-      // 
-      // dataGridViewTextBoxColumn5
-      // 
-      this.dataGridViewTextBoxColumn5.DataPropertyName = "TrackType";
-      this.dataGridViewTextBoxColumn5.HeaderText = "Type";
-      this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-      this.dataGridViewTextBoxColumn5.ReadOnly = true;
-      this.dataGridViewTextBoxColumn5.Width = 60;
-      // 
-      // panelServerTrackToolstrip
-      // 
-      this.panelServerTrackToolstrip.Controls.Add(this.toolStripServerTracks);
-      this.panelServerTrackToolstrip.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelServerTrackToolstrip.Location = new System.Drawing.Point(0, 0);
-      this.panelServerTrackToolstrip.Name = "panelServerTrackToolstrip";
-      this.panelServerTrackToolstrip.Size = new System.Drawing.Size(469, 50);
-      this.panelServerTrackToolstrip.TabIndex = 0;
-      // 
-      // toolStripServerTracks
-      // 
-      this.toolStripServerTracks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabelServerTracks,
-            this.toolStripSeparator6,
-            this.toolStripLabel3,
-            this.btnServerTracksAppend,
-            this.btnServerTracksInsert,
-            this.toolStripSeparator10,
-            this.toolStripLabel2,
-            this.btnServerTrackAppendAll});
-      this.toolStripServerTracks.Location = new System.Drawing.Point(0, 0);
-      this.toolStripServerTracks.Name = "toolStripServerTracks";
-      this.toolStripServerTracks.Size = new System.Drawing.Size(469, 25);
-      this.toolStripServerTracks.TabIndex = 0;
-      this.toolStripServerTracks.Text = "toolStrip1";
-      // 
-      // toolStripLabelServerTracks
-      // 
-      this.toolStripLabelServerTracks.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-      this.toolStripLabelServerTracks.Name = "toolStripLabelServerTracks";
-      this.toolStripLabelServerTracks.Size = new System.Drawing.Size(98, 22);
-      this.toolStripLabelServerTracks.Text = "Tracks on server";
-      // 
-      // toolStripSeparator6
-      // 
-      this.toolStripSeparator6.Name = "toolStripSeparator6";
-      this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
-      // 
-      // toolStripLabel3
-      // 
-      this.toolStripLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.toolStripLabel3.Name = "toolStripLabel3";
-      this.toolStripLabel3.Size = new System.Drawing.Size(53, 22);
-      this.toolStripLabel3.Text = "Selected:";
-      // 
-      // btnServerTracksAppend
-      // 
-      this.btnServerTracksAppend.Image = global::PlexMusicPlaylists.Properties.Resources.down;
-      this.btnServerTracksAppend.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnServerTracksAppend.Name = "btnServerTracksAppend";
-      this.btnServerTracksAppend.Size = new System.Drawing.Size(123, 22);
-      this.btnServerTracksAppend.Text = "Append to playlist";
-      this.btnServerTracksAppend.Click += new System.EventHandler(this.btnServerTracksAppend_Click);
-      // 
-      // btnServerTracksInsert
-      // 
-      this.btnServerTracksInsert.Image = global::PlexMusicPlaylists.Properties.Resources.left;
-      this.btnServerTracksInsert.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnServerTracksInsert.Name = "btnServerTracksInsert";
-      this.btnServerTracksInsert.Size = new System.Drawing.Size(109, 22);
-      this.btnServerTracksInsert.Text = "Insert in playlist";
-      this.btnServerTracksInsert.Click += new System.EventHandler(this.btnServerTracksInsert_Click);
-      // 
-      // toolStripSeparator10
-      // 
-      this.toolStripSeparator10.Name = "toolStripSeparator10";
-      this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
-      // 
-      // toolStripLabel2
-      // 
-      this.toolStripLabel2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.toolStripLabel2.Name = "toolStripLabel2";
-      this.toolStripLabel2.Size = new System.Drawing.Size(24, 22);
-      this.toolStripLabel2.Text = "All:";
-      // 
-      // btnServerTrackAppendAll
-      // 
-      this.btnServerTrackAppendAll.Image = ((System.Drawing.Image)(resources.GetObject("btnServerTrackAppendAll.Image")));
-      this.btnServerTrackAppendAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnServerTrackAppendAll.Name = "btnServerTrackAppendAll";
-      this.btnServerTrackAppendAll.Size = new System.Drawing.Size(84, 22);
-      this.btnServerTrackAppendAll.Text = "Append all";
-      this.btnServerTrackAppendAll.Click += new System.EventHandler(this.btnServerTrackAppendAll_Click);
       // 
       // panelServerLeft
       // 
@@ -1025,24 +762,16 @@
       // 
       this.trackBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.Track);
       // 
-      // dataGridViewTextBoxColumn4
+      // ucPMSServerUserControl
       // 
-      this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.dataGridViewTextBoxColumn4.DataPropertyName = "Title";
-      this.dataGridViewTextBoxColumn4.HeaderText = "Title";
-      this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-      this.dataGridViewTextBoxColumn4.ReadOnly = true;
-      // 
-      // dataGridViewTextBoxColumn6
-      // 
-      this.dataGridViewTextBoxColumn6.DataPropertyName = "Key";
-      this.dataGridViewTextBoxColumn6.HeaderText = "Key";
-      this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-      this.dataGridViewTextBoxColumn6.ReadOnly = true;
-      // 
-      // librarySectionBindingSource
-      // 
-      this.librarySectionBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.LibrarySection);
+      this.ucPMSServerUserControl.AllowVideos = false;
+      this.ucPMSServerUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.ucPMSServerUserControl.Location = new System.Drawing.Point(0, 0);
+      this.ucPMSServerUserControl.Name = "ucPMSServerUserControl";
+      this.ucPMSServerUserControl.Orientation = System.Windows.Forms.Orientation.Horizontal;
+      this.ucPMSServerUserControl.PMSServer = null;
+      this.ucPMSServerUserControl.Size = new System.Drawing.Size(469, 616);
+      this.ucPMSServerUserControl.TabIndex = 0;
       // 
       // PlaylistUserControl
       // 
@@ -1076,26 +805,10 @@
       ((System.ComponentModel.ISupportInitialize)(this.splitContainerGlobal)).EndInit();
       this.splitContainerGlobal.ResumeLayout(false);
       this.panelServerRight.ResumeLayout(false);
-      this.splitContainerServerMain.Panel1.ResumeLayout(false);
-      this.splitContainerServerMain.Panel2.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.splitContainerServerMain)).EndInit();
-      this.splitContainerServerMain.ResumeLayout(false);
-      this.panelServerSection.ResumeLayout(false);
-      this.panelServerSectionToolstrip.ResumeLayout(false);
-      this.panelServerSectionToolstrip.PerformLayout();
-      this.toolStripServerSections.ResumeLayout(false);
-      this.toolStripServerSections.PerformLayout();
-      this.panelServerTrack.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.gvServerTrack)).EndInit();
-      this.panelServerTrackToolstrip.ResumeLayout(false);
-      this.panelServerTrackToolstrip.PerformLayout();
-      this.toolStripServerTracks.ResumeLayout(false);
-      this.toolStripServerTracks.PerformLayout();
       this.panelMainCaption.ResumeLayout(false);
       this.panelMainDetail.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.playlistBindingSource)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.trackBindingSource)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.librarySectionBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -1140,27 +853,11 @@
     private System.Windows.Forms.Button btnPlaylistEditCreate;
     protected System.Windows.Forms.SplitContainer splitContainerGlobal;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-    private System.Windows.Forms.ToolStripButton btTrackBrowseMusice;
     private System.Windows.Forms.Panel panelServerLeft;
     private System.Windows.Forms.Panel panelServerRight;
-    private System.Windows.Forms.SplitContainer splitContainerServerMain;
-    private System.Windows.Forms.Panel panelServerSection;
-    private System.Windows.Forms.TreeView tvServerSection;
-    private System.Windows.Forms.Panel panelServerSectionToolstrip;
-    private System.Windows.Forms.Panel panelServerTrack;
-    private System.Windows.Forms.DataGridView gvServerTrack;
-    private System.Windows.Forms.Panel panelServerTrackToolstrip;
-    private System.Windows.Forms.BindingSource librarySectionBindingSource;
     private System.Windows.Forms.Panel panelMainCaption;
     private System.Windows.Forms.Panel panelMainDetail;
     private System.Windows.Forms.Label lblCaption;
-    private System.Windows.Forms.ToolStrip toolStripServerTracks;
-    private System.Windows.Forms.ToolStripLabel toolStripLabelServerTracks;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-    private System.Windows.Forms.ToolStripButton btnServerTracksAppend;
-    private System.Windows.Forms.ToolStrip toolStripServerSections;
-    private System.Windows.Forms.ToolStripLabel toolStripLabelServerSection;
-    private System.Windows.Forms.ToolStripButton btnServerTracksInsert;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     private System.Windows.Forms.DataGridViewTextBoxColumn DurationStr;
@@ -1170,18 +867,8 @@
     private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     private System.Windows.Forms.ToolStripButton btnUserAdd;
     private System.Windows.Forms.ToolStripButton btnUserDelete;
-    private System.Windows.Forms.ToolStripDropDownButton btnServerSectionSearch;
-    private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
     private System.Windows.Forms.ToolStripButton btnImport;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-    private System.Windows.Forms.ToolStripLabel toolStripLabel3;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-    private System.Windows.Forms.ToolStripLabel toolStripLabel2;
-    private System.Windows.Forms.ToolStripButton btnServerTrackAppendAll;
     private System.Windows.Forms.ToolStripButton btnImportChannelPlaylist;
     private System.Windows.Forms.ToolStripDropDownButton btnPlaylistSaveToSql;
     private System.Windows.Forms.ToolStripMenuItem saveSelectedToolStripMenuItem;
@@ -1193,5 +880,6 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     private System.Windows.Forms.DataGridViewTextBoxColumn TrackType;
     private System.Windows.Forms.DataGridViewTextBoxColumn keyDataGridViewTextBoxColumn;
+    private PMSServerUserControl ucPMSServerUserControl;
   }
 }
