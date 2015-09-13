@@ -13,6 +13,38 @@ namespace PlexMusicPlaylists.PlexMediaServer
     private const string HEADER_ENTRY_PLEX_CLIENT = "X-Plex-Client-Identifier";
     private const string PLEX_CLIENT_IDENTIFIER = "MusicPlaylist-Configurator";
     public const string DUMMY = "dummy";
+    private static string authToken = "";
+
+    public static bool authenticate(string _userName, string _password)
+    {
+      authToken = "";
+      try
+      {
+        using (var client = new WebClient())
+        {
+          string url = "https://plex.tv/users/sign_in.xml";
+          // CP 2015-01-26: Proposed changesfrom marc_al
+          client.Encoding = Encoding.UTF8;
+          // CP 2015-01-26
+          client.Headers.Add(HEADER_ENTRY_PLEX_CLIENT, PLEX_CLIENT_IDENTIFIER);
+          client.Headers.Add("Authorization", authHeaderVal(_userName, _password));
+          XElement response = XElement.Parse(client.UploadString(url, ""), LoadOptions.None);
+
+          authToken = PMSBase.attributeValue(response, "authenticationToken", "");
+        }
+      }
+      catch (Exception ex)
+      {
+      }
+      return !String.IsNullOrEmpty(authToken);
+    }
+
+    private static string authHeaderVal(string _username, string _password)
+    {
+      var authString = _username + ":" + _password;
+      var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(authString);
+      return "Basic " + System.Convert.ToBase64String(plainTextBytes);
+    }
 
     public static string textFromURL(string _url, bool _throw)
     {
@@ -23,6 +55,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
         client.Encoding = Encoding.UTF8;
         // CP 2015-01-26
         client.Headers.Add(HEADER_ENTRY_PLEX_CLIENT, PLEX_CLIENT_IDENTIFIER);
+        if (!String.IsNullOrEmpty(authToken))
+        {
+          string separator = _url.Contains("?") ? "&" : "?";
+          _url += string.Format("{0}{1}={2}", separator, "X-Plex-Token", authToken);
+        }
         return client.DownloadString(_url);
       }
       catch (Exception ex)

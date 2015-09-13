@@ -51,6 +51,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
+
     protected int Hours
     {
       get

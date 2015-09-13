@@ -21,6 +21,24 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
     }
 
+    public void validateConnection()
+    {
+      try
+      {
+        // Access the name property. This will throw an exception is connection is not valid
+        string localName = this.Name;
+      }
+      catch (Exception ex)
+      {
+        if (ex.Message.Contains("(401)"))
+        {
+          // this is an acess denied!
+          LogonForm logonForm = new LogonForm();
+          logonForm.ShowDialog();
+        }
+      }
+    }
+
     public static char DirectorySeparator { get; set; }
 
     public IEnumerable<XElement> getMusicSections()
@@ -30,7 +48,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
       var musicsections =
         from section in sections.Elements(PMSBase.DIRECTORY)
-        where ((string)section.Attribute("scanner")).Equals("Plex Music Scanner")
+        where ((string)section.Attribute("scanner")).Contains("Music Scanner")
         select section;
 
       return musicsections;

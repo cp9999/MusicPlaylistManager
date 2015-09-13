@@ -16,6 +16,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
     protected const string FILENAME = "PlaylistSettings.xml";
     public string IP { get; set; }
     public int Port { get; set; }
+    public string UserName { get; set; }
     public string ChannelDataFolder { get; set; }
     public bool ChannelPreferDataFolder { get; set; }
     public string PlaylistDB { get; set; }
@@ -28,6 +29,12 @@ namespace PlexMusicPlaylists.PlexMediaServer
     public PlaylistManager.PlaylistMode GUIPlaylistMode { get; set; }
     private static XmlSerializer xs;
     private static PlaylistSettings m_playlistSettings = null;
+    private string m_passWord = "";
+    public string PassWord
+    {
+      get { return m_passWord; }
+      set { m_passWord = value; }
+    }
 
     static PlaylistSettings()
     {
@@ -73,6 +80,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
     {
       IP = "";
       Port = 32400;
+      UserName = "";
+      PassWord = "";
       ChannelDataFolder = "";
       ChannelPreferDataFolder = false;
       PlaylistDB = "";
@@ -168,6 +177,15 @@ namespace PlexMusicPlaylists.PlexMediaServer
       {
         return Path.Combine(PlaylistFolder, SQLPLAYLISTFOLDER);
       }
+    }
+
+    public string parmPassword(string _password = "", bool _set = false)
+    {
+      if (_set)
+      {
+        m_passWord = String.IsNullOrEmpty(_password) ? "" : System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_password));
+      }
+      return String.IsNullOrEmpty(m_passWord) ? "" : System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(m_passWord));
     }
 
   }

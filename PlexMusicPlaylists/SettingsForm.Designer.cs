@@ -37,8 +37,9 @@
       this.btnClose = new System.Windows.Forms.Button();
       this.panelData = new System.Windows.Forms.Panel();
       this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+      this.checkBoxServerAllowMultipleWindows = new System.Windows.Forms.CheckBox();
+      this.checkBoxServerInSeparatedWindow = new System.Windows.Forms.CheckBox();
       this.checkBoxAutoConnect = new System.Windows.Forms.CheckBox();
-      this.playlistSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.groupBoxGUI = new System.Windows.Forms.GroupBox();
       this.rbPlexNative = new System.Windows.Forms.RadioButton();
       this.rbMusicPlaylistChannel = new System.Windows.Forms.RadioButton();
@@ -57,18 +58,17 @@
       this.label3 = new System.Windows.Forms.Label();
       this.ofdPlexDatabase = new System.Windows.Forms.OpenFileDialog();
       this.fbdDataFolder = new System.Windows.Forms.FolderBrowserDialog();
-      this.checkBoxServerInSeparatedWindow = new System.Windows.Forms.CheckBox();
-      this.checkBoxServerAllowMultipleWindows = new System.Windows.Forms.CheckBox();
+      this.playlistSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.panelMain.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       this.panelTop.SuspendLayout();
       this.panelBottom.SuspendLayout();
       this.panelData.SuspendLayout();
       this.groupBoxOptions.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).BeginInit();
       this.groupBoxGUI.SuspendLayout();
       this.groupBoxChannel.SuspendLayout();
       this.groupBoxDatabase.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // panelMain
@@ -163,6 +163,28 @@
       this.groupBoxOptions.TabStop = false;
       this.groupBoxOptions.Text = "Options";
       // 
+      // checkBoxServerAllowMultipleWindows
+      // 
+      this.checkBoxServerAllowMultipleWindows.AutoSize = true;
+      this.checkBoxServerAllowMultipleWindows.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "ServerAllowMultipleWindows", true));
+      this.checkBoxServerAllowMultipleWindows.Location = new System.Drawing.Point(96, 65);
+      this.checkBoxServerAllowMultipleWindows.Name = "checkBoxServerAllowMultipleWindows";
+      this.checkBoxServerAllowMultipleWindows.Size = new System.Drawing.Size(225, 17);
+      this.checkBoxServerAllowMultipleWindows.TabIndex = 12;
+      this.checkBoxServerAllowMultipleWindows.Text = "Allow multiple Plex Media Server windows ";
+      this.checkBoxServerAllowMultipleWindows.UseVisualStyleBackColor = true;
+      // 
+      // checkBoxServerInSeparatedWindow
+      // 
+      this.checkBoxServerInSeparatedWindow.AutoSize = true;
+      this.checkBoxServerInSeparatedWindow.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "ServerInSeparatedWindow", true));
+      this.checkBoxServerInSeparatedWindow.Location = new System.Drawing.Point(96, 42);
+      this.checkBoxServerInSeparatedWindow.Name = "checkBoxServerInSeparatedWindow";
+      this.checkBoxServerInSeparatedWindow.Size = new System.Drawing.Size(236, 17);
+      this.checkBoxServerInSeparatedWindow.TabIndex = 12;
+      this.checkBoxServerInSeparatedWindow.Text = "Show Plex Media Server in separate window";
+      this.checkBoxServerInSeparatedWindow.UseVisualStyleBackColor = true;
+      // 
       // checkBoxAutoConnect
       // 
       this.checkBoxAutoConnect.AutoSize = true;
@@ -173,10 +195,6 @@
       this.checkBoxAutoConnect.TabIndex = 12;
       this.checkBoxAutoConnect.Text = "Automatically connect at startup";
       this.checkBoxAutoConnect.UseVisualStyleBackColor = true;
-      // 
-      // playlistSettingsBindingSource
-      // 
-      this.playlistSettingsBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.PlaylistSettings);
       // 
       // groupBoxGUI
       // 
@@ -370,27 +388,9 @@
       // 
       this.fbdDataFolder.ShowNewFolderButton = false;
       // 
-      // checkBoxServerInSeparatedWindow
+      // playlistSettingsBindingSource
       // 
-      this.checkBoxServerInSeparatedWindow.AutoSize = true;
-      this.checkBoxServerInSeparatedWindow.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "ServerInSeparatedWindow", true));
-      this.checkBoxServerInSeparatedWindow.Location = new System.Drawing.Point(96, 42);
-      this.checkBoxServerInSeparatedWindow.Name = "checkBoxServerInSeparatedWindow";
-      this.checkBoxServerInSeparatedWindow.Size = new System.Drawing.Size(236, 17);
-      this.checkBoxServerInSeparatedWindow.TabIndex = 12;
-      this.checkBoxServerInSeparatedWindow.Text = "Show Plex Media Server in separate window";
-      this.checkBoxServerInSeparatedWindow.UseVisualStyleBackColor = true;
-      // 
-      // checkBoxServerAllowMultipleWindows
-      // 
-      this.checkBoxServerAllowMultipleWindows.AutoSize = true;
-      this.checkBoxServerAllowMultipleWindows.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.playlistSettingsBindingSource, "ServerAllowMultipleWindows", true));
-      this.checkBoxServerAllowMultipleWindows.Location = new System.Drawing.Point(96, 65);
-      this.checkBoxServerAllowMultipleWindows.Name = "checkBoxServerAllowMultipleWindows";
-      this.checkBoxServerAllowMultipleWindows.Size = new System.Drawing.Size(225, 17);
-      this.checkBoxServerAllowMultipleWindows.TabIndex = 12;
-      this.checkBoxServerAllowMultipleWindows.Text = "Allow multiple Plex Media Server windows ";
-      this.checkBoxServerAllowMultipleWindows.UseVisualStyleBackColor = true;
+      this.playlistSettingsBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.PlaylistSettings);
       // 
       // SettingsForm
       // 
@@ -408,13 +408,13 @@
       this.panelData.ResumeLayout(false);
       this.groupBoxOptions.ResumeLayout(false);
       this.groupBoxOptions.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).EndInit();
       this.groupBoxGUI.ResumeLayout(false);
       this.groupBoxGUI.PerformLayout();
       this.groupBoxChannel.ResumeLayout(false);
       this.groupBoxChannel.PerformLayout();
       this.groupBoxDatabase.ResumeLayout(false);
       this.groupBoxDatabase.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.playlistSettingsBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }

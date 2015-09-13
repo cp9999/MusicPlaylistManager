@@ -264,7 +264,8 @@ namespace PlexMusicPlaylists.PlexMediaServer
               Key = attributeValue(element, KEY),
               Title = attributeValue(element, TITLE),
               Description = attributeValue(element, SUMMARY),
-              Duration = attributeValueAsInt(element, DURATION)
+              Duration = attributeValueAsInt(element, DURATION),
+              AccountId = currentUser.Id
             });
           }
         }
@@ -373,13 +374,13 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
-    public string renamePlaylist(string _key, string _newName)
+    public string renamePlaylist(string _key, string _newName, string _desciption = null)
     {
       if (!String.IsNullOrEmpty(_newName))
       {
         if (playlistMode == PlaylistMode.PlexNative)
         {
-          return m_PlexPlaylistCreator.renamePlaylist(_key, _newName);
+          return m_PlexPlaylistCreator.renamePlaylist(_key, _newName, _desciption);
         }
         else
         {
@@ -556,6 +557,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
                 Title = pl.Title,
                 Description = pl.Description,
                 Duration = String.IsNullOrEmpty(pl.Duration) ? 0 : Convert.ToInt32(pl.Duration),
+                AccountId = currentUser.Id
               });
             }
           }

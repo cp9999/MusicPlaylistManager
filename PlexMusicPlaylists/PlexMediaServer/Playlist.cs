@@ -9,6 +9,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
   {
     public string Description { get; set; }
     public Guid UniqueId { get; set; }
+    public int AccountId { get; set; }
 
     public Playlist()
       : base()
@@ -24,10 +25,11 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
     }
 
-    public bool canRenameTo(string _newTitle)
+    public bool canRenameTo(string _newTitle, string _newDescription)
     {
       _newTitle = (_newTitle ?? "").Trim();
-      return !String.IsNullOrEmpty(_newTitle) && Title.Trim() != _newTitle;
+      _newDescription = (_newDescription ?? "").Trim();
+      return (!String.IsNullOrEmpty(_newTitle) && Title.Trim() != _newTitle) || (Description.Trim() != _newDescription);
     }
   }
 }

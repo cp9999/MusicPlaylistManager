@@ -39,7 +39,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     public PlexPlaylistCreator()
     {
-      OrderStepSize = 1000;
+      OrderStepSize = 100;
       PlexDatabaseName = PlaylistSettings.theSettings().PlaylistDB;
     }
 
@@ -120,6 +120,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
           Title = _title,
           Description = _description,
           Duration = 0,
+          AccountId = currentUser.Id
         };
         m_playlists.Add(newPlaylist);
         this.savePlaylists();
@@ -140,6 +141,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
           Title = _playlist.Title,
           Description = _playlist.Description,
           Duration = _playlist.Duration,
+          AccountId = _playlist.AccountId != 0 ? _playlist.AccountId : currentUser.Id
         };
         m_playlists.Add(newPlaylist);
         int totalDuration = 0;
@@ -174,7 +176,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
       MessageBox.Show("Not supported yet");
       return "";  // TODO create new playlist
     }
-    public string renamePlaylist(string _key, string _newName)
+    public string renamePlaylist(string _key, string _newName, string _description = null)
     {
       if (!String.IsNullOrEmpty(_newName) && !String.IsNullOrEmpty(_key))
       {
@@ -182,6 +184,10 @@ namespace PlexMusicPlaylists.PlexMediaServer
         if (playlist != null)
         {
           playlist.Title = _newName;
+          if (!String.IsNullOrEmpty(_description))
+          {
+            playlist.Description = _description;
+          }
           this.savePlaylists();
         }
       }
@@ -331,6 +337,14 @@ namespace PlexMusicPlaylists.PlexMediaServer
     private bool userExist(string _user)
     {
       return m_userList != null && m_userList.Find(user => user.Name.Equals(_user.Trim(), StringComparison.OrdinalIgnoreCase)) != null;
+    }
+    private PLUser findUserById(int _userId)
+    {
+      return m_userList != null && _userId != 0 ? m_userList.FirstOrDefault(user => user.Id.Equals(_userId)) : null;
+    }
+    private bool userIdExist(int _userId)
+    {
+      return this.findUserById(_userId) != null;
     }
     private void logMessage(string _message)
     {
@@ -500,6 +514,10 @@ namespace PlexMusicPlaylists.PlexMediaServer
             // Playlist doesn't exist in the database
             pl.Id = 0;
             pl.Key = pl.UniqueId.ToString("D");
+            if (pl.AccountId == 0 || !this.userIdExist(pl.AccountId))
+            {
+              pl.AccountId = currentUser != null ? currentUser.Id : 0;
+            }
             List<Track> trackList = this.loadSinglePlaylist(pl, out dbTotalDuration, false);
             trackList.ForEach(t => t.Id = 0);
             this.loadMissingArtists(trackList);
@@ -507,6 +525,7 @@ namespace PlexMusicPlaylists.PlexMediaServer
           }
           else 
           {
+            pl.AccountId = plDb.AccountId;
             if (_revertExisting)
             {
               // Playlist does exist in the database: revert
@@ -714,8 +733,12 @@ namespace PlexMusicPlaylists.PlexMediaServer
     }
     private void saveSinglePlaylist(Playlist _playlist, List<Track> _playListTracks, bool _normalizeOrder = false, bool _skipSaveAll = false)
     {
-      if (_playlist != null && _playListTracks != null && _playListTracks.Count() > 0 )
+      if (_playlist != null  && _playListTracks != null && _playListTracks.Count() > 0)
       {
+        if (_playlist.AccountId == 0 && currentUser != null && !currentUser.isUnknownUser())
+        {
+          _playlist.AccountId = currentUser.Id;
+        }
         try
         {
           if (_normalizeOrder)
@@ -825,13 +848,15 @@ namespace PlexMusicPlaylists.PlexMediaServer
                 guid = Guid.NewGuid();
               }
             }
+            Metadata_Item_Account accountItem = this.loadMetadataItemAccount(dbConnection, item.Id ?? 0);
             playlists.Add(new Playlist()
             {
               Id = item.Id ?? 0,
               Key = item.Id.ToString(),
               Title = item.Title,
-              Description = item.Title_sort,
+              Description = item.Summary,
               Duration = item.Duration ?? 0,
+              AccountId = accountItem != null ? accountItem.Account_id : currentUser.Id,
               UniqueId = guid
             });
           }
@@ -980,6 +1005,28 @@ namespace PlexMusicPlaylists.PlexMediaServer
       }
       return metadataItem;
     }
+
+    private Metadata_Item_Account loadMetadataItemAccount(SQLiteConnection _dbConnection, int _metadata_id)
+    {
+      Metadata_Item_Account metadataItemAccount = null;
+      try
+      {
+        var context = new DataContext(_dbConnection);
+        var accountItems = context.GetTable<Metadata_Item_Account>().Where(mia => mia.Metadata_item_id == _metadata_id);
+        foreach (Metadata_Item_Account accountItem in accountItems)
+        {
+          metadataItemAccount = accountItem;
+          break;
+        }
+      }
+      catch (Exception)
+      {
+
+      }
+
+      return metadataItemAccount;
+    }
+
     private void loadMetadataItemObjectsFromDatabase(int _metadata_id, int _accountId, out Metadata_Item _metadataItem, out Metadata_Item_Account _metadataItemAccount)
     {
       _metadataItem = null;
@@ -1010,87 +1057,94 @@ namespace PlexMusicPlaylists.PlexMediaServer
         closeDatabase(ref dbConnection);
       }
     }
-    private string sqlSavePlaylist(Playlist _playlist, List<Track> _playListTracks, DateTime _timeStamp, PLUser _account = null)
+    private string sqlSavePlaylist(Playlist _playlist, List<Track> _playListTracks, DateTime _timeStamp)
     {
       StringBuilder sb = new StringBuilder();
-      _account = _account ?? currentUser;
-      if (_playlist != null && _account != null && !_account.isUnknownUser())
+      if (_playlist != null)
       {
-        Metadata_Item dbPlaylist = null;
-        Metadata_Item_Account dbItemAccount = null;
-        if (_playlist.Id != 0)
+        PLUser account = this.findUserById(_playlist.AccountId) ?? currentUser;
+        if (account != null && !account.isUnknownUser())
         {
-          loadMetadataItemObjectsFromDatabase(_playlist.Id, _account.Id, out dbPlaylist, out dbItemAccount);
-        }
-        bool isNewPlaylist = dbPlaylist == null;
-        string dbTitle = _playlist.Title.Replace("'", "''");
-        string dbGuid = dbPlaylist == null ? String.Format("{0}{1}", METADATA_GUID, _playlist.UniqueId.ToString("D")) : dbPlaylist.Guid ?? "";
-
-        string timeStamp = _timeStamp.ToString("yyyy-MM-dd HH:mm:ss");
-        if (isNewPlaylist)
-        {
-          // Create a new playlist record in the metadata_items table
-          sb.Append("INSERT INTO metadata_items (metadata_type, guid, title, title_sort, [index], absolute_index, added_at, updated_at) ");
-          sb.AppendFormat("VALUES ({0}, '{1}', '{2}', '{3}', {4}, {5}, '{6}', '{7}');", METADATA_TYPE_PLAYLIST, dbGuid, dbTitle, dbTitle, 0, 10, timeStamp, timeStamp);
-          sb.AppendLine();
-
-        }
-        else if (!dbPlaylist.Title.Equals(_playlist.Title))
-        {
-          // Update a  playlist record in the metadata_items table
-          sb.AppendLine(String.Format("UPDATE metadata_items SET title = '{1}', title_sort = '{2}', updated_at = '{3}' WHERE id = {0} ", dbPlaylist.Id, dbTitle, dbTitle, timeStamp));
-        }
-        string selectWhere = isNewPlaylist
-          ? String.Format("metadata_items.metadata_type = {0} and guid = '{1}' ", METADATA_TYPE_PLAYLIST, dbGuid)
-          : String.Format("metadata_items.id = {0}", dbPlaylist.Id);
-        if (dbItemAccount == null)
-        {
-          // Create a new record in the metadata_item_accounts table
-          sb.Append("INSERT INTO metadata_item_accounts (account_id , metadata_item_id) ");
-          if (dbPlaylist != null)
+          this.normalizeOrder(_playListTracks);
+          _playlist.AccountId = account.Id;
+          Metadata_Item dbPlaylist = null;
+          Metadata_Item_Account dbItemAccount = null;
+          if (_playlist.Id != 0)
           {
-            // Use the Playlist ID if we already have it
-            sb.AppendFormat("VALUES ({0}, {1});", _account.Id, dbPlaylist.Id);
+            loadMetadataItemObjectsFromDatabase(_playlist.Id, account.Id, out dbPlaylist, out dbItemAccount);
           }
-          else
+          bool isNewPlaylist = dbPlaylist == null;
+          string dbTitle = _playlist.Title.Replace("'", "''");
+          string dbSummary = _playlist.Description.Replace("'", "''");
+          string dbGuid = dbPlaylist == null ? String.Format("{0}{1}", METADATA_GUID, _playlist.UniqueId.ToString("D")) : dbPlaylist.Guid ?? "";
+
+          string timeStamp = _timeStamp.ToString("yyyy-MM-dd HH:mm:ss");
+          if (isNewPlaylist)
           {
-            sb.AppendFormat(" SELECT {0}, id FROM metadata_items where {1};", _account.Id, selectWhere);
+            // Create a new playlist record in the metadata_items table
+            sb.Append("INSERT INTO metadata_items (metadata_type, guid, title, title_sort, summary, [index], absolute_index, added_at, updated_at) ");
+            sb.AppendFormat("VALUES ({0}, '{1}', '{2}', '{3}', '{4}', {5}, {6}, '{7}', '{8}');", METADATA_TYPE_PLAYLIST, dbGuid, dbTitle, dbTitle, dbSummary, 0, 10, timeStamp, timeStamp);
             sb.AppendLine();
+
           }
-        }
-        if (_playListTracks != null)
-        {
-          bool includeAll = isNewPlaylist || !PlaylistSettings.theSettings().DatabaseModifiedTracksOnly;
-          string updatePlaylistId = isNewPlaylist
-            ? String.Format("(SELECT id FROM metadata_items WHERE {0})", selectWhere)
-            : dbPlaylist.Id.ToString();
-          foreach (Track track in _playListTracks.Where(t => t.Modified || includeAll))
+          else if (!dbPlaylist.Title.Equals(_playlist.Title) || !dbPlaylist.Summary.Equals(_playlist.Description))
           {
-            int metadataId = this.idFromKey(track.Key);
-            if (metadataId != 0)
+            // Update a  playlist record in the metadata_items table
+            sb.AppendLine(String.Format("UPDATE metadata_items SET title = '{1}', title_sort = '{2}', summary = '{3}', updated_at = '{4}' WHERE id = {0}; ",
+              dbPlaylist.Id, dbTitle, dbTitle, dbSummary, timeStamp));
+          }
+          string selectWhere = isNewPlaylist
+            ? String.Format("metadata_items.metadata_type = {0} and guid = '{1}' ", METADATA_TYPE_PLAYLIST, dbGuid)
+            : String.Format("metadata_items.id = {0}", dbPlaylist.Id);
+          if (dbItemAccount == null)
+          {
+            // Create a new record in the metadata_item_accounts table
+            sb.Append("INSERT INTO metadata_item_accounts (account_id , metadata_item_id) ");
+            if (dbPlaylist != null)
             {
-              if (track.Id == 0)
+              // Use the Playlist ID if we already have it
+              sb.AppendFormat("VALUES ({0}, {1});", account.Id, dbPlaylist.Id);
+            }
+            else
+            {
+              sb.AppendFormat(" SELECT {0}, id FROM metadata_items where {1};", account.Id, selectWhere);
+              sb.AppendLine();
+            }
+          }
+          if (_playListTracks != null)
+          {
+            bool includeAll = isNewPlaylist || !PlaylistSettings.theSettings().DatabaseModifiedTracksOnly;
+            string updatePlaylistId = isNewPlaylist
+              ? String.Format("(SELECT id FROM metadata_items WHERE {0})", selectWhere)
+              : dbPlaylist.Id.ToString();
+            foreach (Track track in _playListTracks.Where(t => t.Modified || includeAll))
+            {
+              int metadataId = this.idFromKey(track.Key);
+              if (metadataId != 0)
               {
-                // This is a new track in the playlist
-                sb.Append("INSERT INTO play_queue_generators (playlist_id, metadata_item_id, [order], created_at, updated_at) ");
-                if (dbPlaylist != null)
+                if (track.Id == 0)
                 {
-                  // Use the Playlist ID if we already have it
-                  sb.AppendFormat("VALUES ({0}, {1}, {2}, '{3}', '{4}');", dbPlaylist.Id, metadataId, track.Order, timeStamp, timeStamp);
+                  // This is a new track in the playlist
+                  sb.Append("INSERT INTO play_queue_generators (playlist_id, metadata_item_id, [order], created_at, updated_at) ");
+                  if (dbPlaylist != null)
+                  {
+                    // Use the Playlist ID if we already have it
+                    sb.AppendFormat("VALUES ({0}, {1}, {2}, '{3}', '{4}');", dbPlaylist.Id, metadataId, track.Order, timeStamp, timeStamp);
+                  }
+                  else
+                  {
+                    // Use select statement because we don't know the Id of the newly created playlust
+                    sb.AppendFormat(" SELECT id, {1}, {2}, '{3}', '{4}' FROM metadata_items where {0};", selectWhere, metadataId, track.Order, timeStamp, timeStamp);
+                  }
                 }
                 else
                 {
-                  // Use select statement because we don't know the Id of the newly created playlust
-                  sb.AppendFormat(" SELECT id, {1}, {2}, '{3}', '{4}' FROM metadata_items where {0};", selectWhere, metadataId, track.Order, timeStamp, timeStamp);
+                  // This is an existing track in the playlist
+                  sb.AppendFormat("UPDATE play_queue_generators SET playlist_id = {1}, metadata_item_id = {2}, [order] = {3}, updated_at = '{4}' WHERE id = {0};", track.Id, updatePlaylistId, metadataId, track.Order, timeStamp);
                 }
+                sb.AppendLine();
+                track.Modified = false;
               }
-              else 
-              {
-                // This is an existing track in the playlist
-                sb.AppendFormat("UPDATE play_queue_generators SET playlist_id = {1}, metadata_item_id = {2}, [order] = {3}, updated_at = '{4}' WHERE id = {0};", track.Id, updatePlaylistId, metadataId, track.Order, timeStamp);
-              }
-              sb.AppendLine();
-              track.Modified = false;
             }
           }
         }
@@ -1139,6 +1193,9 @@ namespace PlexMusicPlaylists.PlexMediaServer
 
     [Column(Name = "title_sort")]
     public string Title_sort { get; set; }
+
+    [Column(Name = "summary")]
+    public string Summary { get; set; }
 
     [Column(Name = "guid")]
     public string Guid { get; set; }

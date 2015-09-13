@@ -74,6 +74,7 @@ namespace PlexMusicPlaylists
       server.Port = _port;
       btnUserAdd.Visible = playlistManager.allowUserMaintenance;
       btnUserDelete.Visible = playlistManager.allowUserMaintenance;
+      server.validateConnection();
       try
       {
         updateCaption();
@@ -228,7 +229,8 @@ namespace PlexMusicPlaylists
     {
       gvPlaylists.DataSource = null;
       playlistManager.currentAllPlaylists = playlistManager.allPlaylists(false);
-      gvPlaylists.DataSource = playlistManager.currentAllPlaylists;
+      gvPlaylists.DataSource = new BindingList<Playlist>(
+        playlistManager.currentAllPlaylists.Where(pl => pl.AccountId == playlistManager.currentUser.Id).ToList());
       if (playlistManager.currentAllPlaylists.Count() == 0)
       {
         gvSinglePlayList.DataSource = null;
@@ -281,7 +283,7 @@ namespace PlexMusicPlaylists
         btnPlaylistEditCreate.Enabled = !String.IsNullOrEmpty(tbPlaylistEditAddTitle.Text) && tbPlaylistEditAddTitle.Text.Trim() != String.Empty;
       }
       Playlist playlist = selectedPlaylist;
-      btnPlaylistEditRename.Enabled = playlist != null && playlist.canRenameTo(tbPlaylistEditRenameTitle.Text);
+      btnPlaylistEditRename.Enabled = playlist != null && playlist.canRenameTo(tbPlaylistEditRenameTitle.Text, tbPlaylistEditRenameDescription.Text);
       btnPlaylistDelete.Enabled = plexConnected && playlistBindingSource != null;
       btnUserDelete.Enabled = plexConnected && playlistManager.isNormalUser(playlistManager.currentUser.Name);
       saveSelectedToolStripMenuItem.Enabled = playlist != null;
@@ -386,6 +388,7 @@ namespace PlexMusicPlaylists
         loadPlaylists();
       }
     }
+
     private void fillUserList()
     {
       comboUsers.Items.Clear();
@@ -480,6 +483,11 @@ namespace PlexMusicPlaylists
       enableEditCommands();
     }
 
+    private void tbPlaylistEditRenameDescription_TextChanged(object sender, EventArgs e)
+    {
+      enableEditCommands();
+    }
+
     private void btnPlaylistDelete_Click(object sender, EventArgs e)
     {
       Playlist playlist = selectedPlaylist;
@@ -499,8 +507,9 @@ namespace PlexMusicPlaylists
       Playlist playlist = selectedPlaylist;
       if (playlist != null)
       {
-        playlistManager.renamePlaylist(playlist.Key, tbPlaylistEditRenameTitle.Text.Trim());
+        playlistManager.renamePlaylist(playlist.Key, tbPlaylistEditRenameTitle.Text.Trim(), tbPlaylistEditRenameDescription.Text.Trim());
         playlist.Title = tbPlaylistEditRenameTitle.Text.Trim();
+        playlist.Description = tbPlaylistEditRenameDescription.Text.Trim();
       }
     }
 

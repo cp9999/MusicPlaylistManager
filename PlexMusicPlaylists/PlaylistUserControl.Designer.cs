@@ -37,8 +37,12 @@
       this.splitContainerMain = new System.Windows.Forms.SplitContainer();
       this.panelPlaylistGriedView = new System.Windows.Forms.Panel();
       this.gvPlaylists = new System.Windows.Forms.DataGridView();
+      this.AccountId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.DurationStr = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.playlistBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.panelPlaylistEdit = new System.Windows.Forms.Panel();
       this.gbPlaylistEdit = new System.Windows.Forms.GroupBox();
       this.btnPlaylistEditHide = new System.Windows.Forms.Button();
@@ -74,10 +78,13 @@
       this.panelTrackGridview = new System.Windows.Forms.Panel();
       this.gvSinglePlayList = new System.Windows.Forms.DataGridView();
       this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Artist = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Album = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.TrackType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.keyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.trackBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.panelTrackToolstrip = new System.Windows.Forms.Panel();
       this.toolStripSinglePlaylist = new System.Windows.Forms.ToolStrip();
       this.toolStripLabelTracks = new System.Windows.Forms.ToolStripLabel();
@@ -89,29 +96,25 @@
       this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
       this.splitContainerGlobal = new System.Windows.Forms.SplitContainer();
       this.panelServerRight = new System.Windows.Forms.Panel();
+      this.ucPMSServerUserControl = new PlexMusicPlaylists.PMSServerUserControl();
       this.panelServerLeft = new System.Windows.Forms.Panel();
       this.panelMainCaption = new System.Windows.Forms.Panel();
       this.lblCaption = new System.Windows.Forms.Label();
       this.panelMainDetail = new System.Windows.Forms.Panel();
-      this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.playlistBindingSource = new System.Windows.Forms.BindingSource(this.components);
-      this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.keyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.trackBindingSource = new System.Windows.Forms.BindingSource(this.components);
-      this.ucPMSServerUserControl = new PlexMusicPlaylists.PMSServerUserControl();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
       this.splitContainerMain.Panel1.SuspendLayout();
       this.splitContainerMain.Panel2.SuspendLayout();
       this.splitContainerMain.SuspendLayout();
       this.panelPlaylistGriedView.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.gvPlaylists)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.playlistBindingSource)).BeginInit();
       this.panelPlaylistEdit.SuspendLayout();
       this.gbPlaylistEdit.SuspendLayout();
       this.panelPlaylistToolStrip.SuspendLayout();
       this.toolStripPlaylists.SuspendLayout();
       this.panelTrackGridview.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.gvSinglePlayList)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.trackBindingSource)).BeginInit();
       this.panelTrackToolstrip.SuspendLayout();
       this.toolStripSinglePlaylist.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainerGlobal)).BeginInit();
@@ -121,8 +124,6 @@
       this.panelServerRight.SuspendLayout();
       this.panelMainCaption.SuspendLayout();
       this.panelMainDetail.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.playlistBindingSource)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.trackBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // splitContainerMain
@@ -165,6 +166,7 @@
       this.gvPlaylists.AutoGenerateColumns = false;
       this.gvPlaylists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       this.gvPlaylists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.AccountId,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn1,
             this.DurationStr,
@@ -182,6 +184,29 @@
       this.gvPlaylists.TabIndex = 5;
       this.gvPlaylists.SelectionChanged += new System.EventHandler(this.gvPlaylists_SelectionChanged);
       // 
+      // AccountId
+      // 
+      this.AccountId.DataPropertyName = "AccountId";
+      this.AccountId.HeaderText = "AccountId";
+      this.AccountId.Name = "AccountId";
+      this.AccountId.ReadOnly = true;
+      // 
+      // dataGridViewTextBoxColumn2
+      // 
+      this.dataGridViewTextBoxColumn2.DataPropertyName = "Key";
+      this.dataGridViewTextBoxColumn2.HeaderText = "Key";
+      this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+      this.dataGridViewTextBoxColumn2.ReadOnly = true;
+      this.dataGridViewTextBoxColumn2.Width = 60;
+      // 
+      // dataGridViewTextBoxColumn1
+      // 
+      this.dataGridViewTextBoxColumn1.DataPropertyName = "Title";
+      this.dataGridViewTextBoxColumn1.HeaderText = "Title";
+      this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+      this.dataGridViewTextBoxColumn1.ReadOnly = true;
+      this.dataGridViewTextBoxColumn1.Width = 300;
+      // 
       // DurationStr
       // 
       this.DurationStr.DataPropertyName = "DurationStr";
@@ -197,6 +222,10 @@
       this.Column1.HeaderText = "Description";
       this.Column1.Name = "Column1";
       this.Column1.ReadOnly = true;
+      // 
+      // playlistBindingSource
+      // 
+      this.playlistBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.Playlist);
       // 
       // panelPlaylistEdit
       // 
@@ -309,6 +338,7 @@
       this.tbPlaylistEditRenameDescription.Name = "tbPlaylistEditRenameDescription";
       this.tbPlaylistEditRenameDescription.Size = new System.Drawing.Size(555, 20);
       this.tbPlaylistEditRenameDescription.TabIndex = 0;
+      this.tbPlaylistEditRenameDescription.TextChanged += new System.EventHandler(this.tbPlaylistEditRenameDescription_TextChanged);
       // 
       // tbPlaylistEditAddDescription
       // 
@@ -549,6 +579,14 @@
       this.Column2.ReadOnly = true;
       this.Column2.Width = 60;
       // 
+      // titleDataGridViewTextBoxColumn
+      // 
+      this.titleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+      this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+      this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+      this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+      // 
       // Artist
       // 
       this.Artist.DataPropertyName = "Artist";
@@ -578,6 +616,18 @@
       this.TrackType.Name = "TrackType";
       this.TrackType.ReadOnly = true;
       this.TrackType.Width = 60;
+      // 
+      // keyDataGridViewTextBoxColumn
+      // 
+      this.keyDataGridViewTextBoxColumn.DataPropertyName = "Key";
+      this.keyDataGridViewTextBoxColumn.HeaderText = "Key";
+      this.keyDataGridViewTextBoxColumn.Name = "keyDataGridViewTextBoxColumn";
+      this.keyDataGridViewTextBoxColumn.ReadOnly = true;
+      this.keyDataGridViewTextBoxColumn.Width = 140;
+      // 
+      // trackBindingSource
+      // 
+      this.trackBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.Track);
       // 
       // panelTrackToolstrip
       // 
@@ -682,6 +732,17 @@
       this.panelServerRight.Size = new System.Drawing.Size(469, 616);
       this.panelServerRight.TabIndex = 2;
       // 
+      // ucPMSServerUserControl
+      // 
+      this.ucPMSServerUserControl.AllowVideos = false;
+      this.ucPMSServerUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.ucPMSServerUserControl.Location = new System.Drawing.Point(0, 0);
+      this.ucPMSServerUserControl.Name = "ucPMSServerUserControl";
+      this.ucPMSServerUserControl.Orientation = System.Windows.Forms.Orientation.Horizontal;
+      this.ucPMSServerUserControl.PMSServer = null;
+      this.ucPMSServerUserControl.Size = new System.Drawing.Size(469, 616);
+      this.ucPMSServerUserControl.TabIndex = 0;
+      // 
       // panelServerLeft
       // 
       this.panelServerLeft.Dock = System.Windows.Forms.DockStyle.Left;
@@ -722,57 +783,6 @@
       this.panelMainDetail.Size = new System.Drawing.Size(1240, 616);
       this.panelMainDetail.TabIndex = 3;
       // 
-      // dataGridViewTextBoxColumn2
-      // 
-      this.dataGridViewTextBoxColumn2.DataPropertyName = "Key";
-      this.dataGridViewTextBoxColumn2.HeaderText = "Key";
-      this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-      this.dataGridViewTextBoxColumn2.ReadOnly = true;
-      this.dataGridViewTextBoxColumn2.Width = 60;
-      // 
-      // dataGridViewTextBoxColumn1
-      // 
-      this.dataGridViewTextBoxColumn1.DataPropertyName = "Title";
-      this.dataGridViewTextBoxColumn1.HeaderText = "Title";
-      this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-      this.dataGridViewTextBoxColumn1.ReadOnly = true;
-      this.dataGridViewTextBoxColumn1.Width = 300;
-      // 
-      // playlistBindingSource
-      // 
-      this.playlistBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.Playlist);
-      // 
-      // titleDataGridViewTextBoxColumn
-      // 
-      this.titleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-      this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-      this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-      this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-      // 
-      // keyDataGridViewTextBoxColumn
-      // 
-      this.keyDataGridViewTextBoxColumn.DataPropertyName = "Key";
-      this.keyDataGridViewTextBoxColumn.HeaderText = "Key";
-      this.keyDataGridViewTextBoxColumn.Name = "keyDataGridViewTextBoxColumn";
-      this.keyDataGridViewTextBoxColumn.ReadOnly = true;
-      this.keyDataGridViewTextBoxColumn.Width = 140;
-      // 
-      // trackBindingSource
-      // 
-      this.trackBindingSource.DataSource = typeof(PlexMusicPlaylists.PlexMediaServer.Track);
-      // 
-      // ucPMSServerUserControl
-      // 
-      this.ucPMSServerUserControl.AllowVideos = false;
-      this.ucPMSServerUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.ucPMSServerUserControl.Location = new System.Drawing.Point(0, 0);
-      this.ucPMSServerUserControl.Name = "ucPMSServerUserControl";
-      this.ucPMSServerUserControl.Orientation = System.Windows.Forms.Orientation.Horizontal;
-      this.ucPMSServerUserControl.PMSServer = null;
-      this.ucPMSServerUserControl.Size = new System.Drawing.Size(469, 616);
-      this.ucPMSServerUserControl.TabIndex = 0;
-      // 
       // PlaylistUserControl
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -787,6 +797,7 @@
       this.splitContainerMain.ResumeLayout(false);
       this.panelPlaylistGriedView.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.gvPlaylists)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.playlistBindingSource)).EndInit();
       this.panelPlaylistEdit.ResumeLayout(false);
       this.gbPlaylistEdit.ResumeLayout(false);
       this.gbPlaylistEdit.PerformLayout();
@@ -796,6 +807,7 @@
       this.toolStripPlaylists.PerformLayout();
       this.panelTrackGridview.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.gvSinglePlayList)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.trackBindingSource)).EndInit();
       this.panelTrackToolstrip.ResumeLayout(false);
       this.panelTrackToolstrip.PerformLayout();
       this.toolStripSinglePlaylist.ResumeLayout(false);
@@ -807,8 +819,6 @@
       this.panelServerRight.ResumeLayout(false);
       this.panelMainCaption.ResumeLayout(false);
       this.panelMainDetail.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.playlistBindingSource)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.trackBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -858,10 +868,6 @@
     private System.Windows.Forms.Panel panelMainCaption;
     private System.Windows.Forms.Panel panelMainDetail;
     private System.Windows.Forms.Label lblCaption;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-    private System.Windows.Forms.DataGridViewTextBoxColumn DurationStr;
-    private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     private System.Windows.Forms.ToolStripComboBox comboUsers;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     private System.Windows.Forms.ToolStripLabel toolStripLabel1;
@@ -881,5 +887,10 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn TrackType;
     private System.Windows.Forms.DataGridViewTextBoxColumn keyDataGridViewTextBoxColumn;
     private PMSServerUserControl ucPMSServerUserControl;
+    private System.Windows.Forms.DataGridViewTextBoxColumn AccountId;
+    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+    private System.Windows.Forms.DataGridViewTextBoxColumn DurationStr;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
   }
 }

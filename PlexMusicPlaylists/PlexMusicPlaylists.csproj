@@ -94,6 +94,12 @@
     <Compile Include="Import\SectionFolderForm.Designer.cs">
       <DependentUpon>SectionFolderForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogonForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogonForm.Designer.cs">
+      <DependentUpon>LogonForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PMSServerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +165,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Import\SectionFolderForm.resx">
       <DependentUpon>SectionFolderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogonForm.resx">
+      <DependentUpon>LogonForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PMSServerForm.resx">
       <DependentUpon>PMSServerForm.cs</DependentUpon>
