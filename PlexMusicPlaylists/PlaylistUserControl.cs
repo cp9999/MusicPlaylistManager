@@ -88,6 +88,7 @@ namespace PlexMusicPlaylists
         enableTrackCommands();
         //enableServerSectionCommands();
         this.triggerEnableServerTrackCommands();
+        importManager.setMainSections();
       }
       catch (Exception ex)
       {

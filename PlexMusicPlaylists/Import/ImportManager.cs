@@ -101,6 +101,16 @@ namespace PlexMusicPlaylists.Import
       }
     }
 
+    public void setMainSections()
+    {
+      this.reset();
+      foreach (LibrarySection section in PMSServer.musicSections())
+      {
+        this.addMainSection(section as MainSection);
+      }
+
+    }
+
     public void addMainSection(MainSection _mainSection)
     {
       if (_mainSection != null && m_mainSections.FirstOrDefault(mainSection => mainSection.Key.Equals(_mainSection.Key, StringComparison.OrdinalIgnoreCase)) == null)
